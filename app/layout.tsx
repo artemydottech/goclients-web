@@ -1,8 +1,8 @@
-// app/layout.tsx
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { TooltipProvider } from '@/components/ui/tooltip'; // ← добавь это
+import 'dayjs/locale/ru';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 const inter = Inter({ subsets: ['latin', 'cyrillic'] });
 

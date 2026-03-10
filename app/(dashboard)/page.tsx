@@ -1,4 +1,3 @@
-// src/app/(dashboard)/page.tsx
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Card,
@@ -10,17 +9,15 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 
-import {
-  FiCalendar,
-  FiClock,
-  FiDollarSign,
-  FiTrendingUp,
-  FiUsers,
-} from 'react-icons/fi';
+import { FiCalendar, FiClock, FiTrendingUp, FiUsers } from 'react-icons/fi';
+import { FaRubleSign } from 'react-icons/fa';
 
-export default function OrganizationDashboard() {
+import dayjs from 'dayjs';
+import { Button } from '@/components/ui/button';
+import { ServicesList } from '@/components/home-page-components/services-list';
+
+export default function HomePage() {
   return (
     <div className="space-y-8">
       {/* Шапка дашборда */}
@@ -28,18 +25,16 @@ export default function OrganizationDashboard() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Обзор</h1>
           <p className="text-muted-foreground">
-            Lumina Beauty Studio • Сегодня 6 марта 2026
+            Lumina Beauty Studio • Сегодня{' '}
+            {dayjs().locale('ru').format('D MMMM YYYY')}
           </p>
         </div>
 
         <div className="flex gap-3">
-          <button className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors h-9 px-4 py-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground">
-            Экспорт отчёта
-          </button>
+          <Button>Экспорт отчёта</Button>
         </div>
       </div>
 
-      {/* Статистика карточки */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         <StatCard
           icon={<FiCalendar />}
@@ -48,7 +43,7 @@ export default function OrganizationDashboard() {
           trend="+12%"
         />
         <StatCard
-          icon={<FiDollarSign />}
+          icon={<FaRubleSign />}
           title="Выручка месяц"
           value="1 347 000 ₽"
           trend="+11%"
@@ -77,7 +72,6 @@ export default function OrganizationDashboard() {
           <TabsTrigger value="team">Команда</TabsTrigger>
         </TabsList>
 
-        {/* Обзор (статистика + популярные услуги + команда) */}
         <TabsContent value="overview" className="space-y-6">
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
             <Card className="md:col-span-3">
@@ -86,7 +80,7 @@ export default function OrganizationDashboard() {
                 <CardDescription>Топ за последние 30 дней</CardDescription>
               </CardHeader>
               <CardContent>
-                <ServiceList />
+                <ServicesList />
               </CardContent>
             </Card>
 
@@ -102,7 +96,6 @@ export default function OrganizationDashboard() {
           </div>
         </TabsContent>
 
-        {/* Ближайшие записи */}
         <TabsContent value="upcoming">
           <Card>
             <CardHeader>
@@ -120,7 +113,6 @@ export default function OrganizationDashboard() {
           </Card>
         </TabsContent>
 
-        {/* Услуги (полный список — пока заглушка) */}
         <TabsContent value="services">
           <Card>
             <CardHeader>
@@ -189,30 +181,6 @@ function StatCard({
         </p>
       </CardContent>
     </Card>
-  );
-}
-
-function ServiceList() {
-  const services = [
-    { name: 'Маникюр + гель-лак', count: 312, price: '2 800 ₽' },
-    { name: 'Женская стрижка', count: 203, price: '3 100 ₽' },
-    { name: 'Мужская стрижка + борода', count: 128, price: '2 500 ₽' },
-    { name: 'Окрашивание AirTouch', count: 94, price: '8 900 ₽' },
-    { name: 'Наращивание ресниц 4D', count: 87, price: '4 800 ₽' },
-  ];
-
-  return (
-    <div className="space-y-4">
-      {services.map((s, i) => (
-        <div key={i} className="flex items-center justify-between">
-          <div>
-            <p className="font-medium">{s.name}</p>
-            <p className="text-sm text-muted-foreground">{s.count} записей</p>
-          </div>
-          <Badge variant="outline">{s.price}</Badge>
-        </div>
-      ))}
-    </div>
   );
 }
 
