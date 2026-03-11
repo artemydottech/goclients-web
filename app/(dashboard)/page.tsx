@@ -10,12 +10,12 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 
-import { FiCalendar, FiClock, FiTrendingUp, FiUsers } from 'react-icons/fi';
-import { FaRubleSign } from 'react-icons/fa';
+import { FiClock } from 'react-icons/fi';
 
 import dayjs from 'dayjs';
 import { Button } from '@/components/ui/button';
 import { ServicesList } from '@/components/home-page-components/services-list';
+import { MetricsCards } from '@/components/metrics-cards';
 
 export default function HomePage() {
   return (
@@ -35,35 +35,8 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <StatCard
-          icon={<FiCalendar />}
-          title="Записей сегодня"
-          value="52"
-          trend="+12%"
-        />
-        <StatCard
-          icon={<FaRubleSign />}
-          title="Выручка месяц"
-          value="1 347 000 ₽"
-          trend="+11%"
-        />
-        <StatCard
-          icon={<FiUsers />}
-          title="Средний чек"
-          value="5 150 ₽"
-          trend="+5%"
-        />
-        <StatCard
-          icon={<FiTrendingUp />}
-          title="Загрузка мастеров"
-          value="82%"
-          trend="+6%"
-          trendColor="text-emerald-600 dark:text-emerald-400"
-        />
-      </div>
+      <MetricsCards />
 
-      {/* Вкладки */}
       <Tabs defaultValue="overview" className="space-y-6">
         <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-flex">
           <TabsTrigger value="overview">Обзор</TabsTrigger>
