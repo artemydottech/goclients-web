@@ -4,3 +4,13 @@ export const formatPrice = (price: number): string =>
     currency: 'RUB',
     minimumFractionDigits: 0,
   }).format(price);
+
+export const truncate = (
+  str: string,
+  maxLength: number,
+  ellipsis = '…',
+): string => {
+  if (!str) return '';
+  if (str.length <= maxLength) return str;
+  return str.slice(0, maxLength - ellipsis.length) + ellipsis;
+};
