@@ -20,7 +20,6 @@ import { MetricsCards } from '@/components/metrics-cards';
 export default function HomePage() {
   return (
     <div className="space-y-8">
-      {/* Шапка дашборда */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Обзор</h1>
@@ -29,7 +28,6 @@ export default function HomePage() {
             {dayjs().locale('ru').format('D MMMM YYYY')}
           </p>
         </div>
-
         <div className="flex gap-3">
           <Button>Экспорт отчёта</Button>
         </div>
@@ -104,7 +102,6 @@ export default function HomePage() {
           </Card>
         </TabsContent>
 
-        {/* Команда (расширенный вид) */}
         <TabsContent value="team">
           <Card>
             <CardHeader>
@@ -123,8 +120,6 @@ export default function HomePage() {
     </div>
   );
 }
-
-// ── Вспомогательные компоненты (перенесены и слегка улучшены) ───────────────────────────────
 
 type StatCardProps = {
   icon: React.ReactNode;
