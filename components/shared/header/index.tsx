@@ -15,7 +15,7 @@ export const Header = () => {
         <div className="ml-auto flex items-center gap-2">
           <Button variant="ghost" asChild size="sm" className="hidden sm:flex">
             <a
-              href="https://github.com/shadcn-ui/ui/tree/main/apps/v4/app/(examples)/dashboard"
+              href="https://github.com/artemydottech/goclients-web"
               rel="noopener noreferrer"
               target="_blank"
               className="dark:text-foreground"

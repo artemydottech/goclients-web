@@ -90,7 +90,7 @@ export default function HomePage() {
                   Список услуг с ценами и популярностью
                 </CardDescription>
               </CardHeader>
-              <CardContent className="min-h-[300px] flex items-center justify-center text-muted-foreground">
+              <CardContent className="min-h-75 flex items-center justify-center text-muted-foreground">
                 Полный каталог услуг (фильтры, поиск, редактирование) — в
                 разработке
               </CardContent>
