@@ -1,7 +1,11 @@
 export interface Filial {
-  id: string;
+  id: number;
   title: string;
   address: string;
-  phone?: string;
-  schedule?: string;
+  phone: string;
+  schedule: string;
+  rating: number;
+  reviews: number;
+  email: string;
+  summary: string;
 }
