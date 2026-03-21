@@ -4,10 +4,17 @@ import { Badge } from '@/components/ui/badge';
 import { LuClock, LuPhone, LuMail } from 'react-icons/lu';
 import { useGetFilialById } from '@/services/queries/filials';
 import { useParams } from 'next/navigation';
+import { Spinner } from '../ui/spinner';
 
 export const FilialInfo = () => {
   const { id } = useParams<{ id: string }>();
-  const { data: filial } = useGetFilialById(id);
+  const { data: filial, isPending } = useGetFilialById(id);
+
+  if (isPending) {
+    return (
+      <Spinner className="size-16 flex items-center justify-center w-full" />
+    );
+  }
 
   if (!filial) {
     return null;
