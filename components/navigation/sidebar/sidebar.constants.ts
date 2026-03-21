@@ -20,7 +20,7 @@ export const NavItems = {
   navMain: [
     {
       title: 'Панель управления',
-      url: '#',
+      url: '/',
       icon: LuLayoutDashboard,
     },
     {
