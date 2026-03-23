@@ -3,7 +3,7 @@ import { GetRecordsRequestResponse } from './records.types';
 
 export const getRecords = async () => {
   try {
-    const response = await api.get<GetRecordsRequestResponse>('/filials');
+    const response = await api.get<GetRecordsRequestResponse>('/records');
     return response.data;
   } catch (error) {
     handleApiError(error, 'Ошибка при получении записей');
