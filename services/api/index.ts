@@ -4,7 +4,7 @@ import axios from 'axios';
 //import { logout } from '../../store/auth-store';
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+  baseURL: '/api',
 });
 
 //api.interceptors.request.use((config) => {
