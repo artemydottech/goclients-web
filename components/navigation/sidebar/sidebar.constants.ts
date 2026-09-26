@@ -29,8 +29,8 @@ export const NavItems = {
       icon: LuChartBarDecreasing,
     },
     {
-      title: 'Филиалы',
-      url: '/filials',
+      title: 'Компании',
+      url: '/companies',
       icon: LuStore,
     },
     {
