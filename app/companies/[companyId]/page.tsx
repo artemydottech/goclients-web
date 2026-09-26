@@ -1,4 +1,3 @@
-import { RecordsSection } from '@/components/records-section';
 import { CompanyInfo } from '@/components/company-info';
 
 interface CompanyPageProps {
@@ -8,10 +7,5 @@ interface CompanyPageProps {
 export default async function CompanyPage({ params }: CompanyPageProps) {
   const { companyId } = await params;
 
-  return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-      <CompanyInfo companyId={Number(companyId)} />
-      <RecordsSection />
-    </div>
-  );
+  return <CompanyInfo companyId={Number(companyId)} />;
 }

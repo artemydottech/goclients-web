@@ -1,19 +1,6 @@
-type RecordStatuses = 'free' | 'booked';
-
-export interface Record {
-  id: string;
-  filialId: string;
-  time: string;
-  master: string;
-  service: string;
-  duration: number;
-  price: number;
-  status: RecordStatuses;
-}
-
 export type SocialNetwork = 'vk' | 'telegram' | 'whatsapp' | 'viber';
 
-export type Socials = Partial<globalThis.Record<SocialNetwork, string>>;
+export type Socials = Partial<Record<SocialNetwork, string>>;
 
 export interface Company {
   id: number;
