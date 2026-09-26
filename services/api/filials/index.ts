@@ -10,8 +10,7 @@ export const getFilials = async () => {
     const response = await api.get<GetFilialsResponse>('/filials');
     return response.data;
   } catch (error) {
-    handleApiError(error, 'Ошибка при получении филиалов');
-    throw error;
+    throw handleApiError(error, 'Ошибка при получении филиалов');
   }
 };
 
@@ -20,7 +19,6 @@ export const getFilialById = async (id: string) => {
     const response = await api.get<GetFilialByIdResponse>(`/filials/${id}`);
     return response.data;
   } catch (error) {
-    handleApiError(error, 'Ошибка при получении филиала');
-    throw error;
+    throw handleApiError(error, 'Ошибка при получении филиала');
   }
 };

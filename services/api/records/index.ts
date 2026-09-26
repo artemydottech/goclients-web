@@ -6,7 +6,6 @@ export const getRecords = async () => {
     const { data } = await api.get<GetRecordsRequestResponse>('/records');
     return data;
   } catch (error) {
-    handleApiError(error, 'Ошибка при получении записей');
-    throw error;
+    throw handleApiError(error, 'Ошибка при получении записей');
   }
 };

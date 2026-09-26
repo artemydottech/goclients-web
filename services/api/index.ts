@@ -48,15 +48,37 @@ const api = axios.create({
 
 export default api;
 
+export class ApiError extends Error {
+  constructor(
+    message: string,
+    public status: Nullable<number>,
+  ) {
+    super(message);
+    this.name = 'ApiError';
+  }
+}
+
+export const isApiError = (error: unknown): error is ApiError =>
+  error instanceof ApiError;
+
+const extractServerMessage = (data: unknown): string => {
+  if (typeof data === 'string') return data.trim();
+  if (data && typeof data === 'object' && 'message' in data) {
+    return String(data.message);
+  }
+  return '';
+};
+
 export const handleApiError = (
   error: unknown,
   defaultMessage: string,
-): never => {
-  if (axios.isAxiosError(error)) {
-    const message = error.response?.data?.message || 'Неизвестная ошибка';
+): ApiError => {
+  if (!axios.isAxiosError(error)) return new ApiError(defaultMessage, null);
 
-    throw new Error(`${defaultMessage}: ${message}`);
-  }
+  const status = error.response?.status ?? null;
+  const serverMessage = extractServerMessage(error.response?.data);
 
-  throw new Error(defaultMessage);
+  if (!serverMessage) return new ApiError(defaultMessage, status);
+
+  return new ApiError(`${defaultMessage}: ${serverMessage}`, status);
 };
