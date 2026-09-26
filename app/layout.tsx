@@ -4,16 +4,13 @@ import './globals.css';
 import 'dayjs/locale/ru';
 
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { AppSidebar } from '@/components/navigation/sidebar';
-import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
-import { Header } from '@/components/shared/header';
 import { QueryClientProviderComponent } from '@/components/providers/query-client.provider';
 
 const inter = Inter({ subsets: ['latin', 'cyrillic'] });
 
 export const metadata: Metadata = {
-  title: 'Goclients Dashboard',
-  description: 'Панель управления организацией',
+  title: 'goclients',
+  description: 'Онлайн-запись и управление салоном на своём сервере',
 };
 
 export default function RootLayout({
@@ -27,19 +24,7 @@ export default function RootLayout({
         className={`${inter.className} antialiased bg-background text-foreground`}
       >
         <QueryClientProviderComponent>
-          <TooltipProvider>
-            <SidebarProvider defaultOpen={true}>
-              <div className="w-full flex min-h-screen bg-background">
-                <AppSidebar />
-                <SidebarInset className="flex flex-col flex-1">
-                  <Header />
-                  <main className="flex-1 overflow-auto p-4 md:p-6 lg:p-8">
-                    {children}
-                  </main>
-                </SidebarInset>
-              </div>
-            </SidebarProvider>
-          </TooltipProvider>
+          <TooltipProvider>{children}</TooltipProvider>
         </QueryClientProviderComponent>
       </body>
     </html>

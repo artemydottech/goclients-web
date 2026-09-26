@@ -51,7 +51,7 @@ export const CompaniesList = () => {
     <ul className="grid gap-4 lg:grid-cols-2">
       {companies.map((company) => (
         <li key={company.id}>
-          <Link href={`/companies/${company.id}`}>
+          <Link href={`/dashboard/${company.id}`}>
             <Card className="transition-colors hover:bg-muted/50">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium">

@@ -30,7 +30,7 @@ export const NavItems = {
     },
     {
       title: 'Компании',
-      url: '/companies',
+      url: '/dashboard',
       icon: LuStore,
     },
     {
