@@ -33,3 +33,14 @@ export const getInitials = (fullName: string): string =>
     .slice(0, 2)
     .map((part) => part[0].toUpperCase())
     .join('');
+
+const RU_PHONE_LENGTH = 11;
+
+export const formatPhone = (phone: string): string => {
+  if (phone.length !== RU_PHONE_LENGTH) return phone;
+  const [, code, first, second, third] =
+    phone.match(/^\d(\d{3})(\d{3})(\d{2})(\d{2})$/) ?? [];
+  return `+7 ${code} ${first}-${second}-${third}`;
+};
+
+export const onlyDigits = (value: string): string => value.replace(/\D/g, '');
