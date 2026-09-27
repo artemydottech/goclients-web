@@ -17,3 +17,11 @@ export const truncate = (
 
 export const doestPathMatch = (pathname: string, path: string): boolean =>
   pathname === path || pathname.startsWith(`${path}/`);
+
+export const formatDuration = (minutes: number): string => {
+  const hours = Math.floor(minutes / 60);
+  const rest = minutes % 60;
+  if (!hours) return `${rest} мин`;
+  if (!rest) return `${hours} ч`;
+  return `${hours} ч ${rest} мин`;
+};
