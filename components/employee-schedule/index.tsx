@@ -16,6 +16,7 @@ import type { EmployeeScheduleProps } from './employee-schedule.types';
 const EmployeeScheduleContent = ({ employeeId }: EmployeeScheduleProps) => {
   const {
     data: schedule,
+    dataUpdatedAt,
     isPending,
     error,
   } = useGetEmployeeSchedule(employeeId);
