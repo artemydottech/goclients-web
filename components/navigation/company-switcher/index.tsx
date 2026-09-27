@@ -24,8 +24,6 @@ export function CompanySwitcher({ companyId }: CompanySwitcherProps) {
   const { isMobile } = useSidebar();
   const { data: companies, isPending } = useGetCompanies();
 
-  if (isPending) return <Skeleton className="h-12 w-full" />;
-
   const current = companies?.find(({ id }) => String(id) === companyId);
 
   return (
@@ -40,16 +38,23 @@ export function CompanySwitcher({ companyId }: CompanySwitcherProps) {
               <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                 <LuBox className="size-4" />
               </div>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">
-                  {current?.name ?? 'goclients'}
-                </span>
-                <span className="truncate text-xs text-muted-foreground">
-                  {current
-                    ? current.address || 'Компания'
-                    : 'Выберите компанию'}
-                </span>
-              </div>
+              {isPending ? (
+                <div className="grid flex-1 gap-1.5">
+                  <Skeleton className="h-3.5 w-3/4" />
+                  <Skeleton className="h-3 w-1/2" />
+                </div>
+              ) : (
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold">
+                    {current?.name ?? 'goclients'}
+                  </span>
+                  <span className="truncate text-xs text-muted-foreground">
+                    {current
+                      ? current.address || 'Компания'
+                      : 'Выберите компанию'}
+                  </span>
+                </div>
+              )}
               <LuChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
