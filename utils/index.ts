@@ -25,3 +25,11 @@ export const formatDuration = (minutes: number): string => {
   if (!rest) return `${hours} ч`;
   return `${hours} ч ${rest} мин`;
 };
+
+export const getInitials = (fullName: string): string =>
+  fullName
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0].toUpperCase())
+    .join('');
