@@ -10,12 +10,15 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorText } from '@/components/shared/error-text';
+import { ConfirmDeleteButton } from '@/components/shared/confirm-delete-button';
 import { useGetServices } from '@/services/queries/services';
+import { useDeleteService } from '@/services/mutations/services';
 import { formatDuration, formatPrice } from '@/utils';
 import type { ServicesTableProps } from './services-table.types';
 
 export const ServicesTable = ({ companyId }: ServicesTableProps) => {
   const { data: services, isPending, error } = useGetServices(companyId);
+  const { mutate: deleteService, isPending: isDeleting } = useDeleteService();
 
   if (isPending) return <Skeleton className="h-64 w-full" />;
   if (error) return <ErrorText errorMessage={error.message} />;
@@ -36,7 +39,8 @@ export const ServicesTable = ({ companyId }: ServicesTableProps) => {
             <TableRow>
               <TableHead className="pl-6">Услуга</TableHead>
               <TableHead>Длительность</TableHead>
-              <TableHead className="pr-6 text-right">Цена</TableHead>
+              <TableHead className="text-right">Цена</TableHead>
+              <TableHead className="w-12 pr-6" />
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -53,8 +57,16 @@ export const ServicesTable = ({ companyId }: ServicesTableProps) => {
                 <TableCell className="text-muted-foreground">
                   {formatDuration(service.duration)}
                 </TableCell>
-                <TableCell className="pr-6 text-right tabular-nums">
+                <TableCell className="text-right tabular-nums">
                   {formatPrice(service.price)}
+                </TableCell>
+                <TableCell className="pr-6">
+                  <ConfirmDeleteButton
+                    title={`Удалить «${service.name}»?`}
+                    description="Услуга пропадёт из прайса и у мастеров. Будущие записи на неё тоже удалятся."
+                    isPending={isDeleting}
+                    onConfirm={() => deleteService(service.id)}
+                  />
                 </TableCell>
               </TableRow>
             ))}
