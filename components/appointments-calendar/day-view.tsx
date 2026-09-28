@@ -29,20 +29,20 @@ export const DayView = ({
   }
 
   return (
-    <div className="overflow-x-auto rounded-xl border bg-card">
+    <div className="max-h-[calc(100dvh-16rem)] min-h-96 overflow-auto rounded-xl border bg-card">
       <div
         className="grid min-w-max"
         style={{
           gridTemplateColumns: `4rem repeat(${employees.length}, minmax(10rem, 1fr))`,
         }}
       >
-        <div className="sticky left-0 z-20 border-b bg-card" />
+        <div className="sticky left-0 top-0 z-30 border-b bg-card" />
         {employees.map((employee) => {
           const fullName = `${employee.name} ${employee.surname}`.trim();
           return (
             <div
               key={employee.id}
-              className="flex items-center gap-2 border-b border-l px-3 py-2"
+              className="sticky top-0 z-20 flex items-center gap-2 border-b border-l bg-card px-3 py-2"
             >
               <Avatar className="size-7">
                 <AvatarImage src={employee.avatar} alt={fullName} />

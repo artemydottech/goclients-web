@@ -39,8 +39,9 @@ export const WeekView = ({
           <section
             key={day}
             className={cn(
-              'flex min-h-40 flex-col gap-2 rounded-xl border bg-card p-2',
+              'flex flex-col gap-2 rounded-xl border bg-card p-2 md:min-h-40',
               day === today && 'border-primary',
+              dayAppointments.length === 0 && day !== today && 'hidden md:flex',
             )}
           >
             <Link
