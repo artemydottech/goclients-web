@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { LuArrowLeft } from 'react-icons/lu';
+import { LuArrowLeft, LuCalendarDays } from 'react-icons/lu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -49,6 +49,12 @@ export const EmployeeProfile = ({
             {employee.position || 'Мастер'}
           </p>
         </div>
+        <Button variant="outline" asChild>
+          <Link href={`${listUrl}/${employeeId}/day`}>
+            <LuCalendarDays className="size-4" />
+            Мой день
+          </Link>
+        </Button>
         <ConfirmDeleteButton
           title={`Удалить сотрудника ${fullName}?`}
           description="Вместе с ним удалятся график, отпуска и его записи."
