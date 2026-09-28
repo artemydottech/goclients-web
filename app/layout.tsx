@@ -4,6 +4,7 @@ import './globals.css';
 import 'dayjs/locale/ru';
 
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { Toaster } from '@/components/ui/sonner';
 import { QueryClientProviderComponent } from '@/components/providers/query-client.provider';
 
 const inter = Inter({ subsets: ['latin', 'cyrillic'] });
@@ -25,6 +26,7 @@ export default function RootLayout({
       >
         <QueryClientProviderComponent>
           <TooltipProvider>{children}</TooltipProvider>
+          <Toaster position="top-center" />
         </QueryClientProviderComponent>
       </body>
     </html>

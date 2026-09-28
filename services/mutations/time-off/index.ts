@@ -6,6 +6,7 @@ export const useCreateTimeOff = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: createTimeOff,
+    meta: { successMessage: 'Период добавлен', hasInlineError: true },
     onSuccess: (_, { employeeId }) => {
       queryClient.invalidateQueries({
         queryKey: ['get-employee-time-off', employeeId],
@@ -19,6 +20,7 @@ export const useDeleteTimeOff = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: deleteTimeOff,
+    meta: { successMessage: 'Период удалён' },
     onSuccess: (_, { employeeId }) => {
       queryClient.invalidateQueries({
         queryKey: ['get-employee-time-off', employeeId],
