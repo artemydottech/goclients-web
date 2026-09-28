@@ -7,7 +7,7 @@ import { TextareaField } from '@/components/shared/textarea-field';
 import { SlotPicker } from '@/components/slot-picker';
 import { useGetServiceEmployees } from '@/services/queries/services';
 import { formatPhone, formatPrice } from '@/utils';
-import { EntitySelect } from './entity-select';
+import { EntitySelect } from '@/components/shared/entity-select';
 import type { AppointmentFormFieldsProps } from './appointment-form.types';
 
 const AppointmentFormFields = ({

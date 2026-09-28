@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import type { EntitySelectProps } from './appointment-form.types';
+import type { EntitySelectProps } from './entity-select.types';
 
 export const EntitySelect = ({
   id,
