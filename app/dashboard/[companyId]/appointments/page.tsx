@@ -1,0 +1,25 @@
+import { PageHeader } from '@/components/shared/page-header';
+import { AppointmentsCalendar } from '@/components/appointments-calendar';
+
+const DATE_PARAM_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+
+interface AppointmentsPageProps {
+  params: Promise<{ companyId: string }>;
+  searchParams: Promise<{ date?: string }>;
+}
+
+export default async function AppointmentsPage({
+  params,
+  searchParams,
+}: AppointmentsPageProps) {
+  const { companyId } = await params;
+  const { date } = await searchParams;
+  const validDate = date && DATE_PARAM_PATTERN.test(date) ? date : null;
+
+  return (
+    <div className="space-y-6">
+      <PageHeader title="Записи" description="Календарь мастеров на день" />
+      <AppointmentsCalendar companyId={Number(companyId)} date={validDate} />
+    </div>
+  );
+}

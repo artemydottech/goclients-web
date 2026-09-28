@@ -14,3 +14,25 @@ export const useGetAppointment = (id: number) =>
     queryKey: ['get-appointment', id],
     queryFn: () => getAppointment(id),
   });
+
+export const useGetCompanyAppointments = (
+  companyId: number,
+  from: string,
+  to: string,
+) =>
+  useQuery({
+    queryKey: ['get-appointments', {}],
+    queryFn: () => getAppointments(),
+    select: (appointments) => {
+      const fromMs = Date.parse(from);
+      const toMs = Date.parse(to);
+      return appointments.filter((appointment) => {
+        const startsAtMs = Date.parse(appointment.starts_at);
+        return (
+          appointment.company_id === companyId &&
+          startsAtMs >= fromMs &&
+          startsAtMs < toMs
+        );
+      });
+    },
+  });
