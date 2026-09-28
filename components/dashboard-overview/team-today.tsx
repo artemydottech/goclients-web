@@ -9,9 +9,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import dayjs from '@/lib/dayjs';
 import { getInitials } from '@/utils';
-import { inCompanyTimezone } from '@/utils/date';
+import { getCompanyToday, toDateKey } from '@/utils/date';
 import { isActiveAppointment } from '@/utils/appointments';
 import type { OverviewSectionProps } from './dashboard-overview.types';
 
@@ -21,13 +20,11 @@ export const TeamToday = ({
   directory,
   timezone,
 }: OverviewSectionProps) => {
-  const today = dayjs().tz(timezone).format('YYYY-MM-DD');
+  const today = getCompanyToday(timezone);
   const todayAppointments = appointments.filter(
     (appointment) =>
       isActiveAppointment(appointment) &&
-      inCompanyTimezone(appointment.starts_at, timezone).format(
-        'YYYY-MM-DD',
-      ) === today,
+      toDateKey(appointment.starts_at, timezone) === today,
   );
 
   return (

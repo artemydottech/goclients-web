@@ -14,7 +14,7 @@ import { TimeOffForm } from '@/forms/time-off-form';
 import type { TimeOffFormValues } from '@/forms/time-off-form/time-off-form.validation';
 import { useCreateTimeOff } from '@/services/mutations/time-off';
 import dayjs from '@/lib/dayjs';
-import { toCompanyDateTime } from '@/utils/date';
+import { DATE_KEY_FORMAT, toCompanyDateTime } from '@/utils/date';
 import type { CreateTimeOffDialogProps } from './employee-time-off.types';
 
 const DAY_START = '00:00';
@@ -32,7 +32,7 @@ export const CreateTimeOffDialog = ({
   };
 
   const handleSubmit = ({ starts_on, ends_on, reason }: TimeOffFormValues) => {
-    const dayAfterEnd = dayjs(ends_on).add(1, 'day').format('YYYY-MM-DD');
+    const dayAfterEnd = dayjs(ends_on).add(1, 'day').format(DATE_KEY_FORMAT);
     mutate(
       {
         employeeId,

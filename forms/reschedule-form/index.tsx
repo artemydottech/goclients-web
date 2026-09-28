@@ -8,7 +8,7 @@ import { ErrorText } from '@/components/shared/error-text';
 import { EntitySelect } from '@/components/shared/entity-select';
 import { SlotPicker } from '@/components/slot-picker';
 import { useGetServiceEmployees } from '@/services/queries/services';
-import { inCompanyTimezone } from '@/utils/date';
+import { toDateKey } from '@/utils/date';
 import {
   rescheduleFormSchema,
   type RescheduleFormValues,
@@ -27,9 +27,7 @@ export const RescheduleForm = ({
     resolver: zodResolver(rescheduleFormSchema),
     defaultValues: {
       employee_id: appointment.employee_id,
-      date: inCompanyTimezone(appointment.starts_at, timezone).format(
-        'YYYY-MM-DD',
-      ),
+      date: toDateKey(appointment.starts_at, timezone),
       starts_at: '',
     },
   });

@@ -2,9 +2,8 @@
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import dayjs from '@/lib/dayjs';
-import { inCompanyTimezone } from '@/utils/date';
+import { DATE_KEY_FORMAT, inCompanyTimezone, toDateKey } from '@/utils/date';
 import { STATUS_STYLES } from '@/utils/appointments';
-import { DATE_PARAM_FORMAT } from './appointments-calendar.constants';
 import type { WeekViewProps } from './appointments-calendar.types';
 
 const DAYS_IN_WEEK = 7;
@@ -19,7 +18,7 @@ export const WeekView = ({
   onSelect,
 }: WeekViewProps) => {
   const days = Array.from({ length: DAYS_IN_WEEK }, (_, index) =>
-    dayjs(weekStart).add(index, 'day').format(DATE_PARAM_FORMAT),
+    dayjs(weekStart).add(index, 'day').format(DATE_KEY_FORMAT),
   );
   const sorted = [...appointments].sort(
     (left, right) => Date.parse(left.starts_at) - Date.parse(right.starts_at),
@@ -29,10 +28,7 @@ export const WeekView = ({
     <div className="grid gap-3 md:grid-cols-7">
       {days.map((day) => {
         const dayAppointments = sorted.filter(
-          (appointment) =>
-            inCompanyTimezone(appointment.starts_at, timezone).format(
-              DATE_PARAM_FORMAT,
-            ) === day,
+          (appointment) => toDateKey(appointment.starts_at, timezone) === day,
         );
 
         return (

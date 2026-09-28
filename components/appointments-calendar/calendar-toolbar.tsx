@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { LuChevronLeft, LuChevronRight } from 'react-icons/lu';
 import { Button } from '@/components/ui/button';
 import dayjs from '@/lib/dayjs';
-import { DATE_PARAM_FORMAT } from './appointments-calendar.constants';
+import { DATE_KEY_FORMAT } from '@/utils/date';
 import { getWeekStart } from './appointments-calendar.utils';
 import type {
   CalendarToolbarProps,
@@ -28,7 +28,7 @@ export const CalendarToolbar = ({
     `/dashboard/${companyId}/appointments?date=${value}&view=${nextView}`;
   const shift = (direction: 1 | -1) =>
     hrefFor(
-      current.add(direction * STEP_DAYS[view], 'day').format(DATE_PARAM_FORMAT),
+      current.add(direction * STEP_DAYS[view], 'day').format(DATE_KEY_FORMAT),
     );
 
   const weekStart = dayjs(getWeekStart(date));

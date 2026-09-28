@@ -8,7 +8,7 @@ import { useGetCompanyAppointments } from '@/services/queries/appointments';
 import { useCompanyDirectory } from '@/hooks/use-company-directory';
 import dayjs from '@/lib/dayjs';
 import { formatPrice } from '@/utils';
-import { DEFAULT_TIMEZONE, inCompanyTimezone } from '@/utils/date';
+import { DATE_KEY_FORMAT, DEFAULT_TIMEZONE, toDateKey } from '@/utils/date';
 import { isActiveAppointment } from '@/utils/appointments';
 import { MetricCard } from './metric-card';
 import { UpcomingList } from './upcoming-list';
@@ -56,12 +56,9 @@ export const DashboardOverview = ({ companyId }: DashboardOverviewProps) => {
   if (directory.error)
     return <ErrorText errorMessage={directory.error.message} />;
 
-  const todayKey = todayStart.format('YYYY-MM-DD');
+  const todayKey = todayStart.format(DATE_KEY_FORMAT);
   const today = appointments.filter(
-    (appointment) =>
-      inCompanyTimezone(appointment.starts_at, timezone).format(
-        'YYYY-MM-DD',
-      ) === todayKey,
+    (appointment) => toDateKey(appointment.starts_at, timezone) === todayKey,
   );
   const weekAgo = todayStart.subtract(WEEK_DAYS, 'day').valueOf();
   const completedWeek = appointments.filter(

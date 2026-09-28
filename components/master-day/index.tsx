@@ -5,22 +5,24 @@ import { Button } from '@/components/ui/button';
 import { useGetCompany } from '@/services/queries/companies';
 import { useGetEmployee } from '@/services/queries/employees';
 import dayjs from '@/lib/dayjs';
-import { DEFAULT_TIMEZONE } from '@/utils/date';
+import {
+  DATE_KEY_FORMAT,
+  DEFAULT_TIMEZONE,
+  getCompanyToday,
+} from '@/utils/date';
 import { MasterDayContent } from './master-day-content';
 import type { MasterDayProps } from './master-day.types';
-
-const DATE_FORMAT = 'YYYY-MM-DD';
 
 export const MasterDay = ({ companyId, employeeId, date }: MasterDayProps) => {
   const { data: company } = useGetCompany(companyId);
   const { data: employee } = useGetEmployee(employeeId);
   const timezone = company?.timezone || DEFAULT_TIMEZONE;
-  const currentDate = date ?? dayjs().tz(timezone).format(DATE_FORMAT);
+  const currentDate = date ?? getCompanyToday(timezone);
   const from = dayjs.tz(currentDate, timezone);
 
   const baseUrl = `/dashboard/${companyId}/employees/${employeeId}`;
   const dayHref = (days: number) =>
-    `${baseUrl}/day?date=${from.add(days, 'day').format(DATE_FORMAT)}`;
+    `${baseUrl}/day?date=${from.add(days, 'day').format(DATE_KEY_FORMAT)}`;
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">

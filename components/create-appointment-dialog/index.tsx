@@ -17,8 +17,7 @@ import { useCreateAppointment } from '@/services/mutations/appointments';
 import { useGetCompany } from '@/services/queries/companies';
 import { useGetClients } from '@/services/queries/clients';
 import { useGetServices } from '@/services/queries/services';
-import dayjs from '@/lib/dayjs';
-import { DEFAULT_TIMEZONE } from '@/utils/date';
+import { DEFAULT_TIMEZONE, getCompanyToday } from '@/utils/date';
 import type { CreateAppointmentDialogProps } from './create-appointment-dialog.types';
 
 export const CreateAppointmentDialog = ({
@@ -77,7 +76,7 @@ export const CreateAppointmentDialog = ({
             clients={clients}
             services={services}
             timezone={timezone}
-            defaultDate={date ?? dayjs().tz(timezone).format('YYYY-MM-DD')}
+            defaultDate={date ?? getCompanyToday(timezone)}
             isPending={isPending}
             errorMessage={error?.message}
             onSubmit={handleSubmit}

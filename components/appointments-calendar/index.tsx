@@ -6,13 +6,12 @@ import { useGetCompany } from '@/services/queries/companies';
 import { useGetCompanyAppointments } from '@/services/queries/appointments';
 import { useCompanyDirectory } from '@/hooks/use-company-directory';
 import dayjs from '@/lib/dayjs';
-import { DEFAULT_TIMEZONE } from '@/utils/date';
+import { DEFAULT_TIMEZONE, getCompanyToday } from '@/utils/date';
 import { AppointmentDetails } from '@/components/appointment-details';
 import { CalendarToolbar } from './calendar-toolbar';
 import { DayView } from './day-view';
 import { WeekView } from './week-view';
 import { getWeekStart } from './appointments-calendar.utils';
-import { DATE_PARAM_FORMAT } from './appointments-calendar.constants';
 import type { AppointmentsCalendarProps } from './appointments-calendar.types';
 
 export const AppointmentsCalendar = ({
@@ -23,7 +22,7 @@ export const AppointmentsCalendar = ({
   const [selectedId, setSelectedId] = useState<Nullable<number>>(null);
   const { data: company } = useGetCompany(companyId);
   const timezone = company?.timezone || DEFAULT_TIMEZONE;
-  const today = dayjs().tz(timezone).format(DATE_PARAM_FORMAT);
+  const today = getCompanyToday(timezone);
   const currentDate = date ?? today;
   const weekStart = getWeekStart(currentDate);
   const from = dayjs.tz(view === 'day' ? currentDate : weekStart, timezone);

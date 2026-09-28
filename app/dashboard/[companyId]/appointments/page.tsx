@@ -1,8 +1,7 @@
+import { parseDateParam } from '@/utils/date';
 import { PageHeader } from '@/components/shared/page-header';
 import { AppointmentsCalendar } from '@/components/appointments-calendar';
 import { CreateAppointmentDialog } from '@/components/create-appointment-dialog';
-
-const DATE_PARAM_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
 interface AppointmentsPageProps {
   params: Promise<{ companyId: string }>;
@@ -15,7 +14,7 @@ export default async function AppointmentsPage({
 }: AppointmentsPageProps) {
   const { companyId } = await params;
   const { date, view } = await searchParams;
-  const validDate = date && DATE_PARAM_PATTERN.test(date) ? date : null;
+  const validDate = parseDateParam(date);
 
   return (
     <div className="space-y-6">
