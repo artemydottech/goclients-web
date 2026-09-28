@@ -1,5 +1,6 @@
 import { PageHeader } from '@/components/shared/page-header';
 import { AppointmentsCalendar } from '@/components/appointments-calendar';
+import { CreateAppointmentDialog } from '@/components/create-appointment-dialog';
 
 const DATE_PARAM_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -18,7 +19,16 @@ export default async function AppointmentsPage({
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Записи" description="Календарь мастеров" />
+      <PageHeader
+        title="Записи"
+        description="Календарь мастеров"
+        action={
+          <CreateAppointmentDialog
+            companyId={Number(companyId)}
+            date={validDate}
+          />
+        }
+      />
       <AppointmentsCalendar
         companyId={Number(companyId)}
         date={validDate}
