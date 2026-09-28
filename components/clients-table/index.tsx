@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import { LuSearch } from 'react-icons/lu';
+import { LuContact, LuSearch } from 'react-icons/lu';
 import {
   Table,
   TableBody,
@@ -14,6 +14,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorText } from '@/components/shared/error-text';
+import { EmptyState } from '@/components/shared/empty-state';
 import { useGetClients } from '@/services/queries/clients';
 import { formatPhone, onlyDigits } from '@/utils';
 import type { Client } from '@/types';
@@ -36,6 +37,16 @@ export const ClientsTable = ({ companyId }: ClientsTableProps) => {
   if (isPending) return <Skeleton className="h-64 w-full" />;
   if (error) return <ErrorText errorMessage={error.message} />;
 
+  if (clients.length === 0) {
+    return (
+      <EmptyState
+        icon={LuContact}
+        title="Клиентов пока нет"
+        description="Клиенты появятся здесь после первой записи или если добавить их вручную."
+      />
+    );
+  }
+
   const filtered = clients.filter((client) => matchesQuery(client, query));
 
   return (
@@ -53,7 +64,7 @@ export const ClientsTable = ({ companyId }: ClientsTableProps) => {
 
       {filtered.length === 0 ? (
         <p className="py-10 text-center text-sm text-muted-foreground">
-          {clients.length === 0 ? 'Клиентов пока нет' : 'Никого не нашли'}
+          Никого не нашли
         </p>
       ) : (
         <Card className="py-0">

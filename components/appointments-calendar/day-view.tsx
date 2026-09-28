@@ -1,5 +1,7 @@
 'use client';
+import { LuUsers } from 'react-icons/lu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { EmptyState } from '@/components/shared/empty-state';
 import { getInitials } from '@/utils';
 import { AppointmentBlock } from './appointment-block';
 import {
@@ -18,9 +20,11 @@ export const DayView = ({
 
   if (employees.length === 0) {
     return (
-      <p className="py-10 text-center text-sm text-muted-foreground">
-        Добавьте сотрудников, чтобы вести календарь
-      </p>
+      <EmptyState
+        icon={LuUsers}
+        title="В календаре пока пусто"
+        description="Добавьте сотрудников в разделе «Сотрудники», и здесь появятся их колонки."
+      />
     );
   }
 

@@ -9,7 +9,10 @@ import {
   CardContent,
 } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { LuStore } from 'react-icons/lu';
 import { ErrorText } from '@/components/shared/error-text';
+import { EmptyState } from '@/components/shared/empty-state';
+import { CreateCompanyDialog } from '@/components/create-company-dialog';
 import { useGetCompanies } from '@/services/queries/companies';
 
 const SKELETON_COUNT = 4;
@@ -39,11 +42,12 @@ export const CompaniesList = () => {
 
   if (companies.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-10 text-center">
-        <h3 className="text-sm font-medium text-muted-foreground">
-          Компаний пока нет
-        </h3>
-      </div>
+      <EmptyState
+        icon={LuStore}
+        title="Компаний пока нет"
+        description="Создайте первую компанию, чтобы вести записи, сотрудников и клиентов."
+        action={<CreateCompanyDialog />}
+      />
     );
   }
 

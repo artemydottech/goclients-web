@@ -9,7 +9,10 @@ import {
 } from '@/components/ui/table';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { LuScissors } from 'react-icons/lu';
 import { ErrorText } from '@/components/shared/error-text';
+import { EmptyState } from '@/components/shared/empty-state';
+import { CreateServiceDialog } from '@/components/create-service-dialog';
 import { ConfirmDeleteButton } from '@/components/shared/confirm-delete-button';
 import { useGetServices } from '@/services/queries/services';
 import { useDeleteService } from '@/services/mutations/services';
@@ -25,9 +28,12 @@ export const ServicesTable = ({ companyId }: ServicesTableProps) => {
 
   if (services.length === 0) {
     return (
-      <p className="py-10 text-center text-sm text-muted-foreground">
-        Услуг пока нет
-      </p>
+      <EmptyState
+        icon={LuScissors}
+        title="Услуг пока нет"
+        description="Добавьте первую услугу с ценой и длительностью — по ней будут считаться слоты для записи."
+        action={<CreateServiceDialog companyId={companyId} />}
+      />
     );
   }
 

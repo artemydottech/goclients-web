@@ -3,7 +3,10 @@ import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { LuUsers } from 'react-icons/lu';
 import { ErrorText } from '@/components/shared/error-text';
+import { EmptyState } from '@/components/shared/empty-state';
+import { CreateEmployeeDialog } from '@/components/create-employee-dialog';
 import { useGetEmployees } from '@/services/queries/employees';
 import { getInitials } from '@/utils';
 import type { EmployeesListProps } from './employees-list.types';
@@ -27,9 +30,12 @@ export const EmployeesList = ({ companyId }: EmployeesListProps) => {
 
   if (employees.length === 0) {
     return (
-      <p className="py-10 text-center text-sm text-muted-foreground">
-        Сотрудников пока нет
-      </p>
+      <EmptyState
+        icon={LuUsers}
+        title="Сотрудников пока нет"
+        description="Добавьте мастера, затем задайте ему график и услуги."
+        action={<CreateEmployeeDialog companyId={companyId} />}
+      />
     );
   }
 
