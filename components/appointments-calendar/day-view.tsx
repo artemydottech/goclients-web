@@ -12,6 +12,7 @@ export const DayView = ({
   appointments,
   directory,
   timezone,
+  onSelect,
 }: DayViewProps) => {
   const { employees } = directory;
 
@@ -78,6 +79,7 @@ export const DayView = ({
                   appointment={appointment}
                   directory={directory}
                   timezone={timezone}
+                  onSelect={onSelect}
                 />
               ))}
           </div>

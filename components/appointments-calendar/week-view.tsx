@@ -16,6 +16,7 @@ export const WeekView = ({
   appointments,
   directory,
   timezone,
+  onSelect,
 }: WeekViewProps) => {
   const days = Array.from({ length: DAYS_IN_WEEK }, (_, index) =>
     dayjs(weekStart).add(index, 'day').format(DATE_PARAM_FORMAT),
@@ -57,10 +58,12 @@ export const WeekView = ({
                 appointment.employee_id,
               );
               return (
-                <div
+                <button
+                  type="button"
                   key={appointment.id}
+                  onClick={() => onSelect(appointment.id)}
                   className={cn(
-                    'rounded-md border px-2 py-1 text-xs',
+                    'cursor-pointer rounded-md border px-2 py-1 text-left text-xs transition-shadow hover:shadow-md',
                     STATUS_STYLES[appointment.status],
                   )}
                 >
@@ -71,7 +74,7 @@ export const WeekView = ({
                     · {client?.name ?? 'Клиент'}
                   </p>
                   <p className="truncate opacity-80">{employee?.name}</p>
-                </div>
+                </button>
               );
             })}
           </section>

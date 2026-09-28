@@ -1,4 +1,5 @@
 'use client';
+import { useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorText } from '@/components/shared/error-text';
 import { useGetCompany } from '@/services/queries/companies';
@@ -6,6 +7,7 @@ import { useGetCompanyAppointments } from '@/services/queries/appointments';
 import { useCompanyDirectory } from '@/hooks/use-company-directory';
 import dayjs from '@/lib/dayjs';
 import { DEFAULT_TIMEZONE } from '@/utils/date';
+import { AppointmentDetails } from '@/components/appointment-details';
 import { CalendarToolbar } from './calendar-toolbar';
 import { DayView } from './day-view';
 import { WeekView } from './week-view';
@@ -18,6 +20,7 @@ export const AppointmentsCalendar = ({
   date,
   view,
 }: AppointmentsCalendarProps) => {
+  const [selectedId, setSelectedId] = useState<Nullable<number>>(null);
   const { data: company } = useGetCompany(companyId);
   const timezone = company?.timezone || DEFAULT_TIMEZONE;
   const today = dayjs().tz(timezone).format(DATE_PARAM_FORMAT);
@@ -50,6 +53,7 @@ export const AppointmentsCalendar = ({
           appointments={appointments}
           directory={directory}
           timezone={timezone}
+          onSelect={setSelectedId}
         />
       );
     }
@@ -58,6 +62,7 @@ export const AppointmentsCalendar = ({
         appointments={appointments}
         directory={directory}
         timezone={timezone}
+        onSelect={setSelectedId}
       />
     );
   };
@@ -71,6 +76,13 @@ export const AppointmentsCalendar = ({
         view={view}
       />
       {renderContent()}
+      <AppointmentDetails
+        companyId={companyId}
+        appointment={appointments?.find(({ id }) => id === selectedId) ?? null}
+        directory={directory}
+        timezone={timezone}
+        onClose={() => setSelectedId(null)}
+      />
     </div>
   );
 };

@@ -20,12 +20,14 @@ export interface DayViewProps {
   appointments: Appointment[];
   directory: CompanyDirectory;
   timezone: string;
+  onSelect: (appointmentId: number) => void;
 }
 
 export interface AppointmentBlockProps {
   appointment: Appointment;
   directory: CompanyDirectory;
   timezone: string;
+  onSelect: (appointmentId: number) => void;
 }
 
 export interface WeekViewProps extends DayViewProps {

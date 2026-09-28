@@ -23,3 +23,30 @@ export const STATUS_STYLES: Record<AppointmentStatus, string> = {
 
 export const isActiveAppointment = ({ status }: Appointment): boolean =>
   status === 'pending' || status === 'confirmed';
+
+const STATUS_TRANSITIONS: Partial<
+  Record<AppointmentStatus, AppointmentStatus[]>
+> = {
+  pending: ['confirmed', 'cancelled', 'completed', 'no_show'],
+  confirmed: ['cancelled', 'completed', 'no_show'],
+};
+
+const STATUSES_AFTER_START: AppointmentStatus[] = ['completed', 'no_show'];
+
+export const getNextStatuses = (
+  appointment: Appointment,
+  now: number = Date.now(),
+): AppointmentStatus[] => {
+  const hasStarted = Date.parse(appointment.starts_at) <= now;
+  return (STATUS_TRANSITIONS[appointment.status] ?? []).filter(
+    (status) => hasStarted || !STATUSES_AFTER_START.includes(status),
+  );
+};
+
+export const STATUS_ACTION_LABELS: Record<AppointmentStatus, string> = {
+  pending: 'Вернуть в ожидание',
+  confirmed: 'Подтвердить',
+  completed: 'Клиент пришёл',
+  no_show: 'Клиент не пришёл',
+  cancelled: 'Отменить запись',
+};

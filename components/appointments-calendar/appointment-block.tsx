@@ -15,6 +15,7 @@ export const AppointmentBlock = ({
   appointment,
   directory,
   timezone,
+  onSelect,
 }: AppointmentBlockProps) => {
   const startsAt = inCompanyTimezone(appointment.starts_at, timezone);
   const endsAt = inCompanyTimezone(appointment.ends_at, timezone);
@@ -25,9 +26,11 @@ export const AppointmentBlock = ({
   const service = directory.servicesById.get(appointment.service_id);
 
   return (
-    <div
+    <button
+      type="button"
+      onClick={() => onSelect(appointment.id)}
       className={cn(
-        'absolute inset-x-1 overflow-hidden rounded-md border px-2 py-1 text-left text-xs',
+        'absolute inset-x-1 flex cursor-pointer flex-col justify-start transition-shadow hover:shadow-md overflow-hidden rounded-md border px-2 py-1 text-left text-xs',
         STATUS_STYLES[appointment.status],
       )}
       style={{
@@ -43,6 +46,6 @@ export const AppointmentBlock = ({
       </p>
       <p className="truncate font-medium">{client?.name ?? 'Клиент'}</p>
       <p className="truncate opacity-80">{service?.name}</p>
-    </div>
+    </button>
   );
 };
