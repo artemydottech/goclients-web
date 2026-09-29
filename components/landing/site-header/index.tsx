@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import { FaGithub } from 'react-icons/fa6';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/shared/logo';
+import { ThemeToggle } from '@/components/shared/theme-toggle';
 import { cn } from '@/lib/utils';
 import { GITHUB_URL, SITE_NAV } from './site-header.constants';
 
@@ -29,6 +30,7 @@ export const SiteHeader = () => {
           ))}
         </nav>
         <div className="ml-auto flex items-center gap-2">
+          <ThemeToggle />
           <Button variant="ghost" size="icon" asChild>
             <a
               href={GITHUB_URL}

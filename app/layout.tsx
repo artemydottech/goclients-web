@@ -6,6 +6,7 @@ import 'dayjs/locale/ru';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Toaster } from '@/components/ui/sonner';
 import { QueryClientProviderComponent } from '@/components/providers/query-client.provider';
+import { ThemeProviderComponent } from '@/components/providers/theme.provider';
 
 const inter = Inter({ subsets: ['latin', 'cyrillic'] });
 
@@ -24,10 +25,12 @@ export default function RootLayout({
       <body
         className={`${inter.className} antialiased bg-background text-foreground`}
       >
-        <QueryClientProviderComponent>
-          <TooltipProvider>{children}</TooltipProvider>
-          <Toaster position="top-center" />
-        </QueryClientProviderComponent>
+        <ThemeProviderComponent>
+          <QueryClientProviderComponent>
+            <TooltipProvider>{children}</TooltipProvider>
+            <Toaster position="top-center" />
+          </QueryClientProviderComponent>
+        </ThemeProviderComponent>
       </body>
     </html>
   );
