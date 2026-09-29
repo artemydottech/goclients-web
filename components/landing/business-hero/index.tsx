@@ -4,6 +4,7 @@ import { FaGithub } from 'react-icons/fa6';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { AudienceSwitch } from '@/components/landing/audience-switch';
+import { ProductPreview } from '@/components/landing/product-preview';
 import { GITHUB_URL } from '@/components/landing/site-header/site-header.constants';
 
 export const BusinessHero = () => (
@@ -39,6 +40,9 @@ export const BusinessHero = () => (
           </a>
         </Button>
       </div>
+    </div>
+    <div className="px-4 pb-8">
+      <ProductPreview />
     </div>
   </section>
 );
