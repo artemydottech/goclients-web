@@ -10,7 +10,16 @@ export const Pricing = () => (
     description="goclients — открытый проект. Платите хостингу, а не за каждого мастера."
   >
     <div className="grid gap-6 lg:grid-cols-5">
-      <div className="overflow-hidden rounded-xl border lg:col-span-3">
+      <ul className="space-y-3 sm:hidden">
+        {COMPARISON.map((row) => (
+          <li key={row.label} className="rounded-xl border p-4 text-sm">
+            <p className="mb-2 font-medium">{row.label}</p>
+            <p className="text-muted-foreground">Облако: {row.cloud}</p>
+            <p>goclients: {row.selfhosted}</p>
+          </li>
+        ))}
+      </ul>
+      <div className="hidden overflow-hidden rounded-xl border sm:block lg:col-span-3">
         <table className="w-full text-sm">
           <thead className="bg-muted/60 text-left">
             <tr>

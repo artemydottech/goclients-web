@@ -26,7 +26,7 @@ export const BusinessHero = () => (
         история каждого клиента. Без абонентской платы и без передачи базы
         третьим лицам.
       </p>
-      <div className="flex flex-col gap-3 sm:flex-row">
+      <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
         <Button size="lg" asChild>
           <Link href="/dashboard">
             Открыть демо-панель
