@@ -1,6 +1,6 @@
 import type { Company, Employee, Service } from '@/types';
 
-export type BookingStep = 'service' | 'employee' | 'time';
+export type BookingStep = 'service' | 'employee' | 'time' | 'contacts';
 
 export interface BookingSelection {
   service: Nullable<Service>;
@@ -45,6 +45,7 @@ export interface TimeStepProps {
   onDateChange: (date: string) => void;
   onSlotChange: (slot: string) => void;
   onBack: () => void;
+  onNext: () => void;
 }
 
 export interface OptionCardProps {

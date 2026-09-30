@@ -18,6 +18,7 @@ export const TimeStep = ({
   onDateChange,
   onSlotChange,
   onBack,
+  onNext,
 }: TimeStepProps) => {
   const today = getCompanyToday(timezone);
   const days = Array.from({ length: DAYS_AHEAD }, (_, index) =>
@@ -72,6 +73,9 @@ export const TimeStep = ({
         value={slot}
         onChange={onSlotChange}
       />
+      <Button size="lg" disabled={!slot} onClick={onNext}>
+        Продолжить
+      </Button>
     </div>
   );
 };

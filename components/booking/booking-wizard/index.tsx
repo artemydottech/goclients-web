@@ -1,6 +1,8 @@
 'use client';
 import { useState } from 'react';
 import { useGetCompany } from '@/services/queries/companies';
+import { useCreateBooking } from '@/services/mutations/booking';
+import { BookingContactsForm } from '@/forms/booking-contacts-form';
 import { DEFAULT_TIMEZONE, getCompanyToday } from '@/utils/date';
 import { StepIndicator } from './step-indicator';
 import { ServiceStep } from './service-step';
@@ -24,10 +26,31 @@ export const BookingWizard = ({ companyId }: BookingWizardProps) => {
     slot: '',
   }));
 
+  const createBooking = useCreateBooking();
+
   const update = (patch: Partial<BookingSelection>) =>
     setSelection((current) => ({ ...current, ...patch }));
 
   const renderStep = () => {
+    if (step === 'contacts' && selection.service && selection.employee) {
+      const { service, employee, slot } = selection;
+      return (
+        <BookingContactsForm
+          isPending={createBooking.isPending}
+          errorMessage={createBooking.error?.message}
+          onBack={() => setStep('time')}
+          onSubmit={(contacts) =>
+            createBooking.mutate({
+              ...contacts,
+              companyId,
+              serviceId: service.id,
+              employeeId: employee.id,
+              startsAt: slot,
+            })
+          }
+        />
+      );
+    }
     if (step === 'time' && selection.service && selection.employee) {
       return (
         <TimeStep
@@ -39,6 +62,7 @@ export const BookingWizard = ({ companyId }: BookingWizardProps) => {
           onDateChange={(date) => update({ date, slot: '' })}
           onSlotChange={(slot) => update({ slot })}
           onBack={() => setStep('employee')}
+          onNext={() => setStep('contacts')}
         />
       );
     }
