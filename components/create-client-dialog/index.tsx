@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -40,6 +41,9 @@ export const CreateClientDialog = ({ companyId }: CreateClientDialogProps) => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Новый клиент</DialogTitle>
+          <DialogDescription>
+            Телефон уникален в пределах компании
+          </DialogDescription>
         </DialogHeader>
         <ClientForm
           isPending={isPending}

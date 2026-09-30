@@ -30,7 +30,7 @@ export const AppointmentBlock = ({
       type="button"
       onClick={() => onSelect(appointment.id)}
       className={cn(
-        'absolute inset-x-1 flex cursor-pointer flex-col justify-start transition-shadow hover:shadow-md overflow-hidden rounded-md border px-2 py-1 text-left text-xs',
+        'absolute inset-x-1 flex cursor-pointer flex-col justify-start transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background overflow-hidden rounded-md border px-2 py-1 text-left text-xs',
         STATUS_STYLES[appointment.status],
       )}
       style={{

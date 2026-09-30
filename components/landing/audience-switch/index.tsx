@@ -18,7 +18,7 @@ export const AudienceSwitch = ({ active }: AudienceSwitchProps) => (
         href={option.href}
         aria-current={option.value === active ? 'page' : undefined}
         className={cn(
-          'rounded-full px-4 py-1.5 text-muted-foreground transition-colors hover:text-foreground',
+          'rounded-full px-4 py-1.5 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
           option.value === active && 'bg-background text-foreground shadow-sm',
         )}
       >

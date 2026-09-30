@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -42,6 +43,9 @@ export const CreateServiceDialog = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Новая услуга</DialogTitle>
+          <DialogDescription>
+            Длительность нужна, чтобы считать свободные слоты
+          </DialogDescription>
         </DialogHeader>
         <ServiceForm
           isPending={isPending}

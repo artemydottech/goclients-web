@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -42,6 +43,9 @@ export const CreateEmployeeDialog = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Новый сотрудник</DialogTitle>
+          <DialogDescription>
+            После создания задайте мастеру график и услуги
+          </DialogDescription>
         </DialogHeader>
         <EmployeeForm
           isPending={isPending}

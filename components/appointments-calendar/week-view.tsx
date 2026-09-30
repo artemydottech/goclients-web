@@ -60,7 +60,7 @@ export const WeekView = ({
                   key={appointment.id}
                   onClick={() => onSelect(appointment.id)}
                   className={cn(
-                    'cursor-pointer rounded-md border px-2 py-1 text-left text-xs transition-shadow hover:shadow-md',
+                    'cursor-pointer rounded-md border px-2 py-1 text-left text-xs transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
                     STATUS_STYLES[appointment.status],
                   )}
                 >

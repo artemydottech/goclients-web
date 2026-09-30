@@ -47,7 +47,7 @@ export const TimeStep = ({
               aria-checked={isSelected}
               onClick={() => onDateChange(value)}
               className={cn(
-                'flex w-14 shrink-0 flex-col items-center rounded-xl border py-2 text-sm transition-colors hover:bg-muted/50',
+                'flex w-14 shrink-0 flex-col items-center rounded-xl border py-2 text-sm transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
                 isSelected &&
                   'border-primary bg-primary text-primary-foreground hover:bg-primary',
               )}
