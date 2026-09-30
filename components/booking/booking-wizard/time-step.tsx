@@ -1,0 +1,77 @@
+'use client';
+import { LuArrowLeft } from 'react-icons/lu';
+import { Button } from '@/components/ui/button';
+import { SlotPicker } from '@/components/slot-picker';
+import dayjs from '@/lib/dayjs';
+import { cn } from '@/lib/utils';
+import { DATE_KEY_FORMAT, getCompanyToday } from '@/utils/date';
+import type { TimeStepProps } from './booking-wizard.types';
+
+const DAYS_AHEAD = 14;
+
+export const TimeStep = ({
+  serviceId,
+  employeeId,
+  timezone,
+  date,
+  slot,
+  onDateChange,
+  onSlotChange,
+  onBack,
+}: TimeStepProps) => {
+  const today = getCompanyToday(timezone);
+  const days = Array.from({ length: DAYS_AHEAD }, (_, index) =>
+    dayjs(today).add(index, 'day'),
+  );
+
+  return (
+    <div className="space-y-5">
+      <Button variant="ghost" size="sm" className="-ml-2" onClick={onBack}>
+        <LuArrowLeft className="size-4" />
+        Другой мастер
+      </Button>
+      <div
+        role="radiogroup"
+        aria-label="День"
+        className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1"
+      >
+        {days.map((day) => {
+          const value = day.format(DATE_KEY_FORMAT);
+          const isSelected = value === date;
+          return (
+            <button
+              key={value}
+              type="button"
+              role="radio"
+              aria-checked={isSelected}
+              onClick={() => onDateChange(value)}
+              className={cn(
+                'flex w-14 shrink-0 flex-col items-center rounded-xl border py-2 text-sm transition-colors hover:bg-muted/50',
+                isSelected &&
+                  'border-primary bg-primary text-primary-foreground hover:bg-primary',
+              )}
+            >
+              <span className="text-xs uppercase opacity-70">
+                {day.format('dd')}
+              </span>
+              <span className="text-lg font-semibold tabular-nums">
+                {day.format('D')}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+      <p className="text-sm font-medium first-letter:uppercase">
+        {dayjs(date).format('dddd, D MMMM')}
+      </p>
+      <SlotPicker
+        employeeId={employeeId}
+        serviceId={serviceId}
+        date={date}
+        timezone={timezone}
+        value={slot}
+        onChange={onSlotChange}
+      />
+    </div>
+  );
+};

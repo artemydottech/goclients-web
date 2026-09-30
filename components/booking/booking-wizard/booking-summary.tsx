@@ -1,9 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { formatDuration, formatPrice } from '@/utils';
+import { inCompanyTimezone } from '@/utils/date';
 import type { BookingSummaryProps } from './booking-wizard.types';
 
-export const BookingSummary = ({ company, selection }: BookingSummaryProps) => {
-  const { service, employee } = selection;
+export const BookingSummary = ({
+  company,
+  selection,
+  timezone,
+}: BookingSummaryProps) => {
+  const { service, employee, slot } = selection;
 
   return (
     <Card className="lg:sticky lg:top-24">
@@ -30,6 +35,16 @@ export const BookingSummary = ({ company, selection }: BookingSummaryProps) => {
               {employee
                 ? `${employee.name} ${employee.surname}`.trim()
                 : 'Не выбран'}
+            </dd>
+          </div>
+          <div>
+            <dt className="text-muted-foreground">Время</dt>
+            <dd className="font-medium first-letter:uppercase">
+              {slot
+                ? inCompanyTimezone(slot, timezone).format(
+                    'dddd, D MMMM, HH:mm',
+                  )
+                : 'Не выбрано'}
             </dd>
           </div>
           {service && (
