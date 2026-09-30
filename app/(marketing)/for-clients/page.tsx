@@ -6,7 +6,7 @@ import { Faq } from '@/components/landing/faq';
 import { CLIENT_FAQ, CLIENT_STEPS } from './page.constants';
 
 export const metadata: Metadata = {
-  title: 'Онлайн-запись к мастеру · goclients',
+  title: 'Онлайн-запись к мастеру',
   description:
     'Выберите услугу, мастера и свободное время. Без звонков и регистрации.',
 };

@@ -4,7 +4,8 @@ import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
 import { Header } from '@/components/shared/header';
 
 export const metadata: Metadata = {
-  title: 'Панель управления · goclients',
+  title: 'Панель управления',
+  robots: { index: false, follow: false },
 };
 
 export default function DashboardLayout({

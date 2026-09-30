@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { SalonList } from '@/components/booking/salon-list';
 
 export const metadata: Metadata = {
-  title: 'Выберите салон · goclients',
+  title: 'Выберите салон',
 };
 
 export default function BookPage() {
