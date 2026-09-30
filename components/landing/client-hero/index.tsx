@@ -21,12 +21,17 @@ export const ClientHero = () => (
           Выберите услугу, мастера и удобное окно — показываем только реально
           свободное время. Регистрация не нужна: достаточно имени и телефона.
         </p>
-        <Button size="lg" asChild>
-          <Link href="#steps">
-            Как это работает
-            <LuArrowRight className="size-4" />
-          </Link>
-        </Button>
+        <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+          <Button size="lg" asChild>
+            <Link href="/book">
+              Выбрать салон
+              <LuArrowRight className="size-4" />
+            </Link>
+          </Button>
+          <Button size="lg" variant="outline" asChild>
+            <Link href="#steps">Как это работает</Link>
+          </Button>
+        </div>
       </div>
       <div
         aria-hidden="true"

@@ -1,4 +1,5 @@
 import { CompanyInfo } from '@/components/company-info';
+import { BookingLink } from '@/components/booking-link';
 
 interface CompanyPageProps {
   params: Promise<{ companyId: string }>;
@@ -7,5 +8,10 @@ interface CompanyPageProps {
 export default async function CompanyPage({ params }: CompanyPageProps) {
   const { companyId } = await params;
 
-  return <CompanyInfo companyId={Number(companyId)} />;
+  return (
+    <div className="space-y-6">
+      <CompanyInfo companyId={Number(companyId)} />
+      <BookingLink companyId={Number(companyId)} />
+    </div>
+  );
 }
