@@ -9,6 +9,7 @@ import { ServiceStep } from './service-step';
 import { EmployeeStep } from './employee-step';
 import { TimeStep } from './time-step';
 import { BookingSummary } from './booking-summary';
+import { BookingConfirmation } from './booking-confirmation';
 import type {
   BookingSelection,
   BookingStep,
@@ -25,6 +26,7 @@ export const BookingWizard = ({ companyId }: BookingWizardProps) => {
     date: getCompanyToday(timezone),
     slot: '',
   }));
+  const [isBooked, setIsBooked] = useState(false);
 
   const createBooking = useCreateBooking();
 
@@ -40,13 +42,16 @@ export const BookingWizard = ({ companyId }: BookingWizardProps) => {
           errorMessage={createBooking.error?.message}
           onBack={() => setStep('time')}
           onSubmit={(contacts) =>
-            createBooking.mutate({
-              ...contacts,
-              companyId,
-              serviceId: service.id,
-              employeeId: employee.id,
-              startsAt: slot,
-            })
+            createBooking.mutate(
+              {
+                ...contacts,
+                companyId,
+                serviceId: service.id,
+                employeeId: employee.id,
+                startsAt: slot,
+              },
+              { onSuccess: () => setIsBooked(true) },
+            )
           }
         />
       );
@@ -90,6 +95,27 @@ export const BookingWizard = ({ companyId }: BookingWizardProps) => {
       />
     );
   };
+
+  if (isBooked) {
+    return (
+      <BookingConfirmation
+        company={company}
+        selection={selection}
+        timezone={timezone}
+        onRestart={() => {
+          createBooking.reset();
+          setSelection((current) => ({
+            ...current,
+            service: null,
+            employee: null,
+            slot: '',
+          }));
+          setStep('service');
+          setIsBooked(false);
+        }}
+      />
+    );
+  }
 
   return (
     <div className="grid gap-8 lg:grid-cols-3">

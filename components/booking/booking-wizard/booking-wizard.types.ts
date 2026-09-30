@@ -48,6 +48,13 @@ export interface TimeStepProps {
   onNext: () => void;
 }
 
+export interface BookingConfirmationProps {
+  company?: Company;
+  selection: BookingSelection;
+  timezone: string;
+  onRestart: () => void;
+}
+
 export interface OptionCardProps {
   isSelected: boolean;
   onClick: () => void;
