@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# goclients-web
 
-## Getting Started
+Веб-интерфейс для [goclients](https://github.com/artemydottech/goclients) — selfhosted-аналога yclients на Go и SQLite. Здесь лендинг, публичная онлайн-запись и панель управления салоном.
 
-First, run the development server:
+![Лендинг](docs/screenshots/landing.png)
+
+## Что есть
+
+**Панель управления** (`/dashboard`)
+
+- компании с часовым поясом, адресом и соцсетями;
+- календарь записей: день по мастерам и неделя целиком;
+- создание записи по свободным слотам, перенос, смена статуса по правилам бэкенда;
+- сотрудники: недельный график с перерывом, отпуска и больничные, привязка услуг;
+- «Мой день» мастера со списком записей и быстрыми статусами;
+- услуги с ценой и длительностью;
+- клиенты: поиск по имени и телефону, статистика визитов, история записей;
+- обзор с метриками за сегодня и неделю.
+
+**Онлайн-запись** (`/book`): клиент выбирает салон, услугу, мастера, день и слот, оставляет имя и телефон.
+
+**Лендинг**: `/` для владельцев салонов и `/for-clients` для клиентов.
+
+![Календарь](docs/screenshots/calendar.png)
+
+![Онлайн-запись](docs/screenshots/booking.png)
+
+## Запуск
+
+Нужен запущенный [бэкенд goclients](https://github.com/artemydottech/goclients):
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/artemydottech/goclients.git
+cd goclients && cp .env.example .env && go run .
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Фронтенд:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+cp .env.example .env
+npm install
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Переменная | По умолчанию            | Назначение                               |
+| ---------- | ----------------------- | ---------------------------------------- |
+| `API_URL`  | `http://localhost:8080` | адрес бэкенда, на него проксируется `/api` |
+| `SITE_URL` | `http://localhost:3000` | публичный адрес для sitemap и OG-тегов   |
 
-## Learn More
+Бэкенд не отдаёт CORS-заголовки, поэтому браузер ходит в `/api/*`, а Next.js проксирует запросы через `rewrites`.
 
-To learn more about Next.js, take a look at the following resources:
+## Скрипты
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run dev        # dev-сервер
+npm run build      # production-сборка
+npm run lint       # ESLint
+npm run typecheck  # tsc --noEmit
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+CI в `.github/workflows/ci.yml` прогоняет lint, typecheck и build на каждый push.
 
-## Deploy on Vercel
+## Стек
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, shadcn/ui, TanStack Query, React Hook Form + Zod, dayjs, sonner, next-themes.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Структура
+
+```text
+app/
+  (marketing)/         лендинг и публичная запись
+  dashboard/           панель управления
+components/            компоненты по фичам, components/ui — shadcn
+forms/                 формы: index, fields, validation, types
+services/
+  api/<domain>/        запросы axios, бросают ApiError с готовым текстом
+  queries/<domain>/    useQuery-хуки
+  mutations/<domain>/  useMutation-хуки с инвалидацией кэша и тостами через meta
+hooks/                 общие хуки
+utils/                 форматирование, даты в поясе компании, статусы записей
+```
+
+Время хранится в UTC, а показывается и отправляется в часовом поясе компании (`utils/date.ts`).
+
+## Ограничения API
+
+Интерфейс работает с тем, что сейчас отдаёт бэкенд:
+
+- **нет авторизации** — панель открыта всем, кто видит адрес;
+- **нет эндпоинтов обновления** — компании, услуги, сотрудники и клиенты только создаются и удаляются;
+- **нет фильтра сотрудников по компании** — список фильтруется на клиенте;
+- **нет поиска клиента по телефону** — публичная запись загружает клиентов компании, ищет совпадение по номеру и создаёт нового, если не нашла.
