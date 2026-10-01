@@ -1,8 +1,9 @@
 'use client';
 import { cn } from '@/lib/utils';
 import { inCompanyTimezone } from '@/utils/date';
-import { STATUS_STYLES } from '@/utils/appointments';
+import { isActiveAppointment, STATUS_STYLES } from '@/utils/appointments';
 import {
+  APPOINTMENT_DRAG_TYPE,
   DAY_START_HOUR,
   HOUR_HEIGHT_PX,
   MINUTES_IN_HOUR,
@@ -29,6 +30,18 @@ export const AppointmentBlock = ({
     <button
       type="button"
       onClick={() => onSelect(appointment.id)}
+      draggable={isActiveAppointment(appointment)}
+      onDragStart={(event) => {
+        event.dataTransfer.effectAllowed = 'move';
+        event.dataTransfer.setData(
+          APPOINTMENT_DRAG_TYPE,
+          JSON.stringify({
+            appointmentId: appointment.id,
+            grabOffset:
+              event.clientY - event.currentTarget.getBoundingClientRect().top,
+          }),
+        );
+      }}
       className={cn(
         'absolute inset-x-1 flex cursor-pointer flex-col justify-start transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background overflow-hidden rounded-md border px-2 py-1 text-left text-xs',
         STATUS_STYLES[appointment.status],

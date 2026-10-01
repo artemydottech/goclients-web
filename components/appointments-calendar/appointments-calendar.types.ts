@@ -47,3 +47,8 @@ export interface OffHoursProps {
   workingDay?: WorkingDay;
   timeOffReason?: string;
 }
+
+export interface AppointmentDragPayload {
+  appointmentId: number;
+  grabOffset: number;
+}

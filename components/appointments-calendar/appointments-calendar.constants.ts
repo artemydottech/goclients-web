@@ -7,3 +7,6 @@ export const CALENDAR_HOURS = Array.from(
   { length: DAY_END_HOUR - DAY_START_HOUR },
   (_, index) => DAY_START_HOUR + index,
 );
+
+export const SNAP_MINUTES = 15;
+export const APPOINTMENT_DRAG_TYPE = 'application/x-goclients-appointment';

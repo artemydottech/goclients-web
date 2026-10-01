@@ -1,4 +1,6 @@
 'use client';
+import { useState, type DragEvent } from 'react';
+import { toast } from 'sonner';
 import { LuUsers } from 'react-icons/lu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { EmptyState } from '@/components/shared/empty-state';
@@ -9,9 +11,16 @@ import { OffHours } from './off-hours';
 import { useGetEmployeesSchedules } from '@/services/queries/schedule';
 import { useGetEmployeesTimeOff } from '@/services/queries/time-off';
 import dayjs from '@/lib/dayjs';
+import { cn } from '@/lib/utils';
+import { useUpdateAppointmentTime } from '@/services/mutations/appointments';
+import { parseDragPayload } from './appointments-calendar.utils';
 import {
+  APPOINTMENT_DRAG_TYPE,
   CALENDAR_HOURS,
+  DAY_START_HOUR,
   HOUR_HEIGHT_PX,
+  MINUTES_IN_HOUR,
+  SNAP_MINUTES,
 } from './appointments-calendar.constants';
 import type { DayViewProps } from './appointments-calendar.types';
 
@@ -38,6 +47,36 @@ export const DayView = ({
           Date.parse(period.starts_at) < dayEnd &&
           Date.parse(period.ends_at) > dayStart,
       )?.reason;
+
+  const [dropTargetId, setDropTargetId] = useState<Nullable<number>>(null);
+  const { mutate: moveAppointment } = useUpdateAppointmentTime();
+
+  const handleDrop = (event: DragEvent<HTMLDivElement>, employeeId: number) => {
+    event.preventDefault();
+    setDropTargetId(null);
+    const payload = parseDragPayload(
+      event.dataTransfer.getData(APPOINTMENT_DRAG_TYPE),
+    );
+    if (!payload) return;
+
+    const offset =
+      event.clientY -
+      event.currentTarget.getBoundingClientRect().top -
+      payload.grabOffset;
+    const minutes =
+      Math.round(((offset / HOUR_HEIGHT_PX) * MINUTES_IN_HOUR) / SNAP_MINUTES) *
+        SNAP_MINUTES +
+      DAY_START_HOUR * MINUTES_IN_HOUR;
+
+    moveAppointment(
+      {
+        id: payload.appointmentId,
+        employee_id: employeeId,
+        starts_at: dayjs.tz(date, timezone).add(minutes, 'minute').format(),
+      },
+      { onError: (error) => toast.error(error.message) },
+    );
+  };
 
   if (employees.length === 0) {
     return (
@@ -88,7 +127,22 @@ export const DayView = ({
           ))}
         </div>
         {employees.map((employee, index) => (
-          <div key={employee.id} className="relative border-l">
+          <div
+            key={employee.id}
+            className={cn(
+              'relative border-l transition-colors',
+              dropTargetId === employee.id && 'bg-primary/5',
+            )}
+            onDragOver={(event) => {
+              if (!event.dataTransfer.types.includes(APPOINTMENT_DRAG_TYPE)) {
+                return;
+              }
+              event.preventDefault();
+              setDropTargetId(employee.id);
+            }}
+            onDragLeave={() => setDropTargetId(null)}
+            onDrop={(event) => handleDrop(event, employee.id)}
+          >
             {schedules.get(employee.id) && (
               <OffHours
                 timeOffReason={getTimeOffReason(employee.id)}
