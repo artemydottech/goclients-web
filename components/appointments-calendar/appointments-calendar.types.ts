@@ -45,4 +45,5 @@ export interface CurrentTimeLineProps {
 
 export interface OffHoursProps {
   workingDay?: WorkingDay;
+  timeOffReason?: string;
 }

@@ -7,6 +7,7 @@ import { AppointmentBlock } from './appointment-block';
 import { CurrentTimeLine } from './current-time-line';
 import { OffHours } from './off-hours';
 import { useGetEmployeesSchedules } from '@/services/queries/schedule';
+import { useGetEmployeesTimeOff } from '@/services/queries/time-off';
 import dayjs from '@/lib/dayjs';
 import {
   CALENDAR_HOURS,
@@ -23,8 +24,20 @@ export const DayView = ({
   onSelect,
 }: DayViewProps) => {
   const { employees } = directory;
-  const schedules = useGetEmployeesSchedules(employees.map(({ id }) => id));
+  const employeeIds = employees.map(({ id }) => id);
+  const schedules = useGetEmployeesSchedules(employeeIds);
+  const timeOff = useGetEmployeesTimeOff(employeeIds);
+  const dayStart = dayjs.tz(date, timezone).valueOf();
+  const dayEnd = dayjs.tz(date, timezone).add(1, 'day').valueOf();
   const weekday = dayjs(date).day();
+  const getTimeOffReason = (employeeId: number): string | undefined =>
+    timeOff
+      .get(employeeId)
+      ?.find(
+        (period) =>
+          Date.parse(period.starts_at) < dayEnd &&
+          Date.parse(period.ends_at) > dayStart,
+      )?.reason;
 
   if (employees.length === 0) {
     return (
@@ -78,6 +91,7 @@ export const DayView = ({
           <div key={employee.id} className="relative border-l">
             {schedules.get(employee.id) && (
               <OffHours
+                timeOffReason={getTimeOffReason(employee.id)}
                 workingDay={schedules
                   .get(employee.id)
                   ?.find((day) => day.weekday === weekday)}

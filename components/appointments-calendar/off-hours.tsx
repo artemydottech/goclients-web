@@ -20,15 +20,21 @@ const toPx = (minutes: number): number =>
     MINUTES_IN_HOUR) *
   HOUR_HEIGHT_PX;
 
-export const OffHours = ({ workingDay }: OffHoursProps) => {
-  const ranges: { from: number; to: number; label?: string }[] = workingDay
-    ? [
-        { from: CALENDAR_START, to: toMinutes(workingDay.starts_at) },
-        { from: toMinutes(workingDay.ends_at), to: CALENDAR_END },
-      ]
-    : [{ from: CALENDAR_START, to: CALENDAR_END, label: 'Выходной' }];
+export const OffHours = ({ workingDay, timeOffReason }: OffHoursProps) => {
+  const ranges: { from: number; to: number; label?: string }[] = timeOffReason
+    ? [{ from: CALENDAR_START, to: CALENDAR_END, label: timeOffReason }]
+    : workingDay
+      ? [
+          { from: CALENDAR_START, to: toMinutes(workingDay.starts_at) },
+          { from: toMinutes(workingDay.ends_at), to: CALENDAR_END },
+        ]
+      : [{ from: CALENDAR_START, to: CALENDAR_END, label: 'Выходной' }];
 
-  if (workingDay?.break_starts_at && workingDay.break_ends_at) {
+  if (
+    !timeOffReason &&
+    workingDay?.break_starts_at &&
+    workingDay.break_ends_at
+  ) {
     ranges.push({
       from: toMinutes(workingDay.break_starts_at),
       to: toMinutes(workingDay.break_ends_at),
