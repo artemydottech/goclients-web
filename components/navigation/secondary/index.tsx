@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { IconType } from 'react-icons';
+import Link from 'next/link';
 
 import {
   SidebarGroup,
@@ -10,29 +10,22 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { SECONDARY_NAV_ITEMS } from '../sidebar/sidebar.constants';
 
-export function NavSecondary({
-  items,
-  ...props
-}: {
-  items: {
-    title: string;
-    url: string;
-    icon: IconType;
-  }[];
-} & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
+export function NavSecondary(
+  props: React.ComponentPropsWithoutRef<typeof SidebarGroup>,
+) {
   return (
     <SidebarGroup {...props}>
       <SidebarGroupContent>
         <SidebarMenu>
-          {items.map((item) => (
+          {SECONDARY_NAV_ITEMS.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild size="sm">
-                <a href={item.url}>
-                  {/* Добавляем size-4 для консистентности с остальным меню */}
+                <Link href={item.url}>
                   <item.icon className="size-4" />
                   <span>{item.title}</span>
-                </a>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}

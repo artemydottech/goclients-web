@@ -1,76 +1,30 @@
 import {
   LuLayoutDashboard,
-  LuChartBarDecreasing,
+  LuCalendarDays,
+  LuContact,
   LuUsers,
-  LuSettings,
-  LuSearch,
-  LuDatabase,
-  LuFileHeart,
-  LuFileDigit,
+  LuScissors,
   LuStore,
+  LuBuilding2,
+  LuHouse,
 } from 'react-icons/lu';
-import { BsFillQuestionCircleFill } from 'react-icons/bs';
 
-export const NavItems = {
-  user: {
-    name: 'Админ',
-    email: 'm@example.com',
-    avatar: '/avatars/shadcn.jpg',
-  },
-  navMain: [
-    {
-      title: 'Панель управления',
-      url: '/',
-      icon: LuLayoutDashboard,
-    },
-    {
-      title: 'Аналитика',
-      url: '/analytics',
-      icon: LuChartBarDecreasing,
-    },
-    {
-      title: 'Филиалы',
-      url: '/filials',
-      icon: LuStore,
-    },
-    {
-      title: 'Сотрудники',
-      url: '/employees',
-      icon: LuUsers,
-    },
-  ],
-  navSecondary: [
-    {
-      title: 'Настройки',
-      url: '#',
-      icon: LuSettings,
-    },
-    {
-      title: 'Помощь',
-      url: '#',
-      icon: BsFillQuestionCircleFill,
-    },
-    {
-      title: 'Поиск',
-      url: '#',
-      icon: LuSearch,
-    },
-  ],
-  documents: [
-    {
-      name: 'Библиотека данных',
-      url: '#',
-      icon: LuDatabase,
-    },
-    {
-      name: 'Отчеты',
-      url: '#',
-      icon: LuFileHeart,
-    },
-    {
-      name: 'Помощник Word',
-      url: '#',
-      icon: LuFileDigit,
-    },
-  ],
+export const COMPANY_NAV_ITEMS = [
+  { title: 'Обзор', segment: '', icon: LuLayoutDashboard },
+  { title: 'Записи', segment: '/appointments', icon: LuCalendarDays },
+  { title: 'Клиенты', segment: '/clients', icon: LuContact },
+  { title: 'Сотрудники', segment: '/employees', icon: LuUsers },
+  { title: 'Услуги', segment: '/services', icon: LuScissors },
+  { title: 'Компания', segment: '/company', icon: LuStore },
+];
+
+export const SECONDARY_NAV_ITEMS = [
+  { title: 'Все компании', url: '/dashboard', icon: LuBuilding2 },
+  { title: 'На главную', url: '/', icon: LuHouse },
+];
+
+export const NAV_USER = {
+  name: 'Админ',
+  email: 'admin@goclients.local',
+  avatar: '',
 };

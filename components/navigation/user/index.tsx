@@ -1,6 +1,8 @@
 'use client';
 
-import { LuCreditCard, LuBell, LuLogOut, LuUser } from 'react-icons/lu';
+import Link from 'next/link';
+import { LuCalendarCheck, LuStore } from 'react-icons/lu';
+import { FaGithub } from 'react-icons/fa6';
 import { IoMdMore } from 'react-icons/io';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -19,17 +21,12 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { GITHUB_URL } from '@/components/landing/site-header/site-header.constants';
+import type { NavUserProps } from './user-navigation.types';
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string;
-    email: string;
-    avatar: string;
-  };
-}) {
+export function NavUser({ user, companyId }: NavUserProps) {
   const { isMobile } = useSidebar();
+  const initials = user.name.slice(0, 2).toUpperCase();
 
   return (
     <SidebarMenu>
@@ -40,10 +37,10 @@ export function NavUser({
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className="h-8 w-8 rounded-lg grayscale">
+              <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={user.avatar} alt={user.name} />
                 <AvatarFallback className="rounded-lg">
-                  {user.name.slice(0, 2).toUpperCase()}
+                  {initials}
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
@@ -61,41 +58,31 @@ export function NavUser({
             align="end"
             sideOffset={4}
           >
-            <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">
-                    {user.name.slice(0, 2).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user.name}</span>
-                  <span className="truncate text-xs text-muted-foreground">
-                    {user.email}
-                  </span>
-                </div>
-              </div>
+            <DropdownMenuLabel className="text-xs font-normal text-muted-foreground">
+              Демо-режим: вход появится вместе с авторизацией в API
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <LuUser className="mr-2 size-4" />
-                <span>Профиль</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <LuCreditCard className="mr-2 size-4" />
-                <span>Оплата</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <LuBell className="mr-2 size-4" />
-                <span>Уведомления</span>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <LuLogOut className="mr-2 size-4" />
-              <span>Выйти</span>
+            {companyId && (
+              <DropdownMenuGroup>
+                <DropdownMenuItem asChild>
+                  <Link href={`/dashboard/${companyId}/company`}>
+                    <LuStore className="size-4" />
+                    Профиль компании
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href={`/book/${companyId}`} target="_blank">
+                    <LuCalendarCheck className="size-4" />
+                    Страница записи
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            )}
+            <DropdownMenuItem asChild>
+              <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
+                <FaGithub className="size-4" />
+                Исходный код
+              </a>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
