@@ -5,6 +5,9 @@ import { EmptyState } from '@/components/shared/empty-state';
 import { getInitials } from '@/utils';
 import { AppointmentBlock } from './appointment-block';
 import { CurrentTimeLine } from './current-time-line';
+import { OffHours } from './off-hours';
+import { useGetEmployeesSchedules } from '@/services/queries/schedule';
+import dayjs from '@/lib/dayjs';
 import {
   CALENDAR_HOURS,
   HOUR_HEIGHT_PX,
@@ -15,10 +18,13 @@ export const DayView = ({
   appointments,
   directory,
   timezone,
+  date,
   isToday,
   onSelect,
 }: DayViewProps) => {
   const { employees } = directory;
+  const schedules = useGetEmployeesSchedules(employees.map(({ id }) => id));
+  const weekday = dayjs(date).day();
 
   if (employees.length === 0) {
     return (
@@ -70,6 +76,13 @@ export const DayView = ({
         </div>
         {employees.map((employee, index) => (
           <div key={employee.id} className="relative border-l">
+            {schedules.get(employee.id) && (
+              <OffHours
+                workingDay={schedules
+                  .get(employee.id)
+                  ?.find((day) => day.weekday === weekday)}
+              />
+            )}
             {isToday && (
               <CurrentTimeLine timezone={timezone} withDot={index === 0} />
             )}

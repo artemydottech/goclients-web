@@ -58,6 +58,7 @@ export const AppointmentsCalendar = ({
     }
     return (
       <DayView
+        date={currentDate}
         isToday={currentDate === today}
         appointments={appointments}
         directory={directory}

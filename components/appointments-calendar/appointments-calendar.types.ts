@@ -1,4 +1,4 @@
-import type { Appointment } from '@/types';
+import type { Appointment, WorkingDay } from '@/types';
 import type { CompanyDirectory } from '@/hooks/use-company-directory';
 
 export type CalendarView = 'day' | 'week';
@@ -20,6 +20,7 @@ export interface DayViewProps {
   appointments: Appointment[];
   directory: CompanyDirectory;
   timezone: string;
+  date: string;
   isToday: boolean;
   onSelect: (appointmentId: number) => void;
 }
@@ -31,7 +32,7 @@ export interface AppointmentBlockProps {
   onSelect: (appointmentId: number) => void;
 }
 
-export interface WeekViewProps extends Omit<DayViewProps, 'isToday'> {
+export interface WeekViewProps extends Omit<DayViewProps, 'isToday' | 'date'> {
   companyId: number;
   weekStart: string;
   today: string;
@@ -40,4 +41,8 @@ export interface WeekViewProps extends Omit<DayViewProps, 'isToday'> {
 export interface CurrentTimeLineProps {
   timezone: string;
   withDot: boolean;
+}
+
+export interface OffHoursProps {
+  workingDay?: WorkingDay;
 }
