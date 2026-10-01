@@ -2,6 +2,8 @@
 import { LuArrowLeft } from 'react-icons/lu';
 import { Button } from '@/components/ui/button';
 import { SlotPicker } from '@/components/slot-picker';
+import { SLOT_STEP_MINUTES } from '@/components/slot-picker/slot-picker.constants';
+import { useGetSlotsByDates } from '@/services/queries/slots';
 import dayjs from '@/lib/dayjs';
 import { cn } from '@/lib/utils';
 import { DATE_KEY_FORMAT, getCompanyToday } from '@/utils/date';
@@ -24,6 +26,15 @@ export const TimeStep = ({
   const days = Array.from({ length: DAYS_AHEAD }, (_, index) =>
     dayjs(today).add(index, 'day'),
   );
+  const availability = useGetSlotsByDates(
+    { employee_id: employeeId, service_id: serviceId, step: SLOT_STEP_MINUTES },
+    days.map((day) => day.format(DATE_KEY_FORMAT)),
+  );
+  const nearestDate = [...availability.entries()].find(
+    ([, hasSlots]) => hasSlots,
+  )?.[0];
+  const showNearest =
+    availability.get(date) === false && nearestDate && nearestDate !== date;
 
   return (
     <div className="space-y-5">
@@ -39,15 +50,18 @@ export const TimeStep = ({
         {days.map((day) => {
           const value = day.format(DATE_KEY_FORMAT);
           const isSelected = value === date;
+          const isUnavailable = availability.get(value) === false;
           return (
             <button
               key={value}
               type="button"
               role="radio"
               aria-checked={isSelected}
+              aria-disabled={isUnavailable}
               onClick={() => onDateChange(value)}
               className={cn(
                 'flex w-14 shrink-0 flex-col items-center rounded-xl border py-2 text-sm transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+                isUnavailable && !isSelected && 'opacity-40',
                 isSelected &&
                   'border-primary bg-primary text-primary-foreground hover:bg-primary',
               )}
@@ -65,6 +79,14 @@ export const TimeStep = ({
       <p className="text-sm font-medium first-letter:uppercase">
         {dayjs(date).format('dddd, D MMMM')}
       </p>
+      {showNearest && (
+        <Button variant="secondary" onClick={() => onDateChange(nearestDate)}>
+          Ближайшее свободное —{' '}
+          <span className="first-letter:uppercase">
+            {dayjs(nearestDate).format('dd, D MMMM')}
+          </span>
+        </Button>
+      )}
       <SlotPicker
         employeeId={employeeId}
         serviceId={serviceId}

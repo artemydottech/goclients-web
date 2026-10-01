@@ -4,9 +4,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorText } from '@/components/shared/error-text';
 import { useGetSlots } from '@/services/queries/slots';
 import { inCompanyTimezone } from '@/utils/date';
+import { SLOT_STEP_MINUTES } from './slot-picker.constants';
 import type { SlotPickerProps } from './slot-picker.types';
-
-const SLOT_STEP_MINUTES = 15;
 
 export const SlotPicker = ({
   employeeId,
