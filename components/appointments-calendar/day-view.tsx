@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { EmptyState } from '@/components/shared/empty-state';
 import { getInitials } from '@/utils';
 import { AppointmentBlock } from './appointment-block';
+import { CurrentTimeLine } from './current-time-line';
 import {
   CALENDAR_HOURS,
   HOUR_HEIGHT_PX,
@@ -14,6 +15,7 @@ export const DayView = ({
   appointments,
   directory,
   timezone,
+  isToday,
   onSelect,
 }: DayViewProps) => {
   const { employees } = directory;
@@ -66,8 +68,11 @@ export const DayView = ({
             </div>
           ))}
         </div>
-        {employees.map((employee) => (
+        {employees.map((employee, index) => (
           <div key={employee.id} className="relative border-l">
+            {isToday && (
+              <CurrentTimeLine timezone={timezone} withDot={index === 0} />
+            )}
             {CALENDAR_HOURS.map((hour) => (
               <div
                 key={hour}

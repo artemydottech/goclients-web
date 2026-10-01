@@ -20,6 +20,7 @@ export interface DayViewProps {
   appointments: Appointment[];
   directory: CompanyDirectory;
   timezone: string;
+  isToday: boolean;
   onSelect: (appointmentId: number) => void;
 }
 
@@ -30,8 +31,13 @@ export interface AppointmentBlockProps {
   onSelect: (appointmentId: number) => void;
 }
 
-export interface WeekViewProps extends DayViewProps {
+export interface WeekViewProps extends Omit<DayViewProps, 'isToday'> {
   companyId: number;
   weekStart: string;
   today: string;
+}
+
+export interface CurrentTimeLineProps {
+  timezone: string;
+  withDot: boolean;
 }

@@ -58,6 +58,7 @@ export const AppointmentsCalendar = ({
     }
     return (
       <DayView
+        isToday={currentDate === today}
         appointments={appointments}
         directory={directory}
         timezone={timezone}
