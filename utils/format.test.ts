@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatPrice, truncate } from '.';
+import { formatPrice, truncate, formatDuration } from '.';
 
 describe('formatPrice', () => {
   it('formats rubles without fraction digits', () => {
@@ -26,5 +26,19 @@ describe('truncate', () => {
 
   it('supports custom ellipsis', () => {
     expect(truncate('hello world', 8, '...')).toBe('hello...');
+  });
+});
+
+describe('formatDuration', () => {
+  it('formats minutes only', () => {
+    expect(formatDuration(45)).toBe('45 мин');
+  });
+
+  it('formats whole hours', () => {
+    expect(formatDuration(120)).toBe('2 ч');
+  });
+
+  it('formats hours with minutes', () => {
+    expect(formatDuration(95)).toBe('1 ч 35 мин');
   });
 });
