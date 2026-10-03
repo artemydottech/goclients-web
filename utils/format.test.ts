@@ -70,3 +70,14 @@ describe('onlyDigits', () => {
     expect(onlyDigits('abc')).toBe('');
   });
 });
+
+describe('formatPhone', () => {
+  it('formats an eleven digit russian number', () => {
+    expect(formatPhone('79001234567')).toBe('+7 900 123-45-67');
+  });
+
+  it('returns other lengths unchanged', () => {
+    expect(formatPhone('9001234567')).toBe('9001234567');
+    expect(formatPhone('')).toBe('');
+  });
+});
