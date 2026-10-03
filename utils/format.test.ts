@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatPrice, truncate, formatDuration } from '.';
+import { formatPrice, truncate, formatDuration, getInitials } from '.';
 
 describe('formatPrice', () => {
   it('formats rubles without fraction digits', () => {
@@ -40,5 +40,23 @@ describe('formatDuration', () => {
 
   it('formats hours with minutes', () => {
     expect(formatDuration(95)).toBe('1 ч 35 мин');
+  });
+});
+
+describe('getInitials', () => {
+  it('takes first letters of the first two words', () => {
+    expect(getInitials('иван петров')).toBe('ИП');
+  });
+
+  it('ignores extra spaces and words', () => {
+    expect(getInitials('  Анна  Мария  Ли ')).toBe('АМ');
+  });
+
+  it('handles a single word', () => {
+    expect(getInitials('Анна')).toBe('А');
+  });
+
+  it('returns empty string for blank input', () => {
+    expect(getInitials('   ')).toBe('');
   });
 });
