@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatPrice, truncate, formatDuration, getInitials } from '.';
+import { formatPrice, truncate, formatDuration, getInitials, formatPhone, onlyDigits } from '.';
 
 describe('formatPrice', () => {
   it('formats rubles without fraction digits', () => {
@@ -58,5 +58,15 @@ describe('getInitials', () => {
 
   it('returns empty string for blank input', () => {
     expect(getInitials('   ')).toBe('');
+  });
+});
+
+describe('onlyDigits', () => {
+  it('strips non-digit characters', () => {
+    expect(onlyDigits('+7 (900) 123-45-67')).toBe('79001234567');
+  });
+
+  it('returns empty string when there are no digits', () => {
+    expect(onlyDigits('abc')).toBe('');
   });
 });
