@@ -30,7 +30,7 @@ describe('toCompanyDateTime', () => {
 
   it('falls back to UTC for an empty timezone', () => {
     expect(toCompanyDateTime('2026-10-05', '10:00', '')).toBe(
-      '2026-10-05T10:00:00+00:00',
+      '2026-10-05T10:00:00Z',
     );
   });
 });
