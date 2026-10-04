@@ -27,4 +27,16 @@ describe("buildSocialUrl", () => {
       );
     });
   });
+
+  describe("vk", () => {
+    it("keeps a full link as is", () => {
+      expect(buildSocialUrl("vk", "https://vk.com/salon")).toBe(
+        "https://vk.com/salon",
+      );
+    });
+
+    it("adds a protocol to a bare link", () => {
+      expect(buildSocialUrl("vk", "vk.com/salon")).toBe("https://vk.com/salon");
+    });
+  });
 });
