@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 import type { Appointment, AppointmentStatus } from "@/types";
-import { getNextStatuses, isActiveAppointment } from "./appointments";
+import {
+  getNextStatuses,
+  isActiveAppointment,
+  STATUS_ACTION_LABELS,
+  STATUS_LABELS,
+  STATUS_STYLES,
+} from "./appointments";
 
 const buildAppointment = (
   overrides: Partial<Appointment> = {},
@@ -71,4 +77,25 @@ describe("getNextStatuses", () => {
       );
     },
   );
+});
+
+describe("status dictionaries", () => {
+  const statuses: AppointmentStatus[] = [
+    "pending",
+    "confirmed",
+    "cancelled",
+    "completed",
+    "no_show",
+  ];
+
+  it.each([
+    ["STATUS_LABELS", STATUS_LABELS],
+    ["STATUS_STYLES", STATUS_STYLES],
+    ["STATUS_ACTION_LABELS", STATUS_ACTION_LABELS],
+  ])("%s covers every status with a non-empty value", (_, dictionary) => {
+    expect(Object.keys(dictionary).sort()).toEqual([...statuses].sort());
+    statuses.forEach((status) => {
+      expect(dictionary[status]).not.toBe("");
+    });
+  });
 });
