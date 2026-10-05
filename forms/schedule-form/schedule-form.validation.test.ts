@@ -59,4 +59,40 @@ describe("scheduleFormSchema", () => {
     });
     expect(validate(dayOff).success).toBe(true);
   });
+
+  it("rejects a break that ends before it starts", () => {
+    const result = validate(
+      buildDay({
+        hasBreak: true,
+        break_starts_at: "14:00",
+        break_ends_at: "13:00",
+      }),
+    );
+    expect(result.error?.issues[0]).toMatchObject({
+      path: ["days", 0, "break_ends_at"],
+      message: "Перерыв заканчивается раньше, чем начался",
+    });
+  });
+
+  it.each([
+    ["starts before the day", "08:00", "10:00"],
+    ["ends after the day", "17:00", "19:00"],
+  ])("rejects a break that %s", (_, break_starts_at, break_ends_at) => {
+    const result = validate(
+      buildDay({ hasBreak: true, break_starts_at, break_ends_at }),
+    );
+    expect(result.error?.issues[0]).toMatchObject({
+      path: ["days", 0, "break_starts_at"],
+      message: "Перерыв должен быть внутри рабочего дня",
+    });
+  });
+
+  it("ignores break values when the break is disabled", () => {
+    const day = buildDay({
+      hasBreak: false,
+      break_starts_at: "20:00",
+      break_ends_at: "19:00",
+    });
+    expect(validate(day).success).toBe(true);
+  });
 });
