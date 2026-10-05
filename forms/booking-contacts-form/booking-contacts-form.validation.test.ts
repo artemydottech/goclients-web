@@ -25,4 +25,21 @@ describe("bookingContactsFormSchema", () => {
     });
     expect(result.error?.issues[0].message).toBe("Как к вам обращаться?");
   });
+
+  it.each(["", "12345", "+7 900 123", "1234567890123456"])(
+    'rejects phone "%s"',
+    (phone) => {
+      const result = bookingContactsFormSchema.safeParse({ ...valid, phone });
+      expect(result.error?.issues[0].message).toBe("Проверьте номер телефона");
+    },
+  );
+
+  it.each(["9001234567", "+79001234567", "+7 (900) 123-45-67"])(
+    'accepts phone "%s"',
+    (phone) => {
+      expect(
+        bookingContactsFormSchema.safeParse({ ...valid, phone }).success,
+      ).toBe(true);
+    },
+  );
 });
