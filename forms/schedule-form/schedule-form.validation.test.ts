@@ -38,4 +38,25 @@ describe("scheduleFormSchema", () => {
     expect(validate(buildDay({ ends_at: "24:00" })).success).toBe(false);
     expect(validate(buildDay({ ends_at: "18:60" })).success).toBe(false);
   });
+
+  it("rejects a day that ends before it starts", () => {
+    const result = validate(buildDay({ starts_at: "18:00", ends_at: "09:00" }));
+    expect(result.error?.issues[0]).toMatchObject({
+      path: ["days", 0, "ends_at"],
+      message: "Конец дня раньше начала",
+    });
+  });
+
+  it("rejects a day with zero length", () => {
+    expect(validate(buildDay({ ends_at: "09:00" })).success).toBe(false);
+  });
+
+  it("skips checks for a day off", () => {
+    const dayOff = buildDay({
+      isWorking: false,
+      starts_at: "18:00",
+      ends_at: "09:00",
+    });
+    expect(validate(dayOff).success).toBe(true);
+  });
 });
