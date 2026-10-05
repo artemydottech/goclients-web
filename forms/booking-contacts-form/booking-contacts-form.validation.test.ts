@@ -17,4 +17,12 @@ describe("bookingContactsFormSchema", () => {
     expect(result.name).toBe("Анна");
     expect(result.comment).toBe("ждём");
   });
+
+  it("requires a name", () => {
+    const result = bookingContactsFormSchema.safeParse({
+      ...valid,
+      name: "   ",
+    });
+    expect(result.error?.issues[0].message).toBe("Как к вам обращаться?");
+  });
 });
