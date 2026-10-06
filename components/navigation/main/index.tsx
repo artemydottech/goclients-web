@@ -11,7 +11,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { COMPANY_NAV_ITEMS } from '../sidebar/sidebar.constants';
-import { doestPathMatch } from '@/utils';
+import { doesPathMatch } from '@/utils';
 import type { NavMainProps } from './main-navigation.types';
 
 export function NavMain({ companyId }: NavMainProps) {
@@ -26,7 +26,7 @@ export function NavMain({ companyId }: NavMainProps) {
           {COMPANY_NAV_ITEMS.map((item) => {
             const url = `${basePath}${item.segment}`;
             const isActive = item.segment
-              ? doestPathMatch(pathname, url)
+              ? doesPathMatch(pathname, url)
               : pathname === url;
 
             return (

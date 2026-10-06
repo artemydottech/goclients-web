@@ -6,7 +6,7 @@ import {
   getInitials,
   formatPhone,
   onlyDigits,
-  doestPathMatch,
+  doesPathMatch,
 } from ".";
 
 describe("formatPrice", () => {
@@ -90,20 +90,20 @@ describe("formatPhone", () => {
   });
 });
 
-describe("doestPathMatch", () => {
+describe("doesPathMatch", () => {
   it("matches the exact path", () => {
-    expect(doestPathMatch("/dashboard", "/dashboard")).toBe(true);
+    expect(doesPathMatch("/dashboard", "/dashboard")).toBe(true);
   });
 
   it("matches nested paths", () => {
-    expect(doestPathMatch("/dashboard/1/clients", "/dashboard")).toBe(true);
+    expect(doesPathMatch("/dashboard/1/clients", "/dashboard")).toBe(true);
   });
 
   it("does not match a path that only shares a prefix", () => {
-    expect(doestPathMatch("/dashboard-old", "/dashboard")).toBe(false);
+    expect(doesPathMatch("/dashboard-old", "/dashboard")).toBe(false);
   });
 
   it("does not match unrelated paths", () => {
-    expect(doestPathMatch("/book", "/dashboard")).toBe(false);
+    expect(doesPathMatch("/book", "/dashboard")).toBe(false);
   });
 });

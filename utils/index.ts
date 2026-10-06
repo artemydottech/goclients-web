@@ -15,7 +15,7 @@ export const truncate = (
   return str.slice(0, maxLength - ellipsis.length) + ellipsis;
 };
 
-export const doestPathMatch = (pathname: string, path: string): boolean =>
+export const doesPathMatch = (pathname: string, path: string): boolean =>
   pathname === path || pathname.startsWith(`${path}/`);
 
 export const formatDuration = (minutes: number): string => {
