@@ -1,0 +1,98 @@
+import { describe, expect, it } from "vitest";
+import {
+  scheduleFormSchema,
+  type ScheduleDayValues,
+} from "./schedule-form.validation";
+
+const buildDay = (
+  overrides: Partial<ScheduleDayValues> = {},
+): ScheduleDayValues => ({
+  weekday: 1,
+  isWorking: true,
+  starts_at: "09:00",
+  ends_at: "18:00",
+  hasBreak: false,
+  break_starts_at: "13:00",
+  break_ends_at: "14:00",
+  ...overrides,
+});
+
+const validate = (day: ScheduleDayValues) =>
+  scheduleFormSchema.safeParse({ days: [day] });
+
+describe("scheduleFormSchema", () => {
+  it("accepts a regular working day", () => {
+    expect(validate(buildDay()).success).toBe(true);
+  });
+
+  it("accepts a working day with a break inside it", () => {
+    expect(validate(buildDay({ hasBreak: true })).success).toBe(true);
+  });
+
+  it("rejects malformed time", () => {
+    const result = validate(buildDay({ starts_at: "9:00" }));
+    expect(result.error?.issues[0].message).toBe("Формат ЧЧ:ММ");
+  });
+
+  it("rejects out of range hours and minutes", () => {
+    expect(validate(buildDay({ ends_at: "24:00" })).success).toBe(false);
+    expect(validate(buildDay({ ends_at: "18:60" })).success).toBe(false);
+  });
+
+  it("rejects a day that ends before it starts", () => {
+    const result = validate(buildDay({ starts_at: "18:00", ends_at: "09:00" }));
+    expect(result.error?.issues[0]).toMatchObject({
+      path: ["days", 0, "ends_at"],
+      message: "Конец дня раньше начала",
+    });
+  });
+
+  it("rejects a day with zero length", () => {
+    expect(validate(buildDay({ ends_at: "09:00" })).success).toBe(false);
+  });
+
+  it("skips checks for a day off", () => {
+    const dayOff = buildDay({
+      isWorking: false,
+      starts_at: "18:00",
+      ends_at: "09:00",
+    });
+    expect(validate(dayOff).success).toBe(true);
+  });
+
+  it("rejects a break that ends before it starts", () => {
+    const result = validate(
+      buildDay({
+        hasBreak: true,
+        break_starts_at: "14:00",
+        break_ends_at: "13:00",
+      }),
+    );
+    expect(result.error?.issues[0]).toMatchObject({
+      path: ["days", 0, "break_ends_at"],
+      message: "Перерыв заканчивается раньше, чем начался",
+    });
+  });
+
+  it.each([
+    ["starts before the day", "08:00", "10:00"],
+    ["ends after the day", "17:00", "19:00"],
+  ])("rejects a break that %s", (_, break_starts_at, break_ends_at) => {
+    const result = validate(
+      buildDay({ hasBreak: true, break_starts_at, break_ends_at }),
+    );
+    expect(result.error?.issues[0]).toMatchObject({
+      path: ["days", 0, "break_starts_at"],
+      message: "Перерыв должен быть внутри рабочего дня",
+    });
+  });
+
+  it("ignores break values when the break is disabled", () => {
+    const day = buildDay({
+      hasBreak: false,
+      break_starts_at: "20:00",
+      break_ends_at: "19:00",
+    });
+    expect(validate(day).success).toBe(true);
+  });
+});

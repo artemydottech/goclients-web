@@ -57,13 +57,15 @@ npm run dev        # dev-сервер
 npm run build      # production-сборка
 npm run lint       # ESLint
 npm run typecheck  # tsc --noEmit
+npm test            # vitest, один прогон
+npm run test:watch  # vitest в watch-режиме
 ```
 
-CI в `.github/workflows/ci.yml` прогоняет lint, typecheck и build на каждый push.
+CI в `.github/workflows/ci.yml` прогоняет lint, typecheck, тесты и build на каждый push.
 
 ## Стек
 
-Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, shadcn/ui, TanStack Query, React Hook Form + Zod, dayjs, sonner, next-themes.
+Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, shadcn/ui, TanStack Query, React Hook Form + Zod, dayjs, sonner, next-themes, Vitest.
 
 ## Структура
 
