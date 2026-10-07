@@ -1,7 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import api from '..';
 import { buildAxiosError } from '../test-utils';
-import { getService, getServiceEmployees, getServices } from '.';
+import {
+  createService,
+  deleteService,
+  getService,
+  getServiceEmployees,
+  getServices,
+} from '.';
 
 vi.mock('..', async (importOriginal) => ({
   ...(await importOriginal<typeof import('..')>()),
@@ -47,6 +53,41 @@ describe('getServiceEmployees', () => {
 
     await expect(getServiceEmployees(3)).rejects.toMatchObject({
       message: 'Не удалось загрузить мастеров услуги',
+    });
+  });
+});
+
+describe('createService', () => {
+  it('posts the service and returns the created id', async () => {
+    mockedApi.post.mockResolvedValue({ data: { id: 11 } });
+    const body = {
+      company_id: 1,
+      name: 'Стрижка',
+      description: '',
+      duration: 60,
+      price: 1500,
+    };
+
+    await expect(createService(body)).resolves.toEqual({ id: 11 });
+    expect(mockedApi.post).toHaveBeenCalledWith('/services', body);
+  });
+});
+
+describe('deleteService', () => {
+  it('deletes by id', async () => {
+    mockedApi.delete.mockResolvedValue({});
+
+    await deleteService(11);
+
+    expect(mockedApi.delete).toHaveBeenCalledWith('/services/11');
+  });
+
+  it('throws an ApiError on failure', async () => {
+    mockedApi.delete.mockRejectedValue(buildAxiosError(409, 'in use'));
+
+    await expect(deleteService(11)).rejects.toMatchObject({
+      message: 'Не удалось удалить услугу: in use',
+      status: 409,
     });
   });
 });
