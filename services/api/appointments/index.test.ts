@@ -1,7 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import api from '..';
 import { buildAxiosError } from '../test-utils';
-import { getAppointment, getAppointments } from '.';
+import {
+  createAppointment,
+  deleteAppointment,
+  getAppointment,
+  getAppointments,
+  updateAppointmentStatus,
+  updateAppointmentTime,
+} from '.';
 
 vi.mock('..', async (importOriginal) => ({
   ...(await importOriginal<typeof import('..')>()),
@@ -43,5 +50,50 @@ describe('getAppointment', () => {
 
     await expect(getAppointment(5)).resolves.toEqual({ id: 5 });
     expect(mockedApi.get).toHaveBeenCalledWith('/appointments/5');
+  });
+});
+
+describe('createAppointment', () => {
+  it('posts the body and returns the created id', async () => {
+    mockedApi.post.mockResolvedValue({ data: { id: 12 } });
+    const body = {
+      client_id: 1,
+      employee_id: 2,
+      service_id: 3,
+      starts_at: '2026-10-08T10:00:00+05:00',
+      comment: '',
+      status: 'pending' as const,
+    };
+
+    await expect(createAppointment(body)).resolves.toEqual({ id: 12 });
+    expect(mockedApi.post).toHaveBeenCalledWith('/appointments', body);
+  });
+
+  it('throws an ApiError when the slot is taken', async () => {
+    mockedApi.post.mockRejectedValue(buildAxiosError(409, 'slot is taken'));
+
+    await expect(
+      createAppointment({
+        client_id: 1,
+        employee_id: 2,
+        service_id: 3,
+        starts_at: '2026-10-08T10:00:00+05:00',
+        comment: '',
+        status: 'pending',
+      }),
+    ).rejects.toMatchObject({
+      message: 'Не удалось создать запись: slot is taken',
+      status: 409,
+    });
+  });
+});
+
+describe('deleteAppointment', () => {
+  it('deletes by id', async () => {
+    mockedApi.delete.mockResolvedValue({});
+
+    await deleteAppointment(4);
+
+    expect(mockedApi.delete).toHaveBeenCalledWith('/appointments/4');
   });
 });
