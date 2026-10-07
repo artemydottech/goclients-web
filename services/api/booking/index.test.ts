@@ -61,4 +61,20 @@ describe("createBooking", () => {
     });
     expect(vi.mocked(createAppointment).mock.calls[0][0].client_id).toBe(50);
   });
+
+  it("creates a pending appointment and returns its id", async () => {
+    vi.mocked(getClients).mockResolvedValue([]);
+
+    const result = await createBooking(request);
+
+    expect(createAppointment).toHaveBeenCalledWith({
+      client_id: 50,
+      employee_id: 3,
+      service_id: 2,
+      starts_at: "2026-10-08T10:00:00+05:00",
+      comment: "первый визит",
+      status: "pending",
+    });
+    expect(result).toEqual({ appointmentId: 99 });
+  });
 });
