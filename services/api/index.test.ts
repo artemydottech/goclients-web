@@ -1,12 +1,7 @@
-import { AxiosError, type AxiosResponse } from 'axios';
+import { AxiosError } from 'axios';
 import { describe, expect, it } from 'vitest';
 import { ApiError, handleApiError, isApiError } from '.';
-
-const buildAxiosError = (status: number, data: unknown): AxiosError =>
-  new AxiosError('failed', undefined, undefined, undefined, {
-    status,
-    data,
-  } as AxiosResponse);
+import { buildAxiosError } from './test-utils';
 
 describe('handleApiError', () => {
   it('appends a plain text server message', () => {
