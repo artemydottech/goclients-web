@@ -44,4 +44,21 @@ describe("createBooking", () => {
     expect(createClient).not.toHaveBeenCalled();
     expect(vi.mocked(createAppointment).mock.calls[0][0].client_id).toBe(7);
   });
+
+  it("creates a client when no phone matches", async () => {
+    vi.mocked(getClients).mockResolvedValue([
+      buildClient({ id: 7, phone: "79990000000" }),
+    ]);
+
+    await createBooking(request);
+
+    expect(createClient).toHaveBeenCalledWith({
+      company_id: 1,
+      name: "Анна",
+      phone: "+7 (900) 123-45-67",
+      email: "",
+      comment: "",
+    });
+    expect(vi.mocked(createAppointment).mock.calls[0][0].client_id).toBe(50);
+  });
 });
