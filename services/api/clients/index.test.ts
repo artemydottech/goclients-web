@@ -1,7 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import api from '..';
 import { buildAxiosError } from '../test-utils';
-import { getClient, getClientStats, getClients } from '.';
+import {
+  createClient,
+  deleteClient,
+  getClient,
+  getClientStats,
+  getClients,
+} from '.';
 
 vi.mock('..', async (importOriginal) => ({
   ...(await importOriginal<typeof import('..')>()),
@@ -49,5 +55,47 @@ describe('getClientStats', () => {
 
     await expect(getClientStats(3)).resolves.toEqual({ client_id: 3 });
     expect(mockedApi.get).toHaveBeenCalledWith('/clients/3/stats');
+  });
+});
+
+describe('createClient', () => {
+  it('posts the client and returns the created id', async () => {
+    mockedApi.post.mockResolvedValue({ data: { id: 8 } });
+    const body = {
+      company_id: 1,
+      name: 'Анна',
+      phone: '79001234567',
+      email: '',
+      comment: '',
+    };
+
+    await expect(createClient(body)).resolves.toEqual({ id: 8 });
+    expect(mockedApi.post).toHaveBeenCalledWith('/clients', body);
+  });
+
+  it('throws an ApiError with the server message', async () => {
+    mockedApi.post.mockRejectedValue(buildAxiosError(400, 'phone is required'));
+
+    await expect(
+      createClient({
+        company_id: 1,
+        name: 'Анна',
+        phone: '',
+        email: '',
+        comment: '',
+      }),
+    ).rejects.toMatchObject({
+      message: 'Не удалось добавить клиента: phone is required',
+    });
+  });
+});
+
+describe('deleteClient', () => {
+  it('deletes by id', async () => {
+    mockedApi.delete.mockResolvedValue({});
+
+    await deleteClient(5);
+
+    expect(mockedApi.delete).toHaveBeenCalledWith('/clients/5');
   });
 });
