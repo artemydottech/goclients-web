@@ -97,3 +97,45 @@ describe('deleteAppointment', () => {
     expect(mockedApi.delete).toHaveBeenCalledWith('/appointments/4');
   });
 });
+
+describe('updateAppointmentStatus', () => {
+  it('puts only the status to the status endpoint', async () => {
+    mockedApi.put.mockResolvedValue({});
+
+    await updateAppointmentStatus({ id: 7, status: 'confirmed' });
+
+    expect(mockedApi.put).toHaveBeenCalledWith('/appointments/7/status', {
+      status: 'confirmed',
+    });
+  });
+
+  it('surfaces the backend rejection', async () => {
+    mockedApi.put.mockRejectedValue(
+      buildAxiosError(400, 'cannot complete before start'),
+    );
+
+    await expect(
+      updateAppointmentStatus({ id: 7, status: 'completed' }),
+    ).rejects.toMatchObject({
+      message: 'Не удалось изменить статус: cannot complete before start',
+    });
+  });
+});
+
+describe('updateAppointmentTime', () => {
+  it('puts the body without the id and returns the updated appointment', async () => {
+    mockedApi.put.mockResolvedValue({ data: { id: 7 } });
+
+    const result = await updateAppointmentTime({
+      id: 7,
+      employee_id: 2,
+      starts_at: '2026-10-08T11:00:00+05:00',
+    });
+
+    expect(mockedApi.put).toHaveBeenCalledWith('/appointments/7/time', {
+      employee_id: 2,
+      starts_at: '2026-10-08T11:00:00+05:00',
+    });
+    expect(result).toEqual({ id: 7 });
+  });
+});
