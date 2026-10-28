@@ -30,3 +30,24 @@ describe('employeeFormSchema', () => {
     expect(result.error?.issues[0].message).toBe('Некорректная ссылка');
   });
 });
+
+it.each(['name', 'surname', 'position'])(
+  'rejects oversized employee %s',
+  (field) => {
+    const limit = field === 'position' ? 500 : 200;
+    expect(
+      employeeFormSchema.safeParse({ ...valid, [field]: 'я'.repeat(limit + 1) })
+        .success,
+    ).toBe(false);
+    expect(
+      employeeFormSchema.safeParse({ ...valid, [field]: '😀'.repeat(limit) })
+        .success,
+    ).toBe(true);
+  },
+);
+it('rejects non-web avatar protocols', () => {
+  expect(
+    employeeFormSchema.safeParse({ ...valid, avatar: 'file:///tmp/photo' })
+      .success,
+  ).toBe(false);
+});
