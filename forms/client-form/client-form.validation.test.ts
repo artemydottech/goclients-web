@@ -39,3 +39,16 @@ describe('clientFormSchema', () => {
     );
   });
 });
+
+it('checks client field limits and trims optional email', () => {
+  expect(
+    clientFormSchema.safeParse({ ...valid, name: 'я'.repeat(201) }).success,
+  ).toBe(false);
+  expect(
+    clientFormSchema.safeParse({ ...valid, comment: 'я'.repeat(1001) }).success,
+  ).toBe(false);
+  expect(
+    clientFormSchema.parse({ ...valid, email: '  anna@example.com  ' }).email,
+  ).toBe('anna@example.com');
+  expect(clientFormSchema.parse({ ...valid, email: '  ' }).email).toBe('');
+});

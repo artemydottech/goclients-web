@@ -1,11 +1,12 @@
 import { z } from 'zod';
+import { boundedText } from '@/lib/validation';
 import { onlyDigits } from '@/utils';
 
 const MIN_PHONE_DIGITS = 10;
 const MAX_PHONE_DIGITS = 15;
 
 export const clientFormSchema = z.object({
-  name: z.string().trim().min(1, 'Обязательное поле'),
+  name: boundedText(200).min(1, 'Обязательное поле'),
   phone: z.string().refine(
     (value) => {
       const digits = onlyDigits(value).length;
@@ -13,8 +14,10 @@ export const clientFormSchema = z.object({
     },
     { message: 'Некорректный телефон' },
   ),
-  email: z.union([z.literal(''), z.email('Некорректный email')]),
-  comment: z.string().trim(),
+  email: boundedText(254).pipe(
+    z.union([z.literal(''), z.email('Некорректный email')]),
+  ),
+  comment: boundedText(1000),
 });
 
 export type ClientFormValues = z.infer<typeof clientFormSchema>;
