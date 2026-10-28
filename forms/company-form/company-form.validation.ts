@@ -1,17 +1,17 @@
 import { z } from 'zod';
 
-const optionalUrl = z.union([z.literal(''), z.url('Некорректная ссылка')]);
+import { boundedText, optionalWebUrl } from '@/lib/validation';
 
 export const companyFormSchema = z.object({
-  name: z.string().trim().min(1, 'Обязательное поле'),
-  address: z.string().trim(),
-  schedule: z.string().trim(),
+  name: boundedText(200).min(1, 'Обязательное поле'),
+  address: boundedText(500),
+  schedule: boundedText(1000),
   timezone: z.string().min(1, 'Выберите часовой пояс'),
-  site: optionalUrl,
-  logo: optionalUrl,
-  telegram: z.string().trim(),
-  vk: z.string().trim(),
-  whatsapp: z.string().trim(),
+  site: optionalWebUrl,
+  logo: optionalWebUrl,
+  telegram: boundedText(500),
+  vk: boundedText(500),
+  whatsapp: boundedText(500),
 });
 
 export type CompanyFormValues = z.infer<typeof companyFormSchema>;

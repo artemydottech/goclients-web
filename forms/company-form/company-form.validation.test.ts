@@ -41,3 +41,29 @@ describe('companyFormSchema', () => {
     expect(firstMessage({ logo: 'not a url' })).toBe('Некорректная ссылка');
   });
 });
+
+it('matches API length limits without counting surrogate pairs twice', () => {
+  expect(
+    companyFormSchema.safeParse({ ...valid, name: '😀'.repeat(200) }).success,
+  ).toBe(true);
+  expect(
+    companyFormSchema.safeParse({ ...valid, name: '😀'.repeat(201) }).success,
+  ).toBe(false);
+  expect(
+    companyFormSchema.safeParse({ ...valid, address: 'a'.repeat(501) }).success,
+  ).toBe(false);
+  expect(
+    companyFormSchema.safeParse({ ...valid, schedule: 'a'.repeat(1001) })
+      .success,
+  ).toBe(false);
+  expect(
+    companyFormSchema.safeParse({ ...valid, telegram: 'a'.repeat(501) })
+      .success,
+  ).toBe(false);
+});
+it.each(['javascript:alert(1)', 'data:text/plain,test', 'file:///tmp/logo'])(
+  'rejects unsafe company URLs %s',
+  (site) => {
+    expect(companyFormSchema.safeParse({ ...valid, site }).success).toBe(false);
+  },
+);
