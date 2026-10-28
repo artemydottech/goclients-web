@@ -41,3 +41,20 @@ describe('serviceFormSchema', () => {
     ).toBe(true);
   });
 });
+
+it('checks service text limits in Unicode characters', () => {
+  expect(
+    serviceFormSchema.safeParse({
+      ...valid,
+      name: '😀'.repeat(200),
+      description: 'я'.repeat(500),
+    }).success,
+  ).toBe(true);
+  expect(
+    serviceFormSchema.safeParse({ ...valid, name: 'я'.repeat(201) }).success,
+  ).toBe(false);
+  expect(
+    serviceFormSchema.safeParse({ ...valid, description: 'я'.repeat(501) })
+      .success,
+  ).toBe(false);
+});

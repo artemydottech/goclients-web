@@ -1,10 +1,11 @@
 import { z } from 'zod';
+import { boundedText } from '@/lib/validation';
 
 const MAX_DURATION_MINUTES = 1440;
 
 export const serviceFormSchema = z.object({
-  name: z.string().trim().min(1, 'Обязательное поле'),
-  description: z.string().trim(),
+  name: boundedText(200).min(1, 'Обязательное поле'),
+  description: boundedText(500),
   duration: z
     .number({ error: 'Укажите длительность' })
     .int('Только целые минуты')
