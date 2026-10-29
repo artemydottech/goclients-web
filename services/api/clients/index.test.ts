@@ -27,6 +27,7 @@ describe('getClients', () => {
 
     await expect(getClients(2)).resolves.toEqual([{ id: 1 }]);
     expect(mockedApi.get).toHaveBeenCalledWith('/clients', {
+      signal: undefined,
       params: { company_id: 2 },
     });
   });
@@ -46,7 +47,9 @@ describe('getClient', () => {
     mockedApi.get.mockResolvedValue({ data: { id: 3 } });
 
     await expect(getClient(3)).resolves.toEqual({ id: 3 });
-    expect(mockedApi.get).toHaveBeenCalledWith('/clients/3');
+    expect(mockedApi.get).toHaveBeenCalledWith('/clients/3', {
+      signal: undefined,
+    });
   });
 });
 
@@ -55,7 +58,9 @@ describe('getClientStats', () => {
     mockedApi.get.mockResolvedValue({ data: { client_id: 3 } });
 
     await expect(getClientStats(3)).resolves.toEqual({ client_id: 3 });
-    expect(mockedApi.get).toHaveBeenCalledWith('/clients/3/stats');
+    expect(mockedApi.get).toHaveBeenCalledWith('/clients/3/stats', {
+      signal: undefined,
+    });
   });
 });
 
@@ -131,4 +136,34 @@ describe('updateClient', () => {
       status: 404,
     });
   });
+});
+
+it('passes an AbortSignal to getClients', async () => {
+  const signal = new AbortController().signal;
+  mockedApi.get.mockResolvedValue({ data: [] });
+  await getClients(7, signal);
+  expect(mockedApi.get).toHaveBeenCalledWith(
+    '/clients',
+    expect.objectContaining({ signal }),
+  );
+});
+
+it('passes an AbortSignal to getClient', async () => {
+  const signal = new AbortController().signal;
+  mockedApi.get.mockResolvedValue({ data: [] });
+  await getClient(7, signal);
+  expect(mockedApi.get).toHaveBeenCalledWith(
+    '/clients/7',
+    expect.objectContaining({ signal }),
+  );
+});
+
+it('passes an AbortSignal to getClientStats', async () => {
+  const signal = new AbortController().signal;
+  mockedApi.get.mockResolvedValue({ data: [] });
+  await getClientStats(7, signal);
+  expect(mockedApi.get).toHaveBeenCalledWith(
+    '/clients/7/stats',
+    expect.objectContaining({ signal }),
+  );
 });
