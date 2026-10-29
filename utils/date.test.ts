@@ -90,3 +90,13 @@ describe('getCompanyToday', () => {
     expect(getCompanyToday('')).toBe('2026-10-05');
   });
 });
+
+it.each(['2026-02-29', '2026-02-30', '2026-00-01', '2026-13-01', '2026-01-00'])(
+  'rejects impossible URL dates %s',
+  (value) => {
+    expect(parseDateParam(value)).toBeNull();
+  },
+);
+it('accepts leap-day URL dates only in leap years', () => {
+  expect(parseDateParam('2028-02-29')).toBe('2028-02-29');
+});
