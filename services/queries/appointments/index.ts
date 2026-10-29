@@ -6,13 +6,13 @@ import type { GetAppointmentsParams } from '@/services/api/appointments/appointm
 export const useGetAppointments = (params: GetAppointmentsParams = {}) =>
   useQuery({
     queryKey: ['get-appointments', params],
-    queryFn: () => getAppointments(params),
+    queryFn: ({ signal }) => getAppointments(params, signal),
   });
 
 export const useGetAppointment = (id: number) =>
   useQuery({
     queryKey: ['get-appointment', id],
-    queryFn: () => getAppointment(id),
+    queryFn: ({ signal }) => getAppointment(id, signal),
   });
 
 export const useGetCompanyAppointments = (
@@ -22,7 +22,7 @@ export const useGetCompanyAppointments = (
 ) =>
   useQuery({
     queryKey: ['get-appointments', {}],
-    queryFn: () => getAppointments(),
+    queryFn: ({ signal }) => getAppointments({}, signal),
     select: (appointments) => {
       const fromMs = Date.parse(from);
       const toMs = Date.parse(to);

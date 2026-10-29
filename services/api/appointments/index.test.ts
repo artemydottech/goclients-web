@@ -28,6 +28,7 @@ describe('getAppointments', () => {
     const result = await getAppointments({ employee_id: 3 });
 
     expect(mockedApi.get).toHaveBeenCalledWith('/appointments', {
+      signal: undefined,
       params: { employee_id: 3 },
     });
     expect(result).toEqual([{ id: 1 }]);
@@ -49,7 +50,9 @@ describe('getAppointment', () => {
     mockedApi.get.mockResolvedValue({ data: { id: 5 } });
 
     await expect(getAppointment(5)).resolves.toEqual({ id: 5 });
-    expect(mockedApi.get).toHaveBeenCalledWith('/appointments/5');
+    expect(mockedApi.get).toHaveBeenCalledWith('/appointments/5', {
+      signal: undefined,
+    });
   });
 });
 
@@ -138,4 +141,24 @@ describe('updateAppointmentTime', () => {
     });
     expect(result).toEqual({ id: 7 });
   });
+});
+
+it('passes an AbortSignal to getAppointments', async () => {
+  const signal = new AbortController().signal;
+  mockedApi.get.mockResolvedValue({ data: [] });
+  await getAppointments({}, signal);
+  expect(mockedApi.get).toHaveBeenCalledWith(
+    '/appointments',
+    expect.objectContaining({ signal }),
+  );
+});
+
+it('passes an AbortSignal to getAppointment', async () => {
+  const signal = new AbortController().signal;
+  mockedApi.get.mockResolvedValue({ data: [] });
+  await getAppointment(7, signal);
+  expect(mockedApi.get).toHaveBeenCalledWith(
+    '/appointments/7',
+    expect.objectContaining({ signal }),
+  );
 });

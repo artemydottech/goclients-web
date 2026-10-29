@@ -9,18 +9,27 @@ import type {
 
 export const getAppointments = async (
   params: GetAppointmentsParams = {},
+  signal?: AbortSignal,
 ): Promise<Appointment[]> => {
   try {
-    const { data } = await api.get<Appointment[]>('/appointments', { params });
+    const { data } = await api.get<Appointment[]>('/appointments', {
+      signal: signal,
+      params,
+    });
     return data;
   } catch (error) {
     throw handleApiError(error, 'Не удалось загрузить записи');
   }
 };
 
-export const getAppointment = async (id: number): Promise<Appointment> => {
+export const getAppointment = async (
+  id: number,
+  signal?: AbortSignal,
+): Promise<Appointment> => {
   try {
-    const { data } = await api.get<Appointment>(`/appointments/${id}`);
+    const { data } = await api.get<Appointment>(`/appointments/${id}`, {
+      signal: signal,
+    });
     return data;
   } catch (error) {
     throw handleApiError(error, 'Не удалось загрузить запись');
