@@ -6,18 +6,27 @@ import type {
   UpdateEmployeeServicesRequest,
 } from './employees.types';
 
-export const getEmployees = async (): Promise<Employee[]> => {
+export const getEmployees = async (
+  signal?: AbortSignal,
+): Promise<Employee[]> => {
   try {
-    const { data } = await api.get<Employee[]>('/employees');
+    const { data } = await api.get<Employee[]>('/employees', {
+      signal: signal,
+    });
     return data;
   } catch (error) {
     throw handleApiError(error, 'Не удалось загрузить сотрудников');
   }
 };
 
-export const getEmployee = async (id: number): Promise<Employee> => {
+export const getEmployee = async (
+  id: number,
+  signal?: AbortSignal,
+): Promise<Employee> => {
   try {
-    const { data } = await api.get<Employee>(`/employees/${id}`);
+    const { data } = await api.get<Employee>(`/employees/${id}`, {
+      signal: signal,
+    });
     return data;
   } catch (error) {
     throw handleApiError(error, 'Не удалось загрузить сотрудника');
@@ -43,9 +52,14 @@ export const deleteEmployee = async (id: number): Promise<void> => {
   }
 };
 
-export const getEmployeeServices = async (id: number): Promise<Service[]> => {
+export const getEmployeeServices = async (
+  id: number,
+  signal?: AbortSignal,
+): Promise<Service[]> => {
   try {
-    const { data } = await api.get<Service[]>(`/employees/${id}/services`);
+    const { data } = await api.get<Service[]>(`/employees/${id}/services`, {
+      signal: signal,
+    });
     return data;
   } catch (error) {
     throw handleApiError(error, 'Не удалось загрузить услуги сотрудника');

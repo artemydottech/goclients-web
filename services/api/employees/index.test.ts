@@ -27,7 +27,9 @@ describe('getEmployees', () => {
     mockedApi.get.mockResolvedValue({ data: [{ id: 1 }] });
 
     await expect(getEmployees()).resolves.toEqual([{ id: 1 }]);
-    expect(mockedApi.get).toHaveBeenCalledWith('/employees');
+    expect(mockedApi.get).toHaveBeenCalledWith('/employees', {
+      signal: undefined,
+    });
   });
 
   it('throws an ApiError on failure', async () => {
@@ -44,7 +46,9 @@ describe('getEmployee', () => {
     mockedApi.get.mockResolvedValue({ data: { id: 2 } });
 
     await expect(getEmployee(2)).resolves.toEqual({ id: 2 });
-    expect(mockedApi.get).toHaveBeenCalledWith('/employees/2');
+    expect(mockedApi.get).toHaveBeenCalledWith('/employees/2', {
+      signal: undefined,
+    });
   });
 });
 
@@ -87,7 +91,9 @@ describe('getEmployeeServices', () => {
     mockedApi.get.mockResolvedValue({ data: [{ id: 4 }] });
 
     await expect(getEmployeeServices(2)).resolves.toEqual([{ id: 4 }]);
-    expect(mockedApi.get).toHaveBeenCalledWith('/employees/2/services');
+    expect(mockedApi.get).toHaveBeenCalledWith('/employees/2/services', {
+      signal: undefined,
+    });
   });
 });
 
@@ -158,4 +164,34 @@ describe('updateEmployee', () => {
       status: 404,
     });
   });
+});
+
+it('passes an AbortSignal to getEmployees', async () => {
+  const signal = new AbortController().signal;
+  mockedApi.get.mockResolvedValue({ data: [] });
+  await getEmployees(signal);
+  expect(mockedApi.get).toHaveBeenCalledWith(
+    '/employees',
+    expect.objectContaining({ signal }),
+  );
+});
+
+it('passes an AbortSignal to getEmployee', async () => {
+  const signal = new AbortController().signal;
+  mockedApi.get.mockResolvedValue({ data: [] });
+  await getEmployee(7, signal);
+  expect(mockedApi.get).toHaveBeenCalledWith(
+    '/employees/7',
+    expect.objectContaining({ signal }),
+  );
+});
+
+it('passes an AbortSignal to getEmployeeServices', async () => {
+  const signal = new AbortController().signal;
+  mockedApi.get.mockResolvedValue({ data: [] });
+  await getEmployeeServices(7, signal);
+  expect(mockedApi.get).toHaveBeenCalledWith(
+    '/employees/7/services',
+    expect.objectContaining({ signal }),
+  );
 });
