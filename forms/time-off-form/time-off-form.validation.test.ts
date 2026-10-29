@@ -43,3 +43,15 @@ describe('timeOffFormSchema', () => {
     ]);
   });
 });
+
+it('rejects impossible absence dates and oversized reasons', () => {
+  expect(
+    timeOffFormSchema.safeParse({ ...valid, starts_on: '2026-02-30' }).success,
+  ).toBe(false);
+  expect(
+    timeOffFormSchema.safeParse({ ...valid, ends_on: '2026-13-01' }).success,
+  ).toBe(false);
+  expect(
+    timeOffFormSchema.safeParse({ ...valid, reason: 'я'.repeat(201) }).success,
+  ).toBe(false);
+});

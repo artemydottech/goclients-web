@@ -1,10 +1,11 @@
 import { z } from 'zod';
+import { boundedText } from '@/lib/validation';
 
 export const timeOffFormSchema = z
   .object({
-    starts_on: z.string().min(1, 'Укажите дату начала'),
-    ends_on: z.string().min(1, 'Укажите дату окончания'),
-    reason: z.string().trim().min(1, 'Укажите причину'),
+    starts_on: z.iso.date('Укажите дату начала'),
+    ends_on: z.iso.date('Укажите дату окончания'),
+    reason: boundedText(200).min(1, 'Укажите причину'),
   })
   .refine(({ starts_on, ends_on }) => ends_on >= starts_on, {
     path: ['ends_on'],
