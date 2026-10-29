@@ -40,3 +40,24 @@ describe('appointmentFormSchema', () => {
     ).toBe('аллергия');
   });
 });
+
+it.each(['2026-02-30', '2026-13-01', '2026-2-01', 'bad'])(
+  'rejects invalid date %s',
+  (date) => {
+    expect(appointmentFormSchema.safeParse({ ...valid, date }).success).toBe(
+      false,
+    );
+  },
+);
+it('rejects an invalid slot timestamp', () => {
+  expect(
+    appointmentFormSchema.safeParse({ ...valid, starts_at: '10:00' }).success,
+  ).toBe(false);
+});
+
+it('rejects oversized booking comments', () => {
+  expect(
+    appointmentFormSchema.safeParse({ ...valid, comment: 'я'.repeat(1001) })
+      .success,
+  ).toBe(false);
+});
