@@ -31,3 +31,17 @@ describe('rescheduleFormSchema', () => {
     ).toBe(false);
   });
 });
+
+it.each(['2026-02-30', '2026-13-01', '2026-2-01', 'bad'])(
+  'rejects invalid date %s',
+  (date) => {
+    expect(rescheduleFormSchema.safeParse({ ...valid, date }).success).toBe(
+      false,
+    );
+  },
+);
+it('rejects an invalid slot timestamp', () => {
+  expect(
+    rescheduleFormSchema.safeParse({ ...valid, starts_at: '10:00' }).success,
+  ).toBe(false);
+});
