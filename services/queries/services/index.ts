@@ -9,18 +9,18 @@ import {
 export const useGetServices = (companyId: number) =>
   useQuery({
     queryKey: ['get-services', companyId],
-    queryFn: () => getServices(companyId),
+    queryFn: ({ signal }) => getServices(companyId, signal),
   });
 
 export const useGetService = (id: number) =>
   useQuery({
     queryKey: ['get-service', id],
-    queryFn: () => getService(id),
+    queryFn: ({ signal }) => getService(id, signal),
   });
 
 export const useGetServiceEmployees = (id: Nullable<number>) =>
   useQuery({
     queryKey: ['get-service-employees', id],
-    queryFn: () => getServiceEmployees(Number(id)),
+    queryFn: ({ signal }) => getServiceEmployees(Number(id), signal),
     enabled: id !== null,
   });

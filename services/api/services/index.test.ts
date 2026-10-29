@@ -27,6 +27,7 @@ describe('getServices', () => {
 
     await expect(getServices(2)).resolves.toEqual([{ id: 1 }]);
     expect(mockedApi.get).toHaveBeenCalledWith('/services', {
+      signal: undefined,
       params: { company_id: 2 },
     });
   });
@@ -37,7 +38,9 @@ describe('getService', () => {
     mockedApi.get.mockResolvedValue({ data: { id: 3 } });
 
     await expect(getService(3)).resolves.toEqual({ id: 3 });
-    expect(mockedApi.get).toHaveBeenCalledWith('/services/3');
+    expect(mockedApi.get).toHaveBeenCalledWith('/services/3', {
+      signal: undefined,
+    });
   });
 });
 
@@ -46,7 +49,9 @@ describe('getServiceEmployees', () => {
     mockedApi.get.mockResolvedValue({ data: [{ id: 9 }] });
 
     await expect(getServiceEmployees(3)).resolves.toEqual([{ id: 9 }]);
-    expect(mockedApi.get).toHaveBeenCalledWith('/services/3/employees');
+    expect(mockedApi.get).toHaveBeenCalledWith('/services/3/employees', {
+      signal: undefined,
+    });
   });
 
   it('throws an ApiError on failure', async () => {
@@ -123,4 +128,34 @@ describe('updateService', () => {
       status: 404,
     });
   });
+});
+
+it('passes an AbortSignal to getServices', async () => {
+  const signal = new AbortController().signal;
+  mockedApi.get.mockResolvedValue({ data: [] });
+  await getServices(7, signal);
+  expect(mockedApi.get).toHaveBeenCalledWith(
+    '/services',
+    expect.objectContaining({ signal }),
+  );
+});
+
+it('passes an AbortSignal to getService', async () => {
+  const signal = new AbortController().signal;
+  mockedApi.get.mockResolvedValue({ data: [] });
+  await getService(7, signal);
+  expect(mockedApi.get).toHaveBeenCalledWith(
+    '/services/7',
+    expect.objectContaining({ signal }),
+  );
+});
+
+it('passes an AbortSignal to getServiceEmployees', async () => {
+  const signal = new AbortController().signal;
+  mockedApi.get.mockResolvedValue({ data: [] });
+  await getServiceEmployees(7, signal);
+  expect(mockedApi.get).toHaveBeenCalledWith(
+    '/services/7/employees',
+    expect.objectContaining({ signal }),
+  );
 });
