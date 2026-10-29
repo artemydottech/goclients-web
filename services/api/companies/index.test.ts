@@ -25,7 +25,9 @@ describe('getCompanies', () => {
     mockedApi.get.mockResolvedValue({ data: [{ id: 1 }, { id: 2 }] });
 
     await expect(getCompanies()).resolves.toEqual([{ id: 1 }, { id: 2 }]);
-    expect(mockedApi.get).toHaveBeenCalledWith('/companies');
+    expect(mockedApi.get).toHaveBeenCalledWith('/companies', {
+      signal: undefined,
+    });
   });
 
   it('throws an ApiError on failure', async () => {
@@ -43,7 +45,9 @@ describe('getCompany', () => {
     mockedApi.get.mockResolvedValue({ data: { id: 4 } });
 
     await expect(getCompany(4)).resolves.toEqual({ id: 4 });
-    expect(mockedApi.get).toHaveBeenCalledWith('/companies/4');
+    expect(mockedApi.get).toHaveBeenCalledWith('/companies/4', {
+      signal: undefined,
+    });
   });
 
   it('reports a missing company', async () => {
@@ -131,4 +135,24 @@ describe('updateCompany', () => {
       status: 404,
     });
   });
+});
+
+it('passes an AbortSignal to getCompanies', async () => {
+  const signal = new AbortController().signal;
+  mockedApi.get.mockResolvedValue({ data: [] });
+  await getCompanies(signal);
+  expect(mockedApi.get).toHaveBeenCalledWith(
+    '/companies',
+    expect.objectContaining({ signal }),
+  );
+});
+
+it('passes an AbortSignal to getCompany', async () => {
+  const signal = new AbortController().signal;
+  mockedApi.get.mockResolvedValue({ data: [] });
+  await getCompany(7, signal);
+  expect(mockedApi.get).toHaveBeenCalledWith(
+    '/companies/7',
+    expect.objectContaining({ signal }),
+  );
 });

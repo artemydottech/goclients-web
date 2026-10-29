@@ -7,18 +7,27 @@ import type {
   GetCompanyResponse,
 } from './companies.types';
 
-export const getCompanies = async (): Promise<Company[]> => {
+export const getCompanies = async (
+  signal?: AbortSignal,
+): Promise<Company[]> => {
   try {
-    const { data } = await api.get<GetCompaniesResponse>('/companies');
+    const { data } = await api.get<GetCompaniesResponse>('/companies', {
+      signal: signal,
+    });
     return data;
   } catch (error) {
     throw handleApiError(error, 'Не удалось загрузить компании');
   }
 };
 
-export const getCompany = async (id: number): Promise<Company> => {
+export const getCompany = async (
+  id: number,
+  signal?: AbortSignal,
+): Promise<Company> => {
   try {
-    const { data } = await api.get<GetCompanyResponse>(`/companies/${id}`);
+    const { data } = await api.get<GetCompanyResponse>(`/companies/${id}`, {
+      signal: signal,
+    });
     return data;
   } catch (error) {
     throw handleApiError(error, 'Не удалось загрузить компанию');
