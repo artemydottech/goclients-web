@@ -96,3 +96,18 @@ describe('scheduleFormSchema', () => {
     expect(validate(day).success).toBe(true);
   });
 });
+
+it('rejects duplicate weekdays and skips disabled time inputs', () => {
+  expect(
+    scheduleFormSchema.safeParse({ days: [buildDay(), buildDay()] }).success,
+  ).toBe(false);
+  expect(
+    validate(buildDay({ isWorking: false, starts_at: '', ends_at: '' }))
+      .success,
+  ).toBe(true);
+  expect(
+    validate(
+      buildDay({ hasBreak: false, break_starts_at: '', break_ends_at: '' }),
+    ).success,
+  ).toBe(true);
+});

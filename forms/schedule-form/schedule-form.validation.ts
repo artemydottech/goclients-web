@@ -2,20 +2,35 @@ import { z } from 'zod';
 
 const TIME_PATTERN = /^([01]\d|2[0-3]):[0-5]\d$/;
 
-const time = z.string().regex(TIME_PATTERN, 'Формат ЧЧ:ММ');
-
 const scheduleDaySchema = z
   .object({
     weekday: z.number().int().min(0).max(6),
     isWorking: z.boolean(),
-    starts_at: time,
-    ends_at: time,
+    starts_at: z.string(),
+    ends_at: z.string(),
     hasBreak: z.boolean(),
-    break_starts_at: time,
-    break_ends_at: time,
+    break_starts_at: z.string(),
+    break_ends_at: z.string(),
   })
   .superRefine((day, ctx) => {
     if (!day.isWorking) return;
+    const fields = [
+      'starts_at',
+      'ends_at',
+      ...(day.hasBreak ? ['break_starts_at', 'break_ends_at'] : []),
+    ] as const;
+    let invalid = false;
+    for (const field of fields) {
+      if (!TIME_PATTERN.test(day[field as keyof typeof day] as string)) {
+        invalid = true;
+        ctx.addIssue({
+          code: 'custom',
+          path: [field],
+          message: 'Формат ЧЧ:ММ',
+        });
+      }
+    }
+    if (invalid) return;
     if (day.ends_at <= day.starts_at) {
       ctx.addIssue({
         code: 'custom',
@@ -44,7 +59,13 @@ const scheduleDaySchema = z
   });
 
 export const scheduleFormSchema = z.object({
-  days: z.array(scheduleDaySchema),
+  days: z
+    .array(scheduleDaySchema)
+    .max(7, 'Не больше семи дней')
+    .refine(
+      (days) => new Set(days.map((day) => day.weekday)).size === days.length,
+      'День недели указан дважды',
+    ),
 });
 
 export type ScheduleFormValues = z.infer<typeof scheduleFormSchema>;
