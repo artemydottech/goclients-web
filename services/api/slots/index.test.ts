@@ -28,7 +28,10 @@ describe('getSlots', () => {
 
     const slots = await getSlots(params);
 
-    expect(mockedApi.get).toHaveBeenCalledWith('/slots', { params });
+    expect(mockedApi.get).toHaveBeenCalledWith('/slots', {
+      signal: undefined,
+      params,
+    });
     expect(slots).toHaveLength(2);
   });
 
@@ -42,4 +45,14 @@ describe('getSlots', () => {
       status: 400,
     });
   });
+});
+
+it('passes an AbortSignal to getSlots', async () => {
+  const signal = new AbortController().signal;
+  mockedApi.get.mockResolvedValue({ data: [] });
+  await getSlots({ employee_id: 2, service_id: 3, date: '2026-10-29' }, signal);
+  expect(mockedApi.get).toHaveBeenCalledWith(
+    '/slots',
+    expect.objectContaining({ signal }),
+  );
 });

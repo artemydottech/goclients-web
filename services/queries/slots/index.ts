@@ -6,9 +6,9 @@ import type { GetSlotsParams } from '@/services/api/slots/slots.types';
 export const useGetSlots = (params: Nullable<GetSlotsParams>) =>
   useQuery({
     queryKey: ['get-slots', params],
-    queryFn: () => {
+    queryFn: ({ signal }) => {
       if (!params) return [];
-      return getSlots(params);
+      return getSlots(params, signal);
     },
     enabled: params !== null,
   });
@@ -22,7 +22,7 @@ export const useGetSlotsByDates = (
       const dateParams = { ...params, date };
       return {
         queryKey: ['get-slots', dateParams],
-        queryFn: () => getSlots(dateParams),
+        queryFn: ({ signal }) => getSlots(dateParams, signal),
       };
     }),
     combine: (results) =>
