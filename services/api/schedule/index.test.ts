@@ -19,7 +19,9 @@ describe('getEmployeeSchedule', () => {
     mockedApi.get.mockResolvedValue({ data: [{ weekday: 1 }] });
 
     await expect(getEmployeeSchedule(2)).resolves.toEqual([{ weekday: 1 }]);
-    expect(mockedApi.get).toHaveBeenCalledWith('/employees/2/schedule');
+    expect(mockedApi.get).toHaveBeenCalledWith('/employees/2/schedule', {
+      signal: undefined,
+    });
   });
 
   it('throws an ApiError on failure', async () => {
@@ -42,4 +44,14 @@ describe('updateEmployeeSchedule', () => {
       days,
     });
   });
+});
+
+it('passes an AbortSignal to getEmployeeSchedule', async () => {
+  const signal = new AbortController().signal;
+  mockedApi.get.mockResolvedValue({ data: [] });
+  await getEmployeeSchedule(7, signal);
+  expect(mockedApi.get).toHaveBeenCalledWith(
+    '/employees/7/schedule',
+    expect.objectContaining({ signal }),
+  );
 });

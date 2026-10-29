@@ -4,10 +4,12 @@ import type { UpdateEmployeeScheduleRequest } from './schedule.types';
 
 export const getEmployeeSchedule = async (
   employeeId: number,
+  signal?: AbortSignal,
 ): Promise<WorkingDay[]> => {
   try {
     const { data } = await api.get<WorkingDay[]>(
       `/employees/${employeeId}/schedule`,
+      { signal: signal },
     );
     return data;
   } catch (error) {
