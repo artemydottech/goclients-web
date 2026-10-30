@@ -7,10 +7,12 @@ import type {
 
 export const getEmployeeTimeOff = async (
   employeeId: number,
+  signal?: AbortSignal,
 ): Promise<TimeOff[]> => {
   try {
     const { data } = await api.get<TimeOff[]>(
       `/employees/${employeeId}/time-off`,
+      { signal: signal },
     );
     return data;
   } catch (error) {

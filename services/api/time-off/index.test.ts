@@ -19,7 +19,9 @@ describe('getEmployeeTimeOff', () => {
     mockedApi.get.mockResolvedValue({ data: [{ id: 1 }] });
 
     await expect(getEmployeeTimeOff(2)).resolves.toEqual([{ id: 1 }]);
-    expect(mockedApi.get).toHaveBeenCalledWith('/employees/2/time-off');
+    expect(mockedApi.get).toHaveBeenCalledWith('/employees/2/time-off', {
+      signal: undefined,
+    });
   });
 });
 
@@ -67,4 +69,14 @@ describe('deleteTimeOff', () => {
 
     expect(mockedApi.delete).toHaveBeenCalledWith('/time-off/3');
   });
+});
+
+it('passes an AbortSignal to getEmployeeTimeOff', async () => {
+  const signal = new AbortController().signal;
+  mockedApi.get.mockResolvedValue({ data: [] });
+  await getEmployeeTimeOff(7, signal);
+  expect(mockedApi.get).toHaveBeenCalledWith(
+    '/employees/7/time-off',
+    expect.objectContaining({ signal }),
+  );
 });
