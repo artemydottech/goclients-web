@@ -73,3 +73,9 @@ it('invalidate dependent data after company deletion', async () => {
     'get-client-stats',
   ]);
 });
+
+import { useUpdateCompany } from './companies';
+
+it('refresh slot availability after timezone changes', async () => {
+  await expectRefresh(useUpdateCompany, ['get-slots']);
+});

@@ -46,6 +46,7 @@ export const useUpdateCompany = () => {
       Promise.all([
         queryClient.invalidateQueries({ queryKey: ['get-companies'] }),
         queryClient.invalidateQueries({ queryKey: ['get-company'] }),
+        queryClient.invalidateQueries({ queryKey: ['get-slots'] }),
       ]),
   });
 };
