@@ -21,10 +21,16 @@ export const useDeleteService = () => {
   return useMutation({
     mutationFn: deleteService,
     meta: { successMessage: 'Услуга удалена' },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['get-services'] });
-      queryClient.invalidateQueries({ queryKey: ['get-employee-services'] });
-    },
+    onSuccess: () =>
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['get-services'] }),
+        queryClient.invalidateQueries({ queryKey: ['get-employee-services'] }),
+        queryClient.invalidateQueries({ queryKey: ['get-service-employees'] }),
+        queryClient.invalidateQueries({ queryKey: ['get-appointments'] }),
+        queryClient.invalidateQueries({ queryKey: ['get-appointment'] }),
+        queryClient.invalidateQueries({ queryKey: ['get-slots'] }),
+        queryClient.invalidateQueries({ queryKey: ['get-client-stats'] }),
+      ]),
   });
 };
 

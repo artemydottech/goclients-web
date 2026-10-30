@@ -43,3 +43,13 @@ it('refresh bookings and slots after employee deletion', async () => {
     'get-client-stats',
   ]);
 });
+
+import { useDeleteService } from './services';
+
+it('refresh booking caches after service deletion', async () => {
+  await expectRefresh(useDeleteService, [
+    'get-appointments',
+    'get-slots',
+    'get-client-stats',
+  ]);
+});
