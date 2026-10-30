@@ -16,7 +16,10 @@ describe('handleApiError', () => {
   });
 
   it('prefers the error field and falls back to a nonempty message', () => {
-    const preferred = buildAxiosError(400, { error: 'invalid', message: 'other' });
+    const preferred = buildAxiosError(400, {
+      error: 'invalid',
+      message: 'other',
+    });
     const fallback = buildAxiosError(400, { error: ' ', message: 'invalid' });
     expect(handleApiError(preferred, 'Ошибка').message).toBe('Ошибка: invalid');
     expect(handleApiError(fallback, 'Ошибка').message).toBe('Ошибка: invalid');
@@ -29,12 +32,11 @@ describe('handleApiError', () => {
     { message: null },
     { message: 123 },
     { error: '  ' },
-  ])(
-    'uses the default for an invalid error payload %j',
-    (data) => {
-      expect(handleApiError(buildAxiosError(400, data), 'Ошибка').message).toBe('Ошибка');
-    },
-  );
+  ])('uses the default for an invalid error payload %j', (data) => {
+    expect(handleApiError(buildAxiosError(400, data), 'Ошибка').message).toBe(
+      'Ошибка',
+    );
+  });
 
   it('appends a plain text server message', () => {
     const error = handleApiError(
@@ -79,3 +81,13 @@ describe('isApiError', () => {
     expect(isApiError('x')).toBe(false);
   });
 });
+
+it.each(['ECONNABORTED', 'ETIMEDOUT'])(
+  'reports timeout failures %s',
+  (code) => {
+    expect(
+      handleApiError(new AxiosError('timeout', code), 'Не удалось сохранить')
+        .message,
+    ).toBe('Не удалось сохранить: сервер не ответил вовремя');
+  },
+);

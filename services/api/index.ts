@@ -2,15 +2,13 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: '/api',
+  timeout: 15_000,
 });
 
 export default api;
 
 export class ApiError extends Error {
-  constructor(
-    message: string,
-    public status: Nullable<number>,
-  ) {
+  constructor(message: string, public status: Nullable<number>) {
     super(message);
     this.name = 'ApiError';
   }
@@ -37,6 +35,9 @@ export const handleApiError = (
   if (!axios.isAxiosError(error)) return new ApiError(defaultMessage, null);
 
   const status = error.response?.status ?? null;
+  if (error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT') {
+    return new ApiError(`${defaultMessage}: сервер не ответил вовремя`, status);
+  }
   const serverMessage = extractServerMessage(error.response?.data);
 
   if (!serverMessage) return new ApiError(defaultMessage, status);
