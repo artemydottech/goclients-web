@@ -63,3 +63,13 @@ it('refresh availability and stats after client deletion', async () => {
     'get-client-stats',
   ]);
 });
+
+import { useDeleteCompany } from './companies';
+
+it('invalidate dependent data after company deletion', async () => {
+  await expectRefresh(useDeleteCompany, [
+    'get-appointments',
+    'get-slots',
+    'get-client-stats',
+  ]);
+});
