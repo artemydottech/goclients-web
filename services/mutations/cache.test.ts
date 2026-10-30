@@ -53,3 +53,13 @@ it('refresh booking caches after service deletion', async () => {
     'get-client-stats',
   ]);
 });
+
+import { useDeleteClient } from './clients';
+
+it('refresh availability and stats after client deletion', async () => {
+  await expectRefresh(useDeleteClient, [
+    'get-appointments',
+    'get-slots',
+    'get-client-stats',
+  ]);
+});

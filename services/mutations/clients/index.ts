@@ -21,10 +21,14 @@ export const useDeleteClient = () => {
   return useMutation({
     mutationFn: deleteClient,
     meta: { successMessage: 'Клиент удалён' },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['get-clients'] });
-      queryClient.invalidateQueries({ queryKey: ['get-appointments'] });
-    },
+    onSuccess: () =>
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['get-clients'] }),
+        queryClient.invalidateQueries({ queryKey: ['get-appointments'] }),
+        queryClient.invalidateQueries({ queryKey: ['get-appointment'] }),
+        queryClient.invalidateQueries({ queryKey: ['get-slots'] }),
+        queryClient.invalidateQueries({ queryKey: ['get-client-stats'] }),
+      ]),
   });
 };
 
