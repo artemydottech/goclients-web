@@ -22,10 +22,15 @@ export const useDeleteEmployee = () => {
   return useMutation({
     mutationFn: deleteEmployee,
     meta: { successMessage: 'Сотрудник удалён' },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['get-employees'] });
-      queryClient.invalidateQueries({ queryKey: ['get-service-employees'] });
-    },
+    onSuccess: () =>
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['get-employees'] }),
+        queryClient.invalidateQueries({ queryKey: ['get-service-employees'] }),
+        queryClient.invalidateQueries({ queryKey: ['get-appointments'] }),
+        queryClient.invalidateQueries({ queryKey: ['get-appointment'] }),
+        queryClient.invalidateQueries({ queryKey: ['get-slots'] }),
+        queryClient.invalidateQueries({ queryKey: ['get-client-stats'] }),
+      ]),
   });
 };
 
