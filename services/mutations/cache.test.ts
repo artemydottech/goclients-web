@@ -79,3 +79,10 @@ import { useUpdateCompany } from './companies';
 it('refresh slot availability after timezone changes', async () => {
   await expectRefresh(useUpdateCompany, ['get-slots']);
 });
+
+import { useUpdateEmployeeServices } from './employees';
+it('refreshes slots when employee service assignments change', async () => {
+  await expectRefresh(useUpdateEmployeeServices, ['get-slots'], {
+    employeeId: 7,
+  });
+});

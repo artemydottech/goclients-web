@@ -39,12 +39,14 @@ export const useUpdateEmployeeServices = () => {
   return useMutation({
     mutationFn: updateEmployeeServices,
     meta: { successMessage: 'Услуги мастера сохранены', hasInlineError: true },
-    onSuccess: (_, { employeeId }) => {
-      queryClient.invalidateQueries({
-        queryKey: ['get-employee-services', employeeId],
-      });
-      queryClient.invalidateQueries({ queryKey: ['get-service-employees'] });
-    },
+    onSuccess: (_, { employeeId }) =>
+      Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['get-employee-services', employeeId],
+        }),
+        queryClient.invalidateQueries({ queryKey: ['get-service-employees'] }),
+        queryClient.invalidateQueries({ queryKey: ['get-slots'] }),
+      ]),
   });
 };
 
