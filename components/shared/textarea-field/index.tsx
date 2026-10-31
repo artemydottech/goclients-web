@@ -1,4 +1,5 @@
 'use client';
+import { useId } from 'react';
 import { useController, type FieldValues } from 'react-hook-form';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -10,19 +11,24 @@ export const TextareaField = <T extends FieldValues>({
   label,
   placeholder,
 }: TextareaFieldProps<T>) => {
+  const id = useId();
+  const errorId = `${id}-error`;
   const { field, fieldState } = useController({ control, name });
 
   return (
     <div className="grid gap-2">
-      <Label htmlFor={name}>{label}</Label>
+      <Label htmlFor={id}>{label}</Label>
       <Textarea
-        id={name}
+        id={id}
         placeholder={placeholder}
         aria-invalid={Boolean(fieldState.error)}
+        aria-describedby={fieldState.error ? errorId : undefined}
         {...field}
       />
       {fieldState.error && (
-        <p className="text-xs text-destructive">{fieldState.error.message}</p>
+        <p id={errorId} className="text-xs text-destructive">
+          {fieldState.error.message}
+        </p>
       )}
     </div>
   );

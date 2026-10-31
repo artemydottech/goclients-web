@@ -1,4 +1,5 @@
 'use client';
+import { useId } from 'react';
 import { useController, type FieldValues } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,19 +12,21 @@ export const TextField = <T extends FieldValues>({
   type = 'text',
   placeholder,
 }: TextFieldProps<T>) => {
+  const id = useId();
+  const errorId = `${id}-error`;
   const { field, fieldState } = useController({ control, name });
   const isNumber = type === 'number';
-  const value =
-    isNumber && Number.isNaN(field.value) ? '' : (field.value ?? '');
+  const value = isNumber && Number.isNaN(field.value) ? '' : field.value ?? '';
 
   return (
     <div className="grid gap-2">
-      <Label htmlFor={name}>{label}</Label>
+      <Label htmlFor={id}>{label}</Label>
       <Input
-        id={name}
+        id={id}
         type={type}
         placeholder={placeholder}
         aria-invalid={Boolean(fieldState.error)}
+        aria-describedby={fieldState.error ? errorId : undefined}
         {...field}
         value={value}
         onChange={(event) =>
@@ -33,7 +36,9 @@ export const TextField = <T extends FieldValues>({
         }
       />
       {fieldState.error && (
-        <p className="text-xs text-destructive">{fieldState.error.message}</p>
+        <p id={errorId} className="text-xs text-destructive">
+          {fieldState.error.message}
+        </p>
       )}
     </div>
   );
