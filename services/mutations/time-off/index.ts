@@ -7,12 +7,13 @@ export const useCreateTimeOff = () => {
   return useMutation({
     mutationFn: createTimeOff,
     meta: { successMessage: 'Период добавлен', hasInlineError: true },
-    onSuccess: (_, { employeeId }) => {
-      queryClient.invalidateQueries({
-        queryKey: ['get-employee-time-off', employeeId],
-      });
-      queryClient.invalidateQueries({ queryKey: ['get-slots'] });
-    },
+    onSuccess: (_, { employeeId }) =>
+      Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['get-employee-time-off', employeeId],
+        }),
+        queryClient.invalidateQueries({ queryKey: ['get-slots'] }),
+      ]),
   });
 };
 
@@ -21,11 +22,12 @@ export const useDeleteTimeOff = () => {
   return useMutation({
     mutationFn: deleteTimeOff,
     meta: { successMessage: 'Период удалён' },
-    onSuccess: (_, { employeeId }) => {
-      queryClient.invalidateQueries({
-        queryKey: ['get-employee-time-off', employeeId],
-      });
-      queryClient.invalidateQueries({ queryKey: ['get-slots'] });
-    },
+    onSuccess: (_, { employeeId }) =>
+      Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['get-employee-time-off', employeeId],
+        }),
+        queryClient.invalidateQueries({ queryKey: ['get-slots'] }),
+      ]),
   });
 };

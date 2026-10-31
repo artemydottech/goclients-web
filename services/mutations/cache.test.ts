@@ -137,3 +137,11 @@ import { useUpdateEmployeeSchedule } from './schedule';
 it('waits for fresh slots after schedule replacement', async () => {
   await expectPendingRefetch(useUpdateEmployeeSchedule, { employeeId: 7 });
 });
+
+import { useCreateTimeOff, useDeleteTimeOff } from './time-off';
+it.each([useCreateTimeOff, useDeleteTimeOff])(
+  'waits for fresh slots after time-off changes %s',
+  async (hook) => {
+    await expectPendingRefetch(hook, { employeeId: 7 });
+  },
+);
