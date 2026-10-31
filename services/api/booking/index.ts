@@ -8,8 +8,14 @@ import type {
 
 const COMPARABLE_PHONE_DIGITS = 10;
 
-const toComparablePhone = (phone: string): string =>
-  onlyDigits(phone).slice(-COMPARABLE_PHONE_DIGITS);
+const toComparablePhone = (phone: string): string => {
+  const digits = onlyDigits(phone);
+  if (digits.length === COMPARABLE_PHONE_DIGITS) return `7${digits}`;
+  if (digits.length === COMPARABLE_PHONE_DIGITS + 1 && digits.startsWith('8')) {
+    return `7${digits.slice(1)}`;
+  }
+  return digits;
+};
 
 const findOrCreateClientId = async (
   companyId: number,

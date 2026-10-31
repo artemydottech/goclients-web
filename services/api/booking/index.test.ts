@@ -78,3 +78,15 @@ describe('createBooking', () => {
     expect(result).toEqual({ appointmentId: 99 });
   });
 });
+
+it('does not reuse clients from another country with the same phone suffix', async () => {
+  vi.resetAllMocks();
+  vi.mocked(getClients).mockResolvedValue([
+    buildClient({ id: 7, phone: '19001234567' }),
+  ]);
+  vi.mocked(createClient).mockResolvedValue({ id: 50 });
+  vi.mocked(createAppointment).mockResolvedValue({ id: 99 });
+  await createBooking(request);
+  expect(createClient).toHaveBeenCalledOnce();
+  expect(vi.mocked(createAppointment).mock.calls[0][0].client_id).toBe(50);
+});
