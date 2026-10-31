@@ -132,3 +132,8 @@ it.each([
 ])('waits for appointment cache refresh %s', async (hook) => {
   await expectPendingRefetch(hook);
 });
+
+import { useUpdateEmployeeSchedule } from './schedule';
+it('waits for fresh slots after schedule replacement', async () => {
+  await expectPendingRefetch(useUpdateEmployeeSchedule, { employeeId: 7 });
+});

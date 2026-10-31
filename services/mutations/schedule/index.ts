@@ -7,11 +7,12 @@ export const useUpdateEmployeeSchedule = () => {
   return useMutation({
     mutationFn: updateEmployeeSchedule,
     meta: { successMessage: 'График сохранён', hasInlineError: true },
-    onSuccess: (_, { employeeId }) => {
-      queryClient.invalidateQueries({
-        queryKey: ['get-employee-schedule', employeeId],
-      });
-      queryClient.invalidateQueries({ queryKey: ['get-slots'] });
-    },
+    onSuccess: (_, { employeeId }) =>
+      Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['get-employee-schedule', employeeId],
+        }),
+        queryClient.invalidateQueries({ queryKey: ['get-slots'] }),
+      ]),
   });
 };
