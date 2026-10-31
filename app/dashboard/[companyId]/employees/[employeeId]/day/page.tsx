@@ -1,3 +1,4 @@
+import { requireRouteId } from '@/lib/route-id';
 import { parseDateParam } from '@/utils/date';
 import { MasterDay } from '@/components/master-day';
 
@@ -15,8 +16,8 @@ export default async function MasterDayPage({
 
   return (
     <MasterDay
-      companyId={Number(companyId)}
-      employeeId={Number(employeeId)}
+      companyId={requireRouteId(companyId)}
+      employeeId={requireRouteId(employeeId)}
       date={parseDateParam(date)}
     />
   );

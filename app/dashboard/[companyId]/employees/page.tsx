@@ -1,3 +1,4 @@
+import { requireRouteId } from '@/lib/route-id';
 import { PageHeader } from '@/components/shared/page-header';
 import { EmployeesList } from '@/components/employees-list';
 import { CreateEmployeeDialog } from '@/components/create-employee-dialog';
@@ -14,9 +15,9 @@ export default async function EmployeesPage({ params }: EmployeesPageProps) {
       <PageHeader
         title="Сотрудники"
         description="Мастера и администраторы"
-        action={<CreateEmployeeDialog companyId={Number(companyId)} />}
+        action={<CreateEmployeeDialog companyId={requireRouteId(companyId)} />}
       />
-      <EmployeesList companyId={Number(companyId)} />
+      <EmployeesList companyId={requireRouteId(companyId)} />
     </div>
   );
 }

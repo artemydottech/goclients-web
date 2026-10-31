@@ -1,3 +1,4 @@
+import { requireRouteId } from '@/lib/route-id';
 import { EmployeeProfile } from '@/components/employee-profile';
 import { EmployeeServices } from '@/components/employee-services';
 import { EmployeeSchedule } from '@/components/employee-schedule';
@@ -9,7 +10,10 @@ interface EmployeePageProps {
 
 export default async function EmployeePage({ params }: EmployeePageProps) {
   const { companyId, employeeId } = await params;
-  const ids = { companyId: Number(companyId), employeeId: Number(employeeId) };
+  const ids = {
+    companyId: requireRouteId(companyId),
+    employeeId: requireRouteId(employeeId),
+  };
 
   return (
     <div className="space-y-6">
