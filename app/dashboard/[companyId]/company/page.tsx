@@ -1,3 +1,4 @@
+import { requireRouteId } from '@/lib/route-id';
 import { CompanyInfo } from '@/components/company-info';
 import { BookingLink } from '@/components/booking-link';
 
@@ -10,8 +11,8 @@ export default async function CompanyPage({ params }: CompanyPageProps) {
 
   return (
     <div className="space-y-6">
-      <CompanyInfo companyId={Number(companyId)} />
-      <BookingLink companyId={Number(companyId)} />
+      <CompanyInfo companyId={requireRouteId(companyId)} />
+      <BookingLink companyId={requireRouteId(companyId)} />
     </div>
   );
 }
