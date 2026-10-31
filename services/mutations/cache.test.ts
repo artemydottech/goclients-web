@@ -1,5 +1,5 @@
 import { beforeEach, afterEach, expect, it, vi } from 'vitest';
-import { QueryClient } from '@tanstack/react-query';
+import { QueryClient, QueryObserver } from '@tanstack/react-query';
 import { useDeleteEmployee } from './employees';
 
 type SuccessCallback = (data: unknown, variables: unknown) => unknown;
@@ -85,4 +85,50 @@ it('refreshes slots when employee service assignments change', async () => {
   await expectRefresh(useUpdateEmployeeServices, ['get-slots'], {
     employeeId: 7,
   });
+});
+
+const expectPendingRefetch = async (
+  hook: () => unknown,
+  variables: unknown = {},
+) => {
+  let release!: (value: string[]) => void;
+  const response = new Promise<string[]>((resolve) => {
+    release = resolve;
+  });
+  const observer = new QueryObserver(client, {
+    queryKey: ['get-slots'],
+    queryFn: () => response,
+    initialData: [] as string[],
+    staleTime: Infinity,
+  });
+  const unsubscribe = observer.subscribe(() => {});
+  hook();
+  let settled = false;
+  const completion = Promise.resolve(
+    captured.onSuccess?.(undefined, variables),
+  ).then(() => {
+    settled = true;
+  });
+  await Promise.resolve();
+  await Promise.resolve();
+  expect(settled).toBe(false);
+  release([]);
+  await completion;
+  expect(client.getQueryState(['get-slots'])?.fetchStatus).toBe('idle');
+  unsubscribe();
+};
+
+import {
+  useCreateAppointment,
+  useDeleteAppointment,
+  useUpdateAppointmentStatus,
+  useUpdateAppointmentTime,
+} from './appointments';
+it.each([
+  useCreateAppointment,
+  useDeleteAppointment,
+  useUpdateAppointmentStatus,
+  useUpdateAppointmentTime,
+])('waits for appointment cache refresh %s', async (hook) => {
+  await expectPendingRefetch(hook);
 });

@@ -11,12 +11,13 @@ import {
   updateAppointmentTime,
 } from '@/services/api/appointments';
 
-const invalidateAppointments = (queryClient: QueryClient) => {
-  queryClient.invalidateQueries({ queryKey: ['get-appointments'] });
-  queryClient.invalidateQueries({ queryKey: ['get-appointment'] });
-  queryClient.invalidateQueries({ queryKey: ['get-slots'] });
-  queryClient.invalidateQueries({ queryKey: ['get-client-stats'] });
-};
+const invalidateAppointments = (queryClient: QueryClient) =>
+  Promise.all([
+    queryClient.invalidateQueries({ queryKey: ['get-appointments'] }),
+    queryClient.invalidateQueries({ queryKey: ['get-appointment'] }),
+    queryClient.invalidateQueries({ queryKey: ['get-slots'] }),
+    queryClient.invalidateQueries({ queryKey: ['get-client-stats'] }),
+  ]);
 
 export const useCreateAppointment = () => {
   const queryClient = useQueryClient();
