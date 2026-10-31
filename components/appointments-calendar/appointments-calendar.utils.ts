@@ -22,7 +22,11 @@ export const parseDragPayload = (
       'appointmentId' in value &&
       'grabOffset' in value &&
       typeof value.appointmentId === 'number' &&
-      typeof value.grabOffset === 'number'
+      typeof value.grabOffset === 'number' &&
+      Number.isSafeInteger(value.appointmentId) &&
+      value.appointmentId > 0 &&
+      Number.isFinite(value.grabOffset) &&
+      value.grabOffset >= 0
     ) {
       return {
         appointmentId: value.appointmentId,
