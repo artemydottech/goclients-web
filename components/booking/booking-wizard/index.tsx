@@ -1,5 +1,7 @@
 'use client';
 import { useState } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { ErrorText } from '@/components/shared/error-text';
 import { useGetCompany } from '@/services/queries/companies';
 import { useCreateBooking } from '@/services/mutations/booking';
 import { BookingContactsForm } from '@/forms/booking-contacts-form';
@@ -17,7 +19,7 @@ import type {
 } from './booking-wizard.types';
 
 export const BookingWizard = ({ companyId }: BookingWizardProps) => {
-  const { data: company } = useGetCompany(companyId);
+  const { data: company, isPending, error } = useGetCompany(companyId);
   const timezone = company?.timezone || DEFAULT_TIMEZONE;
   const [step, setStep] = useState<BookingStep>('service');
   const [selection, setSelection] = useState<BookingSelection>(() => ({
@@ -89,12 +91,20 @@ export const BookingWizard = ({ companyId }: BookingWizardProps) => {
         companyId={companyId}
         selectedId={selection.service?.id}
         onSelect={(service) => {
-          update({ service, employee: null, slot: '' });
+          update({
+            service,
+            employee: null,
+            slot: '',
+            date: getCompanyToday(timezone),
+          });
           setStep('employee');
         }}
       />
     );
   };
+
+  if (isPending) return <Skeleton className="h-64 w-full" />;
+  if (error && !company) return <ErrorText errorMessage={error.message} />;
 
   if (isBooked) {
     return (
@@ -106,6 +116,7 @@ export const BookingWizard = ({ companyId }: BookingWizardProps) => {
           createBooking.reset();
           setSelection((current) => ({
             ...current,
+            date: getCompanyToday(timezone),
             service: null,
             employee: null,
             slot: '',
