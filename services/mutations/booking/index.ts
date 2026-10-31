@@ -7,10 +7,12 @@ export const useCreateBooking = () => {
   return useMutation({
     mutationFn: createBooking,
     meta: { hasInlineError: true },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['get-slots'] });
-      queryClient.invalidateQueries({ queryKey: ['get-appointments'] });
-      queryClient.invalidateQueries({ queryKey: ['get-clients'] });
-    },
+    onSuccess: () =>
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['get-slots'] }),
+        queryClient.invalidateQueries({ queryKey: ['get-appointments'] }),
+        queryClient.invalidateQueries({ queryKey: ['get-clients'] }),
+        queryClient.invalidateQueries({ queryKey: ['get-client-stats'] }),
+      ]),
   });
 };

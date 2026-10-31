@@ -145,3 +145,9 @@ it.each([useCreateTimeOff, useDeleteTimeOff])(
     await expectPendingRefetch(hook, { employeeId: 7 });
   },
 );
+
+import { useCreateBooking } from './booking';
+it('waits for booking availability and refreshes client stats', async () => {
+  await expectPendingRefetch(useCreateBooking);
+  await expectRefresh(useCreateBooking, ['get-client-stats']);
+});
