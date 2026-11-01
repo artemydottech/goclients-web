@@ -1,3 +1,4 @@
+import { requireRouteId } from '@/lib/route-id';
 import type { Metadata } from 'next';
 import { PublicCompany } from '@/components/booking/public-company';
 import { BookingWizard } from '@/components/booking/booking-wizard';
@@ -11,7 +12,7 @@ export async function generateMetadata({
   params,
 }: BookCompanyPageProps): Promise<Metadata> {
   const { companyId } = await params;
-  const company = await getCompanyOnServer(Number(companyId));
+  const company = await getCompanyOnServer(requireRouteId(companyId));
 
   if (!company) return { title: 'Онлайн-запись' };
 
@@ -30,8 +31,8 @@ export default async function BookCompanyPage({
 
   return (
     <div className="mx-auto max-w-5xl space-y-10 px-4 py-12">
-      <PublicCompany companyId={Number(companyId)} />
-      <BookingWizard companyId={Number(companyId)} />
+      <PublicCompany companyId={requireRouteId(companyId)} />
+      <BookingWizard companyId={requireRouteId(companyId)} />
     </div>
   );
 }
