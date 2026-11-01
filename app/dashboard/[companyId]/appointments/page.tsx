@@ -1,3 +1,4 @@
+import { requireRouteId } from '@/lib/route-id';
 import { parseDateParam } from '@/utils/date';
 import { PageHeader } from '@/components/shared/page-header';
 import { AppointmentsCalendar } from '@/components/appointments-calendar';
@@ -23,13 +24,13 @@ export default async function AppointmentsPage({
         description="Календарь мастеров"
         action={
           <CreateAppointmentDialog
-            companyId={Number(companyId)}
+            companyId={requireRouteId(companyId)}
             date={validDate}
           />
         }
       />
       <AppointmentsCalendar
-        companyId={Number(companyId)}
+        companyId={requireRouteId(companyId)}
         date={validDate}
         view={view === 'week' ? 'week' : 'day'}
       />
