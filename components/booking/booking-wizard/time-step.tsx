@@ -58,6 +58,7 @@ export const TimeStep = ({
               role="radio"
               aria-checked={isSelected}
               aria-disabled={isUnavailable}
+              disabled={isUnavailable}
               onClick={() => onDateChange(value)}
               className={cn(
                 'flex w-14 shrink-0 flex-col items-center rounded-xl border py-2 text-sm transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
