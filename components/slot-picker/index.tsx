@@ -1,4 +1,5 @@
 'use client';
+import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorText } from '@/components/shared/error-text';
@@ -24,7 +25,20 @@ export const SlotPicker = ({
           step: SLOT_STEP_MINUTES,
         }
       : null;
-  const { data: slots, isPending, error } = useGetSlots(params);
+  const { data: slots, isPending, isFetching, error } = useGetSlots(params);
+
+  useEffect(() => {
+    if (
+      !isFetching &&
+      !isPending &&
+      !error &&
+      value &&
+      slots &&
+      !slots.includes(value)
+    ) {
+      onChange('');
+    }
+  }, [slots, isFetching, isPending, error, value, onChange]);
 
   if (!params) {
     return (
@@ -56,6 +70,7 @@ export const SlotPicker = ({
           type="button"
           role="radio"
           aria-checked={slot === value}
+          disabled={isFetching}
           size="sm"
           variant={slot === value ? 'default' : 'outline'}
           className="tabular-nums"
