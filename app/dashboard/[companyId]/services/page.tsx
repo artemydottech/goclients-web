@@ -1,3 +1,4 @@
+import { requireRouteId } from '@/lib/route-id';
 import { PageHeader } from '@/components/shared/page-header';
 import { ServicesTable } from '@/components/services-table';
 import { CreateServiceDialog } from '@/components/create-service-dialog';
@@ -14,9 +15,9 @@ export default async function ServicesPage({ params }: ServicesPageProps) {
       <PageHeader
         title="Услуги"
         description="Прайс-лист и длительность услуг"
-        action={<CreateServiceDialog companyId={Number(companyId)} />}
+        action={<CreateServiceDialog companyId={requireRouteId(companyId)} />}
       />
-      <ServicesTable companyId={Number(companyId)} />
+      <ServicesTable companyId={requireRouteId(companyId)} />
     </div>
   );
 }
