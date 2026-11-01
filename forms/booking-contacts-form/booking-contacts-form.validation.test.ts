@@ -43,3 +43,17 @@ describe('bookingContactsFormSchema', () => {
     },
   );
 });
+
+it('rejects public booking contact values exceeding API limits', () => {
+  const values = { name: 'Анна', phone: '79991234567', comment: '' };
+  expect(
+    bookingContactsFormSchema.safeParse({ ...values, name: 'я'.repeat(201) })
+      .success,
+  ).toBe(false);
+  expect(
+    bookingContactsFormSchema.safeParse({
+      ...values,
+      comment: 'я'.repeat(1001),
+    }).success,
+  ).toBe(false);
+});

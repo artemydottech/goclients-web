@@ -1,11 +1,12 @@
 import { z } from 'zod';
+import { boundedText } from '@/lib/validation';
 import { onlyDigits } from '@/utils';
 
 const MIN_PHONE_DIGITS = 10;
 const MAX_PHONE_DIGITS = 15;
 
 export const bookingContactsFormSchema = z.object({
-  name: z.string().trim().min(1, 'Как к вам обращаться?'),
+  name: boundedText(200).min(1, 'Как к вам обращаться?'),
   phone: z.string().refine(
     (value) => {
       const digits = onlyDigits(value).length;
@@ -13,7 +14,7 @@ export const bookingContactsFormSchema = z.object({
     },
     { message: 'Проверьте номер телефона' },
   ),
-  comment: z.string().trim(),
+  comment: boundedText(1000),
 });
 
 export type BookingContactsFormValues = z.infer<
