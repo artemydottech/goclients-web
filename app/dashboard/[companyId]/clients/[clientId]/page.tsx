@@ -1,3 +1,4 @@
+import { requireRouteId } from '@/lib/route-id';
 import { ClientProfile } from '@/components/client-profile';
 import { ClientStats } from '@/components/client-stats';
 import { ClientHistory } from '@/components/client-history';
@@ -12,13 +13,13 @@ export default async function ClientPage({ params }: ClientPageProps) {
   return (
     <div className="space-y-6">
       <ClientProfile
-        companyId={Number(companyId)}
-        clientId={Number(clientId)}
+        companyId={requireRouteId(companyId)}
+        clientId={requireRouteId(clientId)}
       />
-      <ClientStats clientId={Number(clientId)} />
+      <ClientStats clientId={requireRouteId(clientId)} />
       <ClientHistory
-        companyId={Number(companyId)}
-        clientId={Number(clientId)}
+        companyId={requireRouteId(companyId)}
+        clientId={requireRouteId(clientId)}
       />
     </div>
   );

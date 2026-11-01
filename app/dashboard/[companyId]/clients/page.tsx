@@ -1,3 +1,4 @@
+import { requireRouteId } from '@/lib/route-id';
 import { PageHeader } from '@/components/shared/page-header';
 import { ClientsTable } from '@/components/clients-table';
 import { CreateClientDialog } from '@/components/create-client-dialog';
@@ -14,9 +15,9 @@ export default async function ClientsPage({ params }: ClientsPageProps) {
       <PageHeader
         title="Клиенты"
         description="База клиентов компании"
-        action={<CreateClientDialog companyId={Number(companyId)} />}
+        action={<CreateClientDialog companyId={requireRouteId(companyId)} />}
       />
-      <ClientsTable companyId={Number(companyId)} />
+      <ClientsTable companyId={requireRouteId(companyId)} />
     </div>
   );
 }
