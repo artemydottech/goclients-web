@@ -1,3 +1,4 @@
+import { requireRouteId } from '@/lib/route-id';
 import { DashboardOverview } from '@/components/dashboard-overview';
 
 interface DashboardPageProps {
@@ -7,5 +8,5 @@ interface DashboardPageProps {
 export default async function DashboardPage({ params }: DashboardPageProps) {
   const { companyId } = await params;
 
-  return <DashboardOverview companyId={Number(companyId)} />;
+  return <DashboardOverview companyId={requireRouteId(companyId)} />;
 }
