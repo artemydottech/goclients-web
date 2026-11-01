@@ -5,6 +5,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorText } from '@/components/shared/error-text';
 import { useGetSlots } from '@/services/queries/slots';
 import { inCompanyTimezone } from '@/utils/date';
+import { nextSlotIndex } from './slot-picker.utils';
 import { SLOT_STEP_MINUTES } from './slot-picker.constants';
 import type { SlotPickerProps } from './slot-picker.types';
 
@@ -58,19 +59,31 @@ export const SlotPicker = ({
     );
   }
 
+  const activeIndex = Math.max(0, slots.indexOf(value));
+
   return (
     <div
       role="radiogroup"
       aria-label="Свободное время"
       className="grid max-h-48 grid-cols-4 gap-2 overflow-y-auto sm:grid-cols-6"
     >
-      {slots.map((slot) => (
+      {slots.map((slot, index) => (
         <Button
           key={slot}
           type="button"
           role="radio"
           aria-checked={slot === value}
           disabled={isFetching}
+          tabIndex={index === activeIndex ? 0 : -1}
+          onKeyDown={(event) => {
+            const next = nextSlotIndex(event.key, index, slots.length);
+            if (next === null) return;
+            event.preventDefault();
+            onChange(slots[next]);
+            event.currentTarget.parentElement
+              ?.querySelectorAll<HTMLButtonElement>('[role="radio"]')
+              [next]?.focus();
+          }}
           size="sm"
           variant={slot === value ? 'default' : 'outline'}
           className="tabular-nums"
