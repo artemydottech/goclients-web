@@ -18,13 +18,14 @@ const DEFAULT_VALUES: EmployeeFormValues = {
 };
 
 export const EmployeeForm = ({
+  defaultValues,
   isPending,
   errorMessage,
   onSubmit,
 }: EmployeeFormProps) => {
   const { control, handleSubmit } = useForm<EmployeeFormValues>({
     resolver: zodResolver(employeeFormSchema),
-    defaultValues: DEFAULT_VALUES,
+    defaultValues: { ...DEFAULT_VALUES, ...defaultValues },
   });
 
   return (

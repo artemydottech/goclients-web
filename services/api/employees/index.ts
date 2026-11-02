@@ -2,6 +2,7 @@ import api, { handleApiError } from '..';
 import type { CreatedResponse, Employee, Service } from '@/types';
 import type {
   CreateEmployeeRequest,
+  UpdateEmployeeRequest,
   UpdateEmployeeServicesRequest,
 } from './employees.types';
 
@@ -61,5 +62,16 @@ export const updateEmployeeServices = async ({
     });
   } catch (error) {
     throw handleApiError(error, 'Не удалось сохранить услуги сотрудника');
+  }
+};
+
+export const updateEmployee = async ({
+  id,
+  body,
+}: UpdateEmployeeRequest): Promise<void> => {
+  try {
+    await api.put(`/employees/${id}`, body);
+  } catch (error) {
+    throw handleApiError(error, 'Не удалось сохранить сотрудника');
   }
 };

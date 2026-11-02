@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorText } from '@/components/shared/error-text';
+import { EditEmployeeDialog } from '@/components/edit-employee-dialog';
 import { ConfirmDeleteButton } from '@/components/shared/confirm-delete-button';
 import { useGetEmployee } from '@/services/queries/employees';
 import { useDeleteEmployee } from '@/services/mutations/employees';
@@ -55,6 +56,7 @@ export const EmployeeProfile = ({
             Мой день
           </Link>
         </Button>
+        <EditEmployeeDialog employee={employee} />
         <ConfirmDeleteButton
           title={`Удалить сотрудника ${fullName}?`}
           description="Вместе с ним удалятся график, отпуска и его записи."

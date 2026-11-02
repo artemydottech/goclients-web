@@ -2,6 +2,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   createEmployee,
+  updateEmployee,
   deleteEmployee,
   updateEmployeeServices,
 } from '@/services/api/employees';
@@ -39,5 +40,19 @@ export const useUpdateEmployeeServices = () => {
       });
       queryClient.invalidateQueries({ queryKey: ['get-service-employees'] });
     },
+  });
+};
+
+export const useUpdateEmployee = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateEmployee,
+    meta: { successMessage: 'Сотрудник сохранён', hasInlineError: true },
+    onSuccess: () =>
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['get-employees'] }),
+        queryClient.invalidateQueries({ queryKey: ['get-employee'] }),
+        queryClient.invalidateQueries({ queryKey: ['get-service-employees'] }),
+      ]),
   });
 };

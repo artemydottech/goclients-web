@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const employeeFormSchema = z.object({
   name: z.string().trim().min(1, 'Обязательное поле'),
-  surname: z.string().trim(),
+  surname: z.string().trim().min(1, 'Обязательное поле'),
   position: z.string().trim(),
   avatar: z.union([z.literal(''), z.url('Некорректная ссылка')]),
 });

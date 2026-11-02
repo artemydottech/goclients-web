@@ -6,3 +6,8 @@ export interface UpdateEmployeeServicesRequest {
   employeeId: number;
   serviceIds: number[];
 }
+
+export interface UpdateEmployeeRequest {
+  id: number;
+  body: Omit<Employee, 'id' | 'company_id'>;
+}

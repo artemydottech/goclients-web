@@ -3,6 +3,7 @@ import api from '..';
 import { buildAxiosError } from '../test-utils';
 import {
   createEmployee,
+  updateEmployee,
   deleteEmployee,
   getEmployee,
   getEmployees,
@@ -118,6 +119,43 @@ describe('updateEmployeeServices', () => {
       updateEmployeeServices({ employeeId: 2, serviceIds: [99] }),
     ).rejects.toMatchObject({
       message: 'Не удалось сохранить услуги сотрудника: unknown service',
+    });
+  });
+});
+
+describe('updateEmployee', () => {
+  const body = {
+    name: 'Анна',
+    surname: 'Иванова',
+    position: 'Мастер',
+    avatar: '',
+  };
+
+  it('sends editable fields with PUT and handles a 204 response', async () => {
+    mockedApi.put.mockResolvedValue({ status: 204 });
+
+    await expect(updateEmployee({ id: 7, body })).resolves.toBeUndefined();
+    expect(mockedApi.put).toHaveBeenCalledWith('/employees/7', body);
+  });
+
+  it('keeps backend validation details', async () => {
+    mockedApi.put.mockRejectedValue(
+      buildAxiosError(400, { error: 'invalid data' }),
+    );
+
+    await expect(updateEmployee({ id: 7, body })).rejects.toMatchObject({
+      message: 'Не удалось сохранить сотрудника: invalid data',
+      status: 400,
+    });
+  });
+
+  it('reports deleted entities without returning a successful save', async () => {
+    mockedApi.put.mockRejectedValue(
+      buildAxiosError(404, { error: 'not found' }),
+    );
+
+    await expect(updateEmployee({ id: 7, body })).rejects.toMatchObject({
+      status: 404,
     });
   });
 });
