@@ -21,8 +21,11 @@ export const isApiError = (error: unknown): error is ApiError =>
 
 const extractServerMessage = (data: unknown): string => {
   if (typeof data === 'string') return data.trim();
-  if (data && typeof data === 'object' && 'message' in data) {
-    return String(data.message);
+  if (data && typeof data === 'object') {
+    for (const key of ['error', 'message']) {
+      const message = (data as Record<string, unknown>)[key];
+      if (typeof message === 'string' && message.trim()) return message.trim();
+    }
   }
   return '';
 };

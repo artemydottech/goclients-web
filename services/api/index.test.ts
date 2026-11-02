@@ -4,6 +4,38 @@ import { ApiError, handleApiError, isApiError } from '.';
 import { buildAxiosError } from './test-utils';
 
 describe('handleApiError', () => {
+  it('reads the backend error envelope', () => {
+    const error = handleApiError(
+      buildAxiosError(400, { error: '  client phone already exists\n' }),
+      'Не удалось сохранить клиента',
+    );
+    expect(error.message).toBe(
+      'Не удалось сохранить клиента: client phone already exists',
+    );
+    expect(error.status).toBe(400);
+  });
+
+  it('prefers the error field and falls back to a nonempty message', () => {
+    const preferred = buildAxiosError(400, { error: 'invalid', message: 'other' });
+    const fallback = buildAxiosError(400, { error: ' ', message: 'invalid' });
+    expect(handleApiError(preferred, 'Ошибка').message).toBe('Ошибка: invalid');
+    expect(handleApiError(fallback, 'Ошибка').message).toBe('Ошибка: invalid');
+  });
+
+  it.each([
+    null,
+    {},
+    { error: { code: 1 } },
+    { message: null },
+    { message: 123 },
+    { error: '  ' },
+  ])(
+    'uses the default for an invalid error payload %j',
+    (data) => {
+      expect(handleApiError(buildAxiosError(400, data), 'Ошибка').message).toBe('Ошибка');
+    },
+  );
+
   it('appends a plain text server message', () => {
     const error = handleApiError(
       buildAxiosError(409, 'slot is taken\n'),
