@@ -3,6 +3,7 @@ import api from '..';
 import { buildAxiosError } from '../test-utils';
 import {
   createClient,
+  updateClient,
   deleteClient,
   getClient,
   getClientStats,
@@ -97,5 +98,37 @@ describe('deleteClient', () => {
     await deleteClient(5);
 
     expect(mockedApi.delete).toHaveBeenCalledWith('/clients/5');
+  });
+});
+
+describe('updateClient', () => {
+  const body = { name: 'Анна', phone: '79991234567', email: '', comment: '' };
+
+  it('sends editable fields with PUT and handles a 204 response', async () => {
+    mockedApi.put.mockResolvedValue({ status: 204 });
+
+    await expect(updateClient({ id: 7, body })).resolves.toBeUndefined();
+    expect(mockedApi.put).toHaveBeenCalledWith('/clients/7', body);
+  });
+
+  it('keeps backend validation details', async () => {
+    mockedApi.put.mockRejectedValue(
+      buildAxiosError(400, { error: 'invalid data' }),
+    );
+
+    await expect(updateClient({ id: 7, body })).rejects.toMatchObject({
+      message: 'Не удалось сохранить клиента: invalid data',
+      status: 400,
+    });
+  });
+
+  it('reports deleted entities without returning a successful save', async () => {
+    mockedApi.put.mockRejectedValue(
+      buildAxiosError(404, { error: 'not found' }),
+    );
+
+    await expect(updateClient({ id: 7, body })).rejects.toMatchObject({
+      status: 404,
+    });
   });
 });

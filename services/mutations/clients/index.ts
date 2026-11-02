@@ -1,6 +1,10 @@
 'use client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createClient, deleteClient } from '@/services/api/clients';
+import {
+  createClient,
+  deleteClient,
+  updateClient,
+} from '@/services/api/clients';
 
 export const useCreateClient = () => {
   const queryClient = useQueryClient();
@@ -21,5 +25,18 @@ export const useDeleteClient = () => {
       queryClient.invalidateQueries({ queryKey: ['get-clients'] });
       queryClient.invalidateQueries({ queryKey: ['get-appointments'] });
     },
+  });
+};
+
+export const useUpdateClient = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateClient,
+    meta: { successMessage: 'Клиент сохранён', hasInlineError: true },
+    onSuccess: () =>
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['get-clients'] }),
+        queryClient.invalidateQueries({ queryKey: ['get-client'] }),
+      ]),
   });
 };

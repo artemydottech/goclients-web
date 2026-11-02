@@ -1,6 +1,6 @@
 import api, { handleApiError } from '..';
 import type { Client, ClientStats, CreatedResponse } from '@/types';
-import type { CreateClientRequest } from './clients.types';
+import type { CreateClientRequest, UpdateClientRequest } from './clients.types';
 
 export const getClients = async (companyId: number): Promise<Client[]> => {
   try {
@@ -47,5 +47,16 @@ export const deleteClient = async (id: number): Promise<void> => {
     await api.delete(`/clients/${id}`);
   } catch (error) {
     throw handleApiError(error, 'Не удалось удалить клиента');
+  }
+};
+
+export const updateClient = async ({
+  id,
+  body,
+}: UpdateClientRequest): Promise<void> => {
+  try {
+    await api.put(`/clients/${id}`, body);
+  } catch (error) {
+    throw handleApiError(error, 'Не удалось сохранить клиента');
   }
 };

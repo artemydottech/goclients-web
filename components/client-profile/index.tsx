@@ -5,6 +5,7 @@ import { LuArrowLeft, LuMail, LuPhone } from 'react-icons/lu';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorText } from '@/components/shared/error-text';
+import { EditClientDialog } from '@/components/edit-client-dialog';
 import { ConfirmDeleteButton } from '@/components/shared/confirm-delete-button';
 import { useGetClient } from '@/services/queries/clients';
 import { useDeleteClient } from '@/services/mutations/clients';
@@ -57,6 +58,7 @@ export const ClientProfile = ({ companyId, clientId }: ClientProfileProps) => {
             </p>
           )}
         </div>
+        <EditClientDialog client={client} />
         <ConfirmDeleteButton
           title={`Удалить клиента ${client.name}?`}
           description="Вместе с клиентом удалится история его записей."

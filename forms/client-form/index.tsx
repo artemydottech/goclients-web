@@ -18,13 +18,14 @@ const DEFAULT_VALUES: ClientFormValues = {
 };
 
 export const ClientForm = ({
+  defaultValues,
   isPending,
   errorMessage,
   onSubmit,
 }: ClientFormProps) => {
   const { control, handleSubmit } = useForm<ClientFormValues>({
     resolver: zodResolver(clientFormSchema),
-    defaultValues: DEFAULT_VALUES,
+    defaultValues: { ...DEFAULT_VALUES, ...defaultValues },
   });
 
   return (
