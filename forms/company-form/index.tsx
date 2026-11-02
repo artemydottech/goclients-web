@@ -24,13 +24,15 @@ const DEFAULT_VALUES: CompanyFormValues = {
 };
 
 export const CompanyForm = ({
+  defaultValues,
+  submitLabel = 'Создать компанию',
   isPending,
   errorMessage,
   onSubmit,
 }: CompanyFormProps) => {
   const { control, handleSubmit } = useForm<CompanyFormValues>({
     resolver: zodResolver(companyFormSchema),
-    defaultValues: DEFAULT_VALUES,
+    defaultValues: { ...DEFAULT_VALUES, ...defaultValues },
   });
 
   return (
@@ -38,7 +40,7 @@ export const CompanyForm = ({
       <CompanyFormFields control={control} />
       {errorMessage && <ErrorText errorMessage={errorMessage} />}
       <Button type="submit" disabled={isPending}>
-        Создать компанию
+        {submitLabel}
       </Button>
     </form>
   );

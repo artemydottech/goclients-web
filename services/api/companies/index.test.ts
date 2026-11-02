@@ -1,7 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import api from '..';
 import { buildAxiosError } from '../test-utils';
-import { createCompany, deleteCompany, getCompanies, getCompany } from '.';
+import {
+  createCompany,
+  deleteCompany,
+  getCompanies,
+  getCompany,
+  updateCompany,
+} from '.';
 
 vi.mock('..', async (importOriginal) => ({
   ...(await importOriginal<typeof import('..')>()),
@@ -83,6 +89,46 @@ describe('deleteCompany', () => {
     await expect(deleteCompany(6)).rejects.toMatchObject({
       message: 'Не удалось удалить компанию: has clients',
       status: 409,
+    });
+  });
+});
+
+describe('updateCompany', () => {
+  const body = {
+    name: 'Салон',
+    address: '',
+    geolocation: '56.8,60.6',
+    schedule: '',
+    logo: '',
+    site: '',
+    timezone: 'Asia/Yekaterinburg',
+  };
+
+  it('sends editable fields with PUT and handles a 204 response', async () => {
+    mockedApi.put.mockResolvedValue({ status: 204 });
+
+    await expect(updateCompany({ id: 7, body })).resolves.toBeUndefined();
+    expect(mockedApi.put).toHaveBeenCalledWith('/companies/7', body);
+  });
+
+  it('keeps backend validation details', async () => {
+    mockedApi.put.mockRejectedValue(
+      buildAxiosError(400, { error: 'invalid data' }),
+    );
+
+    await expect(updateCompany({ id: 7, body })).rejects.toMatchObject({
+      message: 'Не удалось сохранить компанию: invalid data',
+      status: 400,
+    });
+  });
+
+  it('reports deleted entities without returning a successful save', async () => {
+    mockedApi.put.mockRejectedValue(
+      buildAxiosError(404, { error: 'not found' }),
+    );
+
+    await expect(updateCompany({ id: 7, body })).rejects.toMatchObject({
+      status: 404,
     });
   });
 });

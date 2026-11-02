@@ -2,6 +2,7 @@ import api, { handleApiError } from '..';
 import type { Company, CreatedResponse } from '@/types';
 import type {
   CreateCompanyRequest,
+  UpdateCompanyRequest,
   GetCompaniesResponse,
   GetCompanyResponse,
 } from './companies.types';
@@ -40,5 +41,16 @@ export const deleteCompany = async (id: number): Promise<void> => {
     await api.delete(`/companies/${id}`);
   } catch (error) {
     throw handleApiError(error, 'Не удалось удалить компанию');
+  }
+};
+
+export const updateCompany = async ({
+  id,
+  body,
+}: UpdateCompanyRequest): Promise<void> => {
+  try {
+    await api.put(`/companies/${id}`, body);
+  } catch (error) {
+    throw handleApiError(error, 'Не удалось сохранить компанию');
   }
 };

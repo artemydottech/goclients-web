@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorText } from '@/components/shared/error-text';
+import { EditCompanyDialog } from '@/components/edit-company-dialog';
 import { ConfirmDeleteButton } from '@/components/shared/confirm-delete-button';
 import { SocialLinks } from '@/components/social-links';
 import { useGetCompany } from '@/services/queries/companies';
@@ -46,6 +47,7 @@ export const CompanyInfo = ({ companyId }: CompanyInfoProps) => {
               {company.timezone || DEFAULT_TIMEZONE}
             </Badge>
           </div>
+          <EditCompanyDialog company={company} />
           <ConfirmDeleteButton
             title={`Удалить «${company.name}»?`}
             description="Удалятся сотрудники, услуги, клиенты и все записи компании. Это действие нельзя отменить."
