@@ -1,6 +1,9 @@
 import api, { handleApiError } from '..';
 import type { CreatedResponse, Employee, Service } from '@/types';
-import type { CreateServiceRequest } from './services.types';
+import type {
+  CreateServiceRequest,
+  UpdateServiceRequest,
+} from './services.types';
 
 export const getServices = async (companyId: number): Promise<Service[]> => {
   try {
@@ -47,5 +50,16 @@ export const getServiceEmployees = async (id: number): Promise<Employee[]> => {
     return data;
   } catch (error) {
     throw handleApiError(error, 'Не удалось загрузить мастеров услуги');
+  }
+};
+
+export const updateService = async ({
+  id,
+  body,
+}: UpdateServiceRequest): Promise<void> => {
+  try {
+    await api.put(`/services/${id}`, body);
+  } catch (error) {
+    throw handleApiError(error, 'Не удалось сохранить услугу');
   }
 };

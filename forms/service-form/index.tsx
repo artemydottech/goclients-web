@@ -18,13 +18,14 @@ const DEFAULT_VALUES: ServiceFormValues = {
 };
 
 export const ServiceForm = ({
+  defaultValues,
   isPending,
   errorMessage,
   onSubmit,
 }: ServiceFormProps) => {
   const { control, handleSubmit } = useForm<ServiceFormValues>({
     resolver: zodResolver(serviceFormSchema),
-    defaultValues: DEFAULT_VALUES,
+    defaultValues: { ...DEFAULT_VALUES, ...defaultValues },
   });
 
   return (

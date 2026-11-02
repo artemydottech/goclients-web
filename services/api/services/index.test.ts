@@ -3,6 +3,7 @@ import api from '..';
 import { buildAxiosError } from '../test-utils';
 import {
   createService,
+  updateService,
   deleteService,
   getService,
   getServiceEmployees,
@@ -88,6 +89,38 @@ describe('deleteService', () => {
     await expect(deleteService(11)).rejects.toMatchObject({
       message: 'Не удалось удалить услугу: in use',
       status: 409,
+    });
+  });
+});
+
+describe('updateService', () => {
+  const body = { name: 'Стрижка', description: '', duration: 45, price: 1500 };
+
+  it('sends editable fields with PUT and handles a 204 response', async () => {
+    mockedApi.put.mockResolvedValue({ status: 204 });
+
+    await expect(updateService({ id: 7, body })).resolves.toBeUndefined();
+    expect(mockedApi.put).toHaveBeenCalledWith('/services/7', body);
+  });
+
+  it('keeps backend validation details', async () => {
+    mockedApi.put.mockRejectedValue(
+      buildAxiosError(400, { error: 'invalid data' }),
+    );
+
+    await expect(updateService({ id: 7, body })).rejects.toMatchObject({
+      message: 'Не удалось сохранить услугу: invalid data',
+      status: 400,
+    });
+  });
+
+  it('reports deleted entities without returning a successful save', async () => {
+    mockedApi.put.mockRejectedValue(
+      buildAxiosError(404, { error: 'not found' }),
+    );
+
+    await expect(updateService({ id: 7, body })).rejects.toMatchObject({
+      status: 404,
     });
   });
 });

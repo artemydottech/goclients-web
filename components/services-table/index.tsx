@@ -13,6 +13,7 @@ import { LuScissors } from 'react-icons/lu';
 import { ErrorText } from '@/components/shared/error-text';
 import { EmptyState } from '@/components/shared/empty-state';
 import { CreateServiceDialog } from '@/components/create-service-dialog';
+import { EditServiceDialog } from '@/components/edit-service-dialog';
 import { ConfirmDeleteButton } from '@/components/shared/confirm-delete-button';
 import { useGetServices } from '@/services/queries/services';
 import { useDeleteService } from '@/services/mutations/services';
@@ -46,7 +47,7 @@ export const ServicesTable = ({ companyId }: ServicesTableProps) => {
               <TableHead className="pl-6">Услуга</TableHead>
               <TableHead>Длительность</TableHead>
               <TableHead className="text-right">Цена</TableHead>
-              <TableHead className="w-12 pr-6" />
+              <TableHead className="w-28 pr-6" />
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -67,12 +68,15 @@ export const ServicesTable = ({ companyId }: ServicesTableProps) => {
                   {formatPrice(service.price)}
                 </TableCell>
                 <TableCell className="pr-6">
-                  <ConfirmDeleteButton
-                    title={`Удалить «${service.name}»?`}
-                    description="Услуга пропадёт из прайса и у мастеров. Будущие записи на неё тоже удалятся."
-                    isPending={isDeleting}
-                    onConfirm={() => deleteService(service.id)}
-                  />
+                  <div className="flex items-center justify-end gap-2">
+                    <EditServiceDialog service={service} />
+                    <ConfirmDeleteButton
+                      title={`Удалить «${service.name}»?`}
+                      description="Услуга пропадёт из прайса и у мастеров. Будущие записи на неё тоже удалятся."
+                      isPending={isDeleting}
+                      onConfirm={() => deleteService(service.id)}
+                    />
+                  </div>
                 </TableCell>
               </TableRow>
             ))}

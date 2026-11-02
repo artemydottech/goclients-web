@@ -2,6 +2,7 @@ import type { Control } from 'react-hook-form';
 import type { ServiceFormValues } from './service-form.validation';
 
 export interface ServiceFormProps {
+  defaultValues?: Partial<ServiceFormValues>;
   isPending: boolean;
   errorMessage?: string;
   onSubmit: (values: ServiceFormValues) => void;
