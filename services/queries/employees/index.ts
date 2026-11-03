@@ -2,16 +2,14 @@
 import { useQuery } from '@tanstack/react-query';
 import {
   getEmployee,
-  getEmployees,
+  getCompanyEmployees,
   getEmployeeServices,
 } from '@/services/api/employees';
 
 export const useGetEmployees = (companyId: number) =>
   useQuery({
-    queryKey: ['get-employees'],
-    queryFn: ({ signal }) => getEmployees(signal),
-    select: (employees) =>
-      employees.filter((employee) => employee.company_id === companyId),
+    queryKey: ['get-employees', companyId],
+    queryFn: ({ signal }) => getCompanyEmployees(companyId, signal),
   });
 
 export const useGetEmployee = (id: number) =>
