@@ -74,3 +74,9 @@ export const updateClient = async ({
     throw handleApiError(error, 'Не удалось сохранить клиента');
   }
 };
+
+export interface ClientSearchParams {q?:string;phone?:string;limit?:number;offset?:number}
+export const searchClients=async(companyId:number,params:ClientSearchParams={},signal?:AbortSignal):Promise<Client[]>=>{
+ try {const {data}=await api.get<Client[]>('/clients/search',{params:{company_id:companyId,...params},signal});return data;}
+ catch(error){throw handleApiError(error,'Не удалось найти клиентов');}
+};
