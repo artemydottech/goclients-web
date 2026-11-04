@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useDeferredValue, useState } from 'react';
 import Link from 'next/link';
 import { LuContact, LuSearch } from 'react-icons/lu';
 import {
@@ -15,29 +15,19 @@ import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorText } from '@/components/shared/error-text';
 import { EmptyState } from '@/components/shared/empty-state';
-import { useGetClients } from '@/services/queries/clients';
-import { formatPhone, onlyDigits } from '@/utils';
-import type { Client } from '@/types';
+import { useSearchClients } from '@/services/queries/clients';
+import { formatPhone } from '@/utils';
 import type { ClientsTableProps } from './clients-table.types';
-
-const matchesQuery = (client: Client, query: string): boolean => {
-  const normalized = query.trim().toLowerCase();
-  if (!normalized) return true;
-  const digits = onlyDigits(normalized);
-  return (
-    client.name.toLowerCase().includes(normalized) ||
-    (digits.length > 0 && client.phone.includes(digits))
-  );
-};
 
 export const ClientsTable = ({ companyId }: ClientsTableProps) => {
   const [query, setQuery] = useState('');
-  const { data: clients, isPending, error } = useGetClients(companyId);
+  const deferredQuery=useDeferredValue(query.trim());
+ const { data: clients, isPending, error } = useSearchClients(companyId,deferredQuery);
 
-  if (isPending) return <Skeleton className="h-64 w-full" />;
+  
   if (error) return <ErrorText errorMessage={error.message} />;
 
-  if (clients.length === 0) {
+  if (!isPending && clients?.length === 0 && !query) {
     return (
       <EmptyState
         icon={LuContact}
@@ -47,7 +37,7 @@ export const ClientsTable = ({ companyId }: ClientsTableProps) => {
     );
   }
 
-  const filtered = clients.filter((client) => matchesQuery(client, query));
+  const filtered = clients ?? [];
 
   return (
     <div className="space-y-4">
@@ -56,13 +46,13 @@ export const ClientsTable = ({ companyId }: ClientsTableProps) => {
         <Input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Имя или телефон"
+          placeholder="Имя, телефон или email"
           aria-label="Поиск клиентов"
           className="pl-9"
         />
       </div>
 
-      {filtered.length === 0 ? (
+      {isPending ? <Skeleton className="h-64 w-full" /> : filtered.length === 0 ? (
         <p className="py-10 text-center text-sm text-muted-foreground">
           Никого не нашли
         </p>

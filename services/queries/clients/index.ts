@@ -1,6 +1,6 @@
 'use client';
 import { useQuery } from '@tanstack/react-query';
-import { getClient, getClients, getClientStats } from '@/services/api/clients';
+import { getClient, getClients, getClientStats, searchClients } from '@/services/api/clients';
 
 export const useGetClients = (companyId: number) =>
   useQuery({
@@ -19,3 +19,8 @@ export const useGetClientStats = (id: number) =>
     queryKey: ['get-client-stats', id],
     queryFn: ({ signal }) => getClientStats(id, signal),
   });
+
+export const useSearchClients=(companyId:number,query:string)=>useQuery({
+ queryKey:['get-clients',companyId,'search',query],
+ queryFn:({signal})=>searchClients(companyId,{q:query,limit:50},signal),
+});
