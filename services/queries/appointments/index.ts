@@ -1,6 +1,6 @@
 'use client';
 import { useQuery } from '@tanstack/react-query';
-import { getAppointment, getAppointments } from '@/services/api/appointments';
+import { getAppointment, getAppointments, searchAppointments } from '@/services/api/appointments';
 import type { GetAppointmentsParams } from '@/services/api/appointments/appointments.types';
 
 export const useGetAppointments = (params: GetAppointmentsParams = {}) =>
@@ -21,18 +21,6 @@ export const useGetCompanyAppointments = (
   to: string,
 ) =>
   useQuery({
-    queryKey: ['get-appointments', {}],
-    queryFn: ({ signal }) => getAppointments({}, signal),
-    select: (appointments) => {
-      const fromMs = Date.parse(from);
-      const toMs = Date.parse(to);
-      return appointments.filter((appointment) => {
-        const startsAtMs = Date.parse(appointment.starts_at);
-        return (
-          appointment.company_id === companyId &&
-          startsAtMs >= fromMs &&
-          startsAtMs < toMs
-        );
-      });
-    },
+    queryKey: ['get-appointments', {company_id:companyId,from,to}],
+    queryFn: ({signal})=>searchAppointments({company_id:companyId,from,to},signal),
   });
