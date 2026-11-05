@@ -80,3 +80,10 @@ export const updateAppointmentTime = async ({
     throw handleApiError(error, 'Не удалось перенести запись');
   }
 };
+
+export const searchAppointments=async(
+ params:import('./appointments.types').AppointmentSearchParams, signal?:AbortSignal,
+):Promise<Appointment[]>=>{
+ try {const {data}=await api.get<Appointment[]>('/appointments/search',{params,signal});return data;}
+ catch(error){throw handleApiError(error,'Не удалось найти записи');}
+};

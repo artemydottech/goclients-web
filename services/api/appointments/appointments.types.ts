@@ -26,3 +26,7 @@ export interface UpdateAppointmentTimeRequest {
   starts_at: string;
   employee_id?: number;
 }
+
+export interface AppointmentSearchParams extends GetAppointmentsParams {
+ company_id:number;service_id?:number;status?:AppointmentStatus;limit?:number;offset?:number;
+}
