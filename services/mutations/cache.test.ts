@@ -152,7 +152,6 @@ it('waits for booking availability and refreshes client stats', async () => {
   await expectRefresh(useCreateBooking, ['get-client-stats']);
 });
 
-import {useCreateAppointment,useUpdateAppointmentStatus} from './appointments';
 it('refreshes company reports after creating and completing appointments',async()=>{
  await expectRefresh(useCreateAppointment,['get-company-report']);
  await expectRefresh(useUpdateAppointmentStatus,['get-company-report']);
