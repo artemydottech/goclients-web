@@ -7,10 +7,8 @@ import { useGetCompany } from '@/services/queries/companies';
 import { useGetCompanyAppointments } from '@/services/queries/appointments';
 import { useCompanyDirectory } from '@/hooks/use-company-directory';
 import dayjs from '@/lib/dayjs';
-import { formatPrice } from '@/utils';
-import { DATE_KEY_FORMAT, DEFAULT_TIMEZONE, toDateKey } from '@/utils/date';
-import { isActiveAppointment } from '@/utils/appointments';
-import { MetricCard } from './metric-card';
+import { DEFAULT_TIMEZONE } from '@/utils/date';
+import {ReportCards} from './report-cards';
 import { UpcomingList } from './upcoming-list';
 import { PopularServices } from './popular-services';
 import { TeamToday } from './team-today';
@@ -18,7 +16,6 @@ import type { DashboardOverviewProps } from './dashboard-overview.types';
 
 const HISTORY_DAYS = 30;
 const LOOKAHEAD_DAYS = 14;
-const WEEK_DAYS = 7;
 
 export const DashboardOverview = ({ companyId }: DashboardOverviewProps) => {
   const { data: company } = useGetCompany(companyId);
@@ -56,50 +53,12 @@ export const DashboardOverview = ({ companyId }: DashboardOverviewProps) => {
   if (directory.error)
     return <ErrorText errorMessage={directory.error.message} />;
 
-  const todayKey = todayStart.format(DATE_KEY_FORMAT);
-  const today = appointments.filter(
-    (appointment) => toDateKey(appointment.starts_at, timezone) === todayKey,
-  );
-  const weekAgo = todayStart.subtract(WEEK_DAYS, 'day').valueOf();
-  const completedWeek = appointments.filter(
-    (appointment) =>
-      appointment.status === 'completed' &&
-      Date.parse(appointment.starts_at) >= weekAgo,
-  );
-  const upcomingCount = appointments.filter(
-    (appointment) =>
-      isActiveAppointment(appointment) &&
-      Date.parse(appointment.starts_at) >= todayStart.valueOf(),
-  ).length;
-  const sum = (items: typeof appointments) =>
-    items.reduce((total, appointment) => total + appointment.price, 0);
   const sectionProps = { companyId, appointments, directory, timezone };
 
   return (
     <div className="space-y-6">
       {header}
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <MetricCard
-          label="Записей сегодня"
-          value={String(today.filter(isActiveAppointment).length)}
-          hint={`Ожидают подтверждения: ${today.filter(({ status }) => status === 'pending').length}`}
-        />
-        <MetricCard
-          label="Ожидаемая выручка сегодня"
-          value={formatPrice(sum(today.filter(isActiveAppointment)))}
-          hint="По ценам на момент записи"
-        />
-        <MetricCard
-          label="Выручка за 7 дней"
-          value={formatPrice(sum(completedWeek))}
-          hint={`Завершённых визитов: ${completedWeek.length}`}
-        />
-        <MetricCard
-          label="Впереди записей"
-          value={String(upcomingCount)}
-          hint={`Клиентов в базе: ${directory.clientsById.size}`}
-        />
-      </div>
+      <ReportCards companyId={companyId} timezone={timezone}/>
       <div className="grid gap-6 lg:grid-cols-5">
         <div className="lg:col-span-3">
           <UpcomingList {...sectionProps} />
