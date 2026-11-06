@@ -30,6 +30,7 @@ export const useDeleteService = () => {
         queryClient.invalidateQueries({ queryKey: ['get-appointment'] }),
         queryClient.invalidateQueries({ queryKey: ['get-slots'] }),
         queryClient.invalidateQueries({ queryKey: ['get-client-stats'] }),
+    queryClient.invalidateQueries({ queryKey: ['get-company-report'] }),
       ]),
   });
 };
