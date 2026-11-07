@@ -6,6 +6,7 @@ import {
 } from '@tanstack/react-query';
 import {
   createAppointment,
+  updateAppointmentComment,
   deleteAppointment,
   updateAppointmentStatus,
   updateAppointmentTime,
@@ -54,4 +55,13 @@ export const useUpdateAppointmentTime = () => {
     meta: { successMessage: 'Запись перенесена', hasInlineError: true },
     onSuccess: () => invalidateAppointments(queryClient),
   });
+};
+
+export const useUpdateAppointmentComment=()=>{
+ const queryClient=useQueryClient();return useMutation({mutationFn:updateAppointmentComment,
+ meta:{successMessage:'Комментарий сохранён',hasInlineError:true},
+ onSuccess:()=>Promise.all([
+ queryClient.invalidateQueries({queryKey:['get-appointments']}),
+ queryClient.invalidateQueries({queryKey:['get-appointment']}),
+ ]),});
 };
