@@ -87,3 +87,8 @@ export const searchAppointments=async(
  try {const {data}=await api.get<Appointment[]>('/appointments/search',{params,signal});return data;}
  catch(error){throw handleApiError(error,'Не удалось найти записи');}
 };
+
+export const updateAppointmentComment=async({id,comment}:{id:number;comment:string}):Promise<void>=>{
+ try{await api.put(`/appointments/${id}/comment`,{comment});}
+ catch(error){throw handleApiError(error,'Не удалось сохранить комментарий');}
+};

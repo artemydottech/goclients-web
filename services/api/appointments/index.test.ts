@@ -170,3 +170,9 @@ it('combines calendar filters in a cancellable search request',async()=>{
  await expect(searchAppointments(params,signal)).resolves.toEqual([]);
  expect(mockedApi.get).toHaveBeenCalledWith('/appointments/search',{params,signal});
 });
+
+it('clears an appointment note using an explicit empty string',async()=>{
+ const {updateAppointmentComment}=await import('.');mockedApi.put.mockResolvedValue({});
+ await updateAppointmentComment({id:7,comment:''});
+ expect(mockedApi.put).toHaveBeenCalledWith('/appointments/7/comment',{comment:''});
+});
