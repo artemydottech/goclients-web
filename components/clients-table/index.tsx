@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorText } from '@/components/shared/error-text';
 import { EmptyState } from '@/components/shared/empty-state';
+import {CsvExportButton} from '@/components/shared/csv-export-button';
 import { useSearchClients } from '@/services/queries/clients';
 import { formatPhone } from '@/utils';
 import type { ClientsTableProps } from './clients-table.types';
@@ -52,6 +53,7 @@ export const ClientsTable = ({ companyId }: ClientsTableProps) => {
         />
       </div>
 
+      <CsvExportButton path="/clients/export" params={{company_id:companyId,q:deferredQuery}} filename="clients.csv"/>
       {isPending ? <Skeleton className="h-64 w-full" /> : filtered.length === 0 ? (
         <p className="py-10 text-center text-sm text-muted-foreground">
           Никого не нашли
