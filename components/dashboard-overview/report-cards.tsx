@@ -1,12 +1,12 @@
  'use client';
 import {useGetCompanyReport} from '@/services/queries/reports';
 import {Skeleton} from '@/components/ui/skeleton';import {ErrorText} from '@/components/shared/error-text';
-import {formatPrice} from '@/utils';import dayjs from '@/lib/dayjs';import {MetricCard} from './metric-card';
+import {formatPrice} from '@/utils';import {getReportPeriods} from './report-periods';import {MetricCard} from './metric-card';
 export const ReportCards=({companyId,timezone}:{companyId:number;timezone:string})=>{
- const today=dayjs().tz(timezone).startOf('day');
- const daily=useGetCompanyReport(companyId,today.format(),today.add(1,'day').format());
- const weekly=useGetCompanyReport(companyId,today.subtract(6,'day').format(),today.add(1,'day').format());
- const upcoming=useGetCompanyReport(companyId,today.format(),today.add(14,'day').format());
+ const periods=getReportPeriods(timezone);
+ const daily=useGetCompanyReport(companyId,periods.daily.from,periods.daily.to);
+ const weekly=useGetCompanyReport(companyId,periods.weekly.from,periods.weekly.to);
+ const upcoming=useGetCompanyReport(companyId,periods.upcoming.from,periods.upcoming.to);
  const error=daily.error??weekly.error??upcoming.error;
  if(error)return <ErrorText errorMessage={error.message}/>;
  if(!daily.data||!weekly.data||!upcoming.data)return <Skeleton className="h-32 w-full"/>;
