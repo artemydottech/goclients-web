@@ -35,7 +35,7 @@ export const ClientsTable = ({ companyId }: ClientsTableProps) => {
     error,
   } = useSearchClients(companyId, deferredQuery, offset);
 
-  if (!isPending && !error && clients?.length === 0 && !query && offset === 0) {
+  if (!isPending && !error && clients?.length === 0 && !query && deferredQuery === '' && offset === 0) {
     return (
       <EmptyState
         icon={LuContact}
