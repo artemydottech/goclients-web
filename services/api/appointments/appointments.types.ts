@@ -28,5 +28,9 @@ export interface UpdateAppointmentTimeRequest {
 }
 
 export interface AppointmentSearchParams extends GetAppointmentsParams {
- company_id:number;service_id?:number;status?:AppointmentStatus;limit?:number;offset?:number;
+  company_id: number;
+  service_id?: number;
+  status?: AppointmentStatus;
+  limit?: number;
+  offset?: number;
 }

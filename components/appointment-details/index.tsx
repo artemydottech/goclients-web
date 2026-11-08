@@ -31,7 +31,7 @@ import {
   STATUS_LABELS,
   STATUS_STYLES,
 } from '@/utils/appointments';
-import {AppointmentNote} from './appointment-note';
+import { AppointmentNote } from './appointment-note';
 import { AppointmentStatusActions } from './appointment-status-actions';
 import type { AppointmentDetailsProps } from './appointment-details.types';
 
@@ -132,7 +132,11 @@ export const AppointmentDetails = ({
                   : 'Мастер удалён'}
               </div>
             </dl>
-            <AppointmentNote key={appointment.id+appointment.comment} id={appointment.id} comment={appointment.comment}/>
+            <AppointmentNote
+              key={appointment.id + appointment.comment}
+              id={appointment.id}
+              comment={appointment.comment}
+            />
 
             <div className="flex items-end justify-between gap-4">
               <div className="space-y-2">

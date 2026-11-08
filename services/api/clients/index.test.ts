@@ -168,9 +168,15 @@ it('passes an AbortSignal to getClientStats', async () => {
   );
 });
 
-it('searches clients with a company scope and cancellation',async()=>{
- const {searchClients}=await import('.');const signal=new AbortController().signal;
- mockedApi.get.mockResolvedValue({data:[]});
- await expect(searchClients(3,{q:'Анна',limit:20,offset:0},signal)).resolves.toEqual([]);
- expect(mockedApi.get).toHaveBeenCalledWith('/clients/search',{params:{company_id:3,q:'Анна',limit:20,offset:0},signal});
+it('searches clients with a company scope and cancellation', async () => {
+  const { searchClients } = await import('.');
+  const signal = new AbortController().signal;
+  mockedApi.get.mockResolvedValue({ data: [] });
+  await expect(
+    searchClients(3, { q: 'Анна', limit: 20, offset: 0 }, signal),
+  ).resolves.toEqual([]);
+  expect(mockedApi.get).toHaveBeenCalledWith('/clients/search', {
+    params: { company_id: 3, q: 'Анна', limit: 20, offset: 0 },
+    signal,
+  });
 });

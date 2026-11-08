@@ -197,13 +197,18 @@ it('passes an AbortSignal to getEmployeeServices', async () => {
   );
 });
 
-it('scopes employee requests and preserves cancellation',async()=>{
- const signal=new AbortController().signal;
- mockedApi.get.mockResolvedValue({data:[{id:2,company_id:7}]});
- await expect(getCompanyEmployees(7,signal)).resolves.toEqual([{id:2,company_id:7}]);
- expect(mockedApi.get).toHaveBeenCalledWith('/employees',{params:{company_id:7},signal});
+it('scopes employee requests and preserves cancellation', async () => {
+  const signal = new AbortController().signal;
+  mockedApi.get.mockResolvedValue({ data: [{ id: 2, company_id: 7 }] });
+  await expect(getCompanyEmployees(7, signal)).resolves.toEqual([
+    { id: 2, company_id: 7 },
+  ]);
+  expect(mockedApi.get).toHaveBeenCalledWith('/employees', {
+    params: { company_id: 7 },
+    signal,
+  });
 });
-it('reports company employee request failures',async()=>{
- mockedApi.get.mockRejectedValue(buildAxiosError(500,{error:'storage'}));
- await expect(getCompanyEmployees(7)).rejects.toMatchObject({status:500});
+it('reports company employee request failures', async () => {
+  mockedApi.get.mockRejectedValue(buildAxiosError(500, { error: 'storage' }));
+  await expect(getCompanyEmployees(7)).rejects.toMatchObject({ status: 500 });
 });

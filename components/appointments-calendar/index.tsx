@@ -8,7 +8,7 @@ import { useCompanyDirectory } from '@/hooks/use-company-directory';
 import dayjs from '@/lib/dayjs';
 import { DEFAULT_TIMEZONE, getCompanyToday } from '@/utils/date';
 import { AppointmentDetails } from '@/components/appointment-details';
-import {CsvExportButton} from '@/components/shared/csv-export-button';
+import { CsvExportButton } from '@/components/shared/csv-export-button';
 import { CalendarToolbar } from './calendar-toolbar';
 import { DayView } from './day-view';
 import { WeekView } from './week-view';
@@ -77,7 +77,11 @@ export const AppointmentsCalendar = ({
         today={today}
         view={view}
       />
-      <CsvExportButton path="/appointments/export" params={{company_id:companyId,from:from.format(),to:to.format()}} filename="appointments.csv"/>
+      <CsvExportButton
+        path="/appointments/export"
+        params={{ company_id: companyId, from: from.format(), to: to.format() }}
+        filename="appointments.csv"
+      />
       {renderContent()}
       <AppointmentDetails
         companyId={companyId}

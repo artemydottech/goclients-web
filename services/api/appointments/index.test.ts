@@ -163,16 +163,29 @@ it('passes an AbortSignal to getAppointment', async () => {
   );
 });
 
-it('combines calendar filters in a cancellable search request',async()=>{
- const {searchAppointments}=await import('.');const signal=new AbortController().signal;
- const params={company_id:3,employee_id:4,status:'pending' as const,from:'2026-11-05T00:00:00Z',limit:20};
- mockedApi.get.mockResolvedValue({data:[]});
- await expect(searchAppointments(params,signal)).resolves.toEqual([]);
- expect(mockedApi.get).toHaveBeenCalledWith('/appointments/search',{params,signal});
+it('combines calendar filters in a cancellable search request', async () => {
+  const { searchAppointments } = await import('.');
+  const signal = new AbortController().signal;
+  const params = {
+    company_id: 3,
+    employee_id: 4,
+    status: 'pending' as const,
+    from: '2026-11-05T00:00:00Z',
+    limit: 20,
+  };
+  mockedApi.get.mockResolvedValue({ data: [] });
+  await expect(searchAppointments(params, signal)).resolves.toEqual([]);
+  expect(mockedApi.get).toHaveBeenCalledWith('/appointments/search', {
+    params,
+    signal,
+  });
 });
 
-it('clears an appointment note using an explicit empty string',async()=>{
- const {updateAppointmentComment}=await import('.');mockedApi.put.mockResolvedValue({});
- await updateAppointmentComment({id:7,comment:''});
- expect(mockedApi.put).toHaveBeenCalledWith('/appointments/7/comment',{comment:''});
+it('clears an appointment note using an explicit empty string', async () => {
+  const { updateAppointmentComment } = await import('.');
+  mockedApi.put.mockResolvedValue({});
+  await updateAppointmentComment({ id: 7, comment: '' });
+  expect(mockedApi.put).toHaveBeenCalledWith('/appointments/7/comment', {
+    comment: '',
+  });
 });

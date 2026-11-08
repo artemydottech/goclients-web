@@ -91,10 +91,16 @@ export const updateEmployee = async ({
 };
 
 export const getCompanyEmployees = async (
- companyId: number, signal?: AbortSignal,
+  companyId: number,
+  signal?: AbortSignal,
 ): Promise<Employee[]> => {
- try {
- const {data}=await api.get<Employee[]>('/employees',{params:{company_id:companyId},signal});
- return data;
- } catch(error) {throw handleApiError(error,'Не удалось загрузить сотрудников компании');}
+  try {
+    const { data } = await api.get<Employee[]>('/employees', {
+      params: { company_id: companyId },
+      signal,
+    });
+    return data;
+  } catch (error) {
+    throw handleApiError(error, 'Не удалось загрузить сотрудников компании');
+  }
 };

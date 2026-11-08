@@ -57,11 +57,15 @@ export const useUpdateAppointmentTime = () => {
   });
 };
 
-export const useUpdateAppointmentComment=()=>{
- const queryClient=useQueryClient();return useMutation({mutationFn:updateAppointmentComment,
- meta:{successMessage:'Комментарий сохранён',hasInlineError:true},
- onSuccess:()=>Promise.all([
- queryClient.invalidateQueries({queryKey:['get-appointments']}),
- queryClient.invalidateQueries({queryKey:['get-appointment']}),
- ]),});
+export const useUpdateAppointmentComment = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateAppointmentComment,
+    meta: { successMessage: 'Комментарий сохранён', hasInlineError: true },
+    onSuccess: () =>
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['get-appointments'] }),
+        queryClient.invalidateQueries({ queryKey: ['get-appointment'] }),
+      ]),
+  });
 };

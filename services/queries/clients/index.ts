@@ -1,6 +1,11 @@
 'use client';
 import { useQuery } from '@tanstack/react-query';
-import { getClient, getClients, getClientStats, searchClients } from '@/services/api/clients';
+import {
+  getClient,
+  getClients,
+  getClientStats,
+  searchClients,
+} from '@/services/api/clients';
 
 export const useGetClients = (companyId: number) =>
   useQuery({
@@ -20,8 +25,18 @@ export const useGetClientStats = (id: number) =>
     queryFn: ({ signal }) => getClientStats(id, signal),
   });
 
-export const CLIENT_SEARCH_PAGE_SIZE=50;
-export const useSearchClients=(companyId:number,query:string,offset=0)=>useQuery({
- queryKey:['get-clients',companyId,'search',query,offset],
- queryFn:({signal})=>searchClients(companyId,{q:query,limit:CLIENT_SEARCH_PAGE_SIZE,offset},signal),
-});
+export const CLIENT_SEARCH_PAGE_SIZE = 50;
+export const useSearchClients = (
+  companyId: number,
+  query: string,
+  offset = 0,
+) =>
+  useQuery({
+    queryKey: ['get-clients', companyId, 'search', query, offset],
+    queryFn: ({ signal }) =>
+      searchClients(
+        companyId,
+        { q: query, limit: CLIENT_SEARCH_PAGE_SIZE, offset },
+        signal,
+      ),
+  });

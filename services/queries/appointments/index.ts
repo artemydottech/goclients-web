@@ -1,6 +1,10 @@
 'use client';
 import { useQuery } from '@tanstack/react-query';
-import { getAppointment, getAppointments, searchAppointments } from '@/services/api/appointments';
+import {
+  getAppointment,
+  getAppointments,
+  searchAppointments,
+} from '@/services/api/appointments';
 import type { GetAppointmentsParams } from '@/services/api/appointments/appointments.types';
 
 export const useGetAppointments = (params: GetAppointmentsParams = {}) =>
@@ -21,6 +25,7 @@ export const useGetCompanyAppointments = (
   to: string,
 ) =>
   useQuery({
-    queryKey: ['get-appointments', {company_id:companyId,from,to}],
-    queryFn: ({signal})=>searchAppointments({company_id:companyId,from,to},signal),
+    queryKey: ['get-appointments', { company_id: companyId, from, to }],
+    queryFn: ({ signal }) =>
+      searchAppointments({ company_id: companyId, from, to }, signal),
   });

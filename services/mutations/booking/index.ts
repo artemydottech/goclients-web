@@ -13,7 +13,7 @@ export const useCreateBooking = () => {
         queryClient.invalidateQueries({ queryKey: ['get-appointments'] }),
         queryClient.invalidateQueries({ queryKey: ['get-clients'] }),
         queryClient.invalidateQueries({ queryKey: ['get-client-stats'] }),
-    queryClient.invalidateQueries({ queryKey: ['get-company-report'] }),
+        queryClient.invalidateQueries({ queryKey: ['get-company-report'] }),
       ]),
   });
 };

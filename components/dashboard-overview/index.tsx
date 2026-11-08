@@ -8,7 +8,7 @@ import { useGetCompanyAppointments } from '@/services/queries/appointments';
 import { useCompanyDirectory } from '@/hooks/use-company-directory';
 import dayjs from '@/lib/dayjs';
 import { DEFAULT_TIMEZONE } from '@/utils/date';
-import {ReportCards} from './report-cards';
+import { ReportCards } from './report-cards';
 import { UpcomingList } from './upcoming-list';
 import { PopularServices } from './popular-services';
 import { TeamToday } from './team-today';
@@ -58,7 +58,7 @@ export const DashboardOverview = ({ companyId }: DashboardOverviewProps) => {
   return (
     <div className="space-y-6">
       {header}
-      <ReportCards companyId={companyId} timezone={timezone}/>
+      <ReportCards companyId={companyId} timezone={timezone} />
       <div className="grid gap-6 lg:grid-cols-5">
         <div className="lg:col-span-3">
           <UpcomingList {...sectionProps} />

@@ -81,14 +81,31 @@ export const updateAppointmentTime = async ({
   }
 };
 
-export const searchAppointments=async(
- params:import('./appointments.types').AppointmentSearchParams, signal?:AbortSignal,
-):Promise<Appointment[]>=>{
- try {const {data}=await api.get<Appointment[]>('/appointments/search',{params,signal});return data;}
- catch(error){throw handleApiError(error,'Не удалось найти записи');}
+export const searchAppointments = async (
+  params: import('./appointments.types').AppointmentSearchParams,
+  signal?: AbortSignal,
+): Promise<Appointment[]> => {
+  try {
+    const { data } = await api.get<Appointment[]>('/appointments/search', {
+      params,
+      signal,
+    });
+    return data;
+  } catch (error) {
+    throw handleApiError(error, 'Не удалось найти записи');
+  }
 };
 
-export const updateAppointmentComment=async({id,comment}:{id:number;comment:string}):Promise<void>=>{
- try{await api.put(`/appointments/${id}/comment`,{comment});}
- catch(error){throw handleApiError(error,'Не удалось сохранить комментарий');}
+export const updateAppointmentComment = async ({
+  id,
+  comment,
+}: {
+  id: number;
+  comment: string;
+}): Promise<void> => {
+  try {
+    await api.put(`/appointments/${id}/comment`, { comment });
+  } catch (error) {
+    throw handleApiError(error, 'Не удалось сохранить комментарий');
+  }
 };
