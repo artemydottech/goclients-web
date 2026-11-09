@@ -40,7 +40,10 @@ export const createAppointment = async (
   body: CreateAppointmentRequest,
 ): Promise<CreatedResponse> => {
   try {
-    const { data } = await api.post<CreatedResponse>('/appointments', body);
+    const {idempotencyKey,...payload}=body;
+ const {data}=idempotencyKey
+ ?await api.post<CreatedResponse>('/appointments',payload,{headers:{'Idempotency-Key':idempotencyKey}})
+ :await api.post<CreatedResponse>('/appointments',payload);
     return data;
   } catch (error) {
     throw handleApiError(error, 'Не удалось создать запись');
