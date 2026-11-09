@@ -1,8 +1,9 @@
 'use client';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorText } from '@/components/shared/error-text';
 import { useGetCompany } from '@/services/queries/companies';
+import {createRequestKey} from '@/lib/request-key';
 import { useCreateBooking } from '@/services/mutations/booking';
 import { BookingContactsForm } from '@/forms/booking-contacts-form';
 import { DEFAULT_TIMEZONE, getCompanyToday } from '@/utils/date';
@@ -31,6 +32,7 @@ export const BookingWizard = ({ companyId }: BookingWizardProps) => {
   const [isBooked, setIsBooked] = useState(false);
 
   const createBooking = useCreateBooking();
+ const requestKey=useRef(createRequestKey());
 
   const update = (patch: Partial<BookingSelection>) =>
     setSelection((current) => ({ ...current, ...patch }));
@@ -47,6 +49,7 @@ export const BookingWizard = ({ companyId }: BookingWizardProps) => {
             createBooking.mutate(
               {
                 ...contacts,
+                idempotencyKey:requestKey.current.forPayload({companyId,selection,contacts}),
                 companyId,
                 serviceId: service.id,
                 employeeId: employee.id,

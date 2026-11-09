@@ -1,5 +1,6 @@
 'use client';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import {createRequestKey} from '@/lib/request-key';
 import { LuCalendarPlus } from 'react-icons/lu';
 import { Button } from '@/components/ui/button';
 import {
@@ -25,6 +26,7 @@ export const CreateAppointmentDialog = ({
   date,
 }: CreateAppointmentDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
+ const requestKey=useRef(createRequestKey());
   const { data: company } = useGetCompany(companyId);
   const { data: clients } = useGetClients(companyId);
   const { data: services } = useGetServices(companyId);
@@ -33,7 +35,7 @@ export const CreateAppointmentDialog = ({
 
   const handleOpenChange = (open: boolean) => {
     setIsOpen(open);
-    if (!open) reset();
+    if (!open) {reset();requestKey.current.reset();}
   };
 
   const handleSubmit = ({
@@ -52,6 +54,7 @@ export const CreateAppointmentDialog = ({
         starts_at,
         comment,
         status: isConfirmed ? 'confirmed' : 'pending',
+        idempotencyKey:requestKey.current.forPayload({client_id,service_id,employee_id,starts_at,comment,isConfirmed}),
       },
       { onSuccess: () => handleOpenChange(false) },
     );

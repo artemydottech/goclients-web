@@ -40,6 +40,7 @@ const findOrCreateClientId = async (
 
 export const createBooking = async ({
   companyId,
+  idempotencyKey,
   serviceId,
   employeeId,
   startsAt,
@@ -55,6 +56,7 @@ export const createBooking = async ({
     starts_at: startsAt,
     comment,
     status: 'pending',
+    ...(idempotencyKey?{idempotencyKey}:{}),
   });
   return { appointmentId: id };
 };
