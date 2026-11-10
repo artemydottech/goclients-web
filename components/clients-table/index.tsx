@@ -26,6 +26,7 @@ import type { ClientsTableProps } from './clients-table.types';
 
 export const ClientsTable = ({ companyId }: ClientsTableProps) => {
   const [query, setQuery] = useState('');
+ const [tag,setTag]=useState('');const deferredTag=useDeferredValue(tag.trim());
   const [offset, setOffset] = useState(0);
   const deferredQuery = useDeferredValue(query.trim());
   const {
@@ -33,14 +34,14 @@ export const ClientsTable = ({ companyId }: ClientsTableProps) => {
     isPending,
     isFetching,
     error,
-  } = useSearchClients(companyId, deferredQuery, offset);
+  } = useSearchClients(companyId, deferredQuery, offset,deferredTag);
 
   if (
     !isPending &&
     !error &&
     clients?.length === 0 &&
     !query &&
-    deferredQuery === '' &&
+    deferredQuery === '' && !tag && !deferredTag &&
     offset === 0
   ) {
     return (
@@ -70,9 +71,10 @@ export const ClientsTable = ({ companyId }: ClientsTableProps) => {
         />
       </div>
 
+      <Input aria-label="Фильтр по тегу" placeholder="Тег клиента" value={tag} onChange={event=>{setTag(event.target.value);setOffset(0);}} className="max-w-sm"/>
       <CsvExportButton
         path="/clients/export"
-        params={{ company_id: companyId, q: deferredQuery }}
+        params={{ company_id: companyId, q: deferredQuery,tag:deferredTag }}
         filename="clients.csv"
       />
       {error ? (
