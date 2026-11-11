@@ -1,4 +1,5 @@
 'use client';
+import {QuickAvailability} from '@/components/quick-availability';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorText } from '@/components/shared/error-text';
 import { PageHeader } from '@/components/shared/page-header';
@@ -59,6 +60,7 @@ export const DashboardOverview = ({ companyId }: DashboardOverviewProps) => {
     <div className="space-y-6">
       {header}
       <ReportCards companyId={companyId} timezone={timezone} />
+      <QuickAvailability companyId={companyId} timezone={timezone}/>
       <div className="grid gap-6 lg:grid-cols-5">
         <div className="lg:col-span-3">
           <UpcomingList {...sectionProps} />
