@@ -156,3 +156,8 @@ it('refreshes company reports after creating and completing appointments', async
   await expectRefresh(useCreateAppointment, ['get-company-report']);
   await expectRefresh(useUpdateAppointmentStatus, ['get-company-report']);
 });
+
+import * as availabilityBookingMutations from './appointments';
+it('refreshes multi-employee availability after rescheduling',async()=>{
+ await expectRefresh(availabilityBookingMutations.useUpdateAppointmentTime,['get-availability']);
+});
