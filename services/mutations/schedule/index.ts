@@ -13,6 +13,7 @@ export const useUpdateEmployeeSchedule = () => {
           queryKey: ['get-employee-schedule', employeeId],
         }),
         queryClient.invalidateQueries({ queryKey: ['get-slots'] }),
+ queryClient.invalidateQueries({queryKey:['get-availability']}),
       ]),
   });
 };

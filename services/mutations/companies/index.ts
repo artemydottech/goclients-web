@@ -32,6 +32,7 @@ export const useDeleteCompany = () => {
         queryClient.invalidateQueries({ queryKey: ['get-appointments'] }),
         queryClient.invalidateQueries({ queryKey: ['get-appointment'] }),
         queryClient.invalidateQueries({ queryKey: ['get-slots'] }),
+ queryClient.invalidateQueries({queryKey:['get-availability']}),
         queryClient.invalidateQueries({ queryKey: ['get-client-stats'] }),
         queryClient.invalidateQueries({ queryKey: ['get-company-report'] }),
       ]),
@@ -48,6 +49,7 @@ export const useUpdateCompany = () => {
         queryClient.invalidateQueries({ queryKey: ['get-companies'] }),
         queryClient.invalidateQueries({ queryKey: ['get-company'] }),
         queryClient.invalidateQueries({ queryKey: ['get-slots'] }),
+ queryClient.invalidateQueries({queryKey:['get-availability']}),
       ]),
   });
 };
