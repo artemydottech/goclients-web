@@ -161,3 +161,7 @@ import * as availabilityBookingMutations from './appointments';
 it('refreshes multi-employee availability after rescheduling',async()=>{
  await expectRefresh(availabilityBookingMutations.useUpdateAppointmentTime,['get-availability']);
 });
+
+it('refreshes appointment history after note changes',async()=>{
+ await expectRefresh(availabilityBookingMutations.useUpdateAppointmentComment,['get-appointment-history']);
+});
