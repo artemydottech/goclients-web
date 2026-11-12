@@ -29,7 +29,7 @@ export const useDeleteService = () => {
         queryClient.invalidateQueries({ queryKey: ['get-appointments'] }),
         queryClient.invalidateQueries({ queryKey: ['get-appointment'] }),
         queryClient.invalidateQueries({ queryKey: ['get-slots'] }),
- queryClient.invalidateQueries({queryKey:['get-availability']}),
+        queryClient.invalidateQueries({ queryKey: ['get-availability'] }),
         queryClient.invalidateQueries({ queryKey: ['get-client-stats'] }),
         queryClient.invalidateQueries({ queryKey: ['get-company-report'] }),
       ]),
@@ -47,7 +47,7 @@ export const useUpdateService = () => {
         queryClient.invalidateQueries({ queryKey: ['get-service'] }),
         queryClient.invalidateQueries({ queryKey: ['get-employee-services'] }),
         queryClient.invalidateQueries({ queryKey: ['get-slots'] }),
- queryClient.invalidateQueries({queryKey:['get-availability']}),
+        queryClient.invalidateQueries({ queryKey: ['get-availability'] }),
       ]),
   });
 };

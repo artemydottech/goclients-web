@@ -56,7 +56,7 @@ export const createBooking = async ({
     starts_at: startsAt,
     comment,
     status: 'pending',
-    ...(idempotencyKey?{idempotencyKey}:{}),
+    ...(idempotencyKey ? { idempotencyKey } : {}),
   });
   return { appointmentId: id };
 };

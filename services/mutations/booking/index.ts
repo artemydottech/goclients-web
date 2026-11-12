@@ -10,7 +10,7 @@ export const useCreateBooking = () => {
     onSuccess: () =>
       Promise.all([
         queryClient.invalidateQueries({ queryKey: ['get-slots'] }),
- queryClient.invalidateQueries({queryKey:['get-availability']}),
+        queryClient.invalidateQueries({ queryKey: ['get-availability'] }),
         queryClient.invalidateQueries({ queryKey: ['get-appointments'] }),
         queryClient.invalidateQueries({ queryKey: ['get-clients'] }),
         queryClient.invalidateQueries({ queryKey: ['get-client-stats'] }),

@@ -1,5 +1,5 @@
 export interface CreateBookingRequest {
- idempotencyKey?:string;
+  idempotencyKey?: string;
   companyId: number;
   serviceId: number;
   employeeId: number;

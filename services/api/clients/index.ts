@@ -76,7 +76,7 @@ export const updateClient = async ({
 };
 
 export interface ClientSearchParams {
- tag?:string;
+  tag?: string;
   q?: string;
   phone?: string;
   limit?: number;

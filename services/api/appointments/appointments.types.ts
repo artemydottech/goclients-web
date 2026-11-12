@@ -8,7 +8,7 @@ export interface GetAppointmentsParams {
 }
 
 export interface CreateAppointmentRequest {
-  idempotencyKey?:string;
+  idempotencyKey?: string;
   client_id: number;
   employee_id: number;
   service_id: number;

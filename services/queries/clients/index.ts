@@ -30,14 +30,26 @@ export const useSearchClients = (
   companyId: number,
   query: string,
   offset = 0,
- tag="",
+  tag = '',
 ) =>
   useQuery({
-    queryKey: ['get-clients', companyId, 'search', query, offset,...(tag?[tag]:[])],
+    queryKey: [
+      'get-clients',
+      companyId,
+      'search',
+      query,
+      offset,
+      ...(tag ? [tag] : []),
+    ],
     queryFn: ({ signal }) =>
       searchClients(
         companyId,
-        { q: query, limit: CLIENT_SEARCH_PAGE_SIZE, offset,...(tag?{tag}:{}) },
+        {
+          q: query,
+          limit: CLIENT_SEARCH_PAGE_SIZE,
+          offset,
+          ...(tag ? { tag } : {}),
+        },
         signal,
       ),
   });

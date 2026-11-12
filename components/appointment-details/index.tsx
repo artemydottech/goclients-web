@@ -31,7 +31,7 @@ import {
   STATUS_LABELS,
   STATUS_STYLES,
 } from '@/utils/appointments';
-import {AppointmentHistory} from './appointment-history';
+import { AppointmentHistory } from './appointment-history';
 import { AppointmentNote } from './appointment-note';
 import { AppointmentStatusActions } from './appointment-status-actions';
 import type { AppointmentDetailsProps } from './appointment-details.types';
@@ -139,7 +139,7 @@ export const AppointmentDetails = ({
               comment={appointment.comment}
             />
 
-            <AppointmentHistory id={appointment.id} timezone={timezone}/>
+            <AppointmentHistory id={appointment.id} timezone={timezone} />
             <div className="flex items-end justify-between gap-4">
               <div className="space-y-2">
                 <AppointmentStatusActions appointment={appointment} />

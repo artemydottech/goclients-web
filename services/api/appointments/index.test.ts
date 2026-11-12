@@ -190,9 +190,17 @@ it('clears an appointment note using an explicit empty string', async () => {
   });
 });
 
-it('sends idempotency keys in headers without adding them to JSON',async()=>{
- mockedApi.post.mockResolvedValue({data:{id:9}});
- const body={client_id:1,employee_id:2,service_id:3,starts_at:'2027-01-01T10:00:00Z',comment:''};
- await createAppointment({...body,idempotencyKey:'same-request'});
- expect(mockedApi.post).toHaveBeenCalledWith('/appointments',body,{headers:{'Idempotency-Key':'same-request'}});
+it('sends idempotency keys in headers without adding them to JSON', async () => {
+  mockedApi.post.mockResolvedValue({ data: { id: 9 } });
+  const body = {
+    client_id: 1,
+    employee_id: 2,
+    service_id: 3,
+    starts_at: '2027-01-01T10:00:00Z',
+    comment: '',
+  };
+  await createAppointment({ ...body, idempotencyKey: 'same-request' });
+  expect(mockedApi.post).toHaveBeenCalledWith('/appointments', body, {
+    headers: { 'Idempotency-Key': 'same-request' },
+  });
 });

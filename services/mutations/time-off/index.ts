@@ -13,7 +13,7 @@ export const useCreateTimeOff = () => {
           queryKey: ['get-employee-time-off', employeeId],
         }),
         queryClient.invalidateQueries({ queryKey: ['get-slots'] }),
- queryClient.invalidateQueries({queryKey:['get-availability']}),
+        queryClient.invalidateQueries({ queryKey: ['get-availability'] }),
       ]),
   });
 };
@@ -29,7 +29,7 @@ export const useDeleteTimeOff = () => {
           queryKey: ['get-employee-time-off', employeeId],
         }),
         queryClient.invalidateQueries({ queryKey: ['get-slots'] }),
- queryClient.invalidateQueries({queryKey:['get-availability']}),
+        queryClient.invalidateQueries({ queryKey: ['get-availability'] }),
       ]),
   });
 };

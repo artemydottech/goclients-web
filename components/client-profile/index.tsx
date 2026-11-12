@@ -5,7 +5,7 @@ import { LuArrowLeft, LuMail, LuPhone } from 'react-icons/lu';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ErrorText } from '@/components/shared/error-text';
-import {ClientTags} from '@/components/client-tags';
+import { ClientTags } from '@/components/client-tags';
 import { EditClientDialog } from '@/components/edit-client-dialog';
 import { ConfirmDeleteButton } from '@/components/shared/confirm-delete-button';
 import { useGetClient } from '@/services/queries/clients';
@@ -69,7 +69,7 @@ export const ClientProfile = ({ companyId, clientId }: ClientProfileProps) => {
           }
         />
       </div>
-      <ClientTags clientId={clientId}/>
+      <ClientTags clientId={clientId} />
     </div>
   );
 };
