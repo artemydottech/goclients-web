@@ -16,6 +16,7 @@ const invalidateAppointments = (queryClient: QueryClient) =>
   Promise.all([
     queryClient.invalidateQueries({ queryKey: ['get-appointments'] }),
     queryClient.invalidateQueries({ queryKey: ['get-appointment'] }),
+ queryClient.invalidateQueries({queryKey:['get-appointment-history']}),
     queryClient.invalidateQueries({ queryKey: ['get-slots'] }),
  queryClient.invalidateQueries({queryKey:['get-availability']}),
     queryClient.invalidateQueries({ queryKey: ['get-client-stats'] }),
@@ -67,6 +68,7 @@ export const useUpdateAppointmentComment = () => {
       Promise.all([
         queryClient.invalidateQueries({ queryKey: ['get-appointments'] }),
         queryClient.invalidateQueries({ queryKey: ['get-appointment'] }),
+ queryClient.invalidateQueries({queryKey:['get-appointment-history']}),
       ]),
   });
 };
